@@ -283,11 +283,13 @@
     Memo : for drugs yo
     
     r_hash : c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c865dd
-    payment_request : lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqzysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    payment_request : lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqzys
+    fcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
     
     
     
-    root@bobuntu:/python/MyLND# mylnd-alice --lookupinvoice c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c865dd
+    root@bobuntu:/python/MyLND# mylnd-alice --lookupinvoice c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c
+    865dd
     
     Invoice Details:
     ----------------
@@ -297,13 +299,16 @@
     r_hash  :  wM84tYIpo/tcYOeujIY6jqdiXj9ozVfvHfudFtTIZd0=
     value  :  100
     creation_date  :  1541791546
-    payment_request  :  lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqzysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    payment_request  :  lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqz
+    ysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
     expiry  :  3600
     cltv_expiry  :  144
     
     
     
-    root@bobuntu:/python/MyLND# mylnd-charlie --payinvoice lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqzysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    root@bobuntu:/python/MyLND# mylnd-charlie --payinvoice lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalw
+    w3d4xgvhwsdq5vehhygrywf6kwueq09hscqzysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ys
+    z74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
     
     Invoice Payment Request :
     -------------------------
