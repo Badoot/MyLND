@@ -8,6 +8,7 @@ def arg_parser_func():
     # Argparser with help description
     parent_parser = argparse.ArgumentParser(prog='mylnd.py', description="""
     MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""",
+                                usage=' mylnd.py [OPTIONS] [ARG1] [ARG2]',
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     # Define arguments and actions
     parent_parser.add_argument("--version", help="LND version", action='store_true',

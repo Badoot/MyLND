@@ -6,30 +6,36 @@ from google.protobuf.json_format import MessageToJson
 import src.get_data as get_data
 from datetime import datetime
 import codecs
+from src.error_handler import error_handler
 
-
+# Pandas dataframe display options
 pd.set_option('colheader_justify', 'left')
 pd.set_option('display.max_colwidth', -1)
 
 
+# Convert Unix timestamp to US Date Format, if desired
 def convert_date(unix_timestamp):
     date = int(unix_timestamp)
     full_date = datetime.utcfromtimestamp(date).strftime('%m-%d-%Y %H:%M:%S')
     return full_date
 
 
+# Convert gRPC response to json, then from json to dict, if desired.
+# This automatically does some encoding and decoding, though.
 def response_to_dict(response):
     response = MessageToJson(response)
     response = json.loads(response)
     return response
 
 
+@error_handler
 def out_get_info():
     get_info = get_data.get_info()
     print("\nMy Lightning Node:\n" + "-" * 18)
     print(get_info)
 
 
+@error_handler
 def out_list_peers():
     peers = get_data.get_peers()
     peers = response_to_dict(peers)
@@ -55,13 +61,12 @@ def out_list_peers():
         print('\nNo peers connected\n')
 
 
+@error_handler
 def out_list_peers_detail():
     peers = get_data.get_peers()
     peers = response_to_dict(peers)
     if len(peers) > 0:
-        # Unlimited column width for Pandas dataframe
         print("\nPeers: " + str(len(peers["peers"])) + " total \n" + "-" * 15 + "\n")
-        # List of columns in the dataframe
         df = pd.DataFrame.from_dict(peers["peers"]).fillna(0)
         # For each peer in the list, print PeerList output and grab NodeInfo details as well
         for index, row in df.iterrows():
@@ -82,11 +87,11 @@ def out_list_peers_detail():
                 print('num_channels : 0')
                 print('total_capacity : 0')
             print('\r')
-
     else:
         print('\nNo peers connected\n')
 
 
+@error_handler
 def out_list_channels():
     channels = get_data.get_channels()
     channels = response_to_dict(channels)
@@ -102,6 +107,7 @@ def out_list_channels():
         print('\nNo channels open\n')
 
 
+@error_handler
 def out_list_channels_detail():
     channels = get_data.get_channels()
     channels = response_to_dict(channels)
@@ -136,6 +142,7 @@ def out_list_channels_detail():
         print('\nNo channels open\n')
 
 
+@error_handler
 def out_pending_channels():
     pending = get_data.get_pending_channels()
     pending = response_to_dict(pending)
@@ -144,6 +151,7 @@ def out_pending_channels():
     else:
         print("\nPending Channels: " + "\n" + "-" * 17)
         for index, pen_type in pending.items():
+            # Total limbo balance of all closing channels
             if 'limbo' in index:
                 print(index, ' : ', pen_type, '\r')
             # If the pending channel is opening...
@@ -151,11 +159,14 @@ def out_pending_channels():
                 # opening = pending['pending_open_channels'][0]['channel']
                 print('\nPending open: \n' + "-" * 14)
                 for channel in pending['pending_open_channels']:
-                    channel = channel['channel']
-                    for key, value in channel.items():
-                        if 'limbo' not in key:
-                            print(key + " : ", value)
-                    print('\r')
+                    if channel['channel']:
+                        channel = channel['channel']
+                        for key, value in channel.items():
+                            if 'limbo' not in key:
+                                print(key + " : ", value)
+                    else:
+                        print(index, pen_type)
+                        print('\r')
 
             # If the pending channel is closing...
             elif 'close' in index:
@@ -169,6 +180,7 @@ def out_pending_channels():
                         print(key, ' : ', value)
 
                 print('\r')
+                # If the pending channel is force-closing
             elif 'closing' in index:
                 print('\nPending forced closing: \n' + "-" * 22)
                 closing = pending['pending_force_closing_channels']
@@ -178,30 +190,38 @@ def out_pending_channels():
                         print(key, ' : ', value)
                     print('\r')
 
+            else:
+                print(index, ' : ', pen_type)
 
+
+@error_handler
 def out_wallet_balance():
     wallet_balance = get_data.get_wallet_balance()
     print("\nWallet Balance:\n" + "-" * 15)
     print(wallet_balance)
 
 
+@error_handler
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     print("\nChannel Balance:\n" + "-" * 16)
     print(channel_balance)
 
 
+@error_handler
 def out_network_info():
     net_info = get_data.get_network_info()
     print("\nLightning Network Stats:\n" + "-" * 24)
     print(net_info)
 
 
+@error_handler
 def out_describe_graph():
     describe_graph = get_data.get_describe_graph()
     print(describe_graph)
 
 
+@error_handler
 def out_closed_channels():
     closed = get_data.get_closed_channels()
     closed = response_to_dict(closed)
@@ -215,6 +235,7 @@ def out_closed_channels():
     print(total_closed + " total closed channels\n")
 
 
+@error_handler
 def out_txns():
     txns = get_data.get_transactions()
     txns = response_to_dict(txns)
@@ -258,6 +279,7 @@ def out_txns():
     print('\r')
 
 
+@error_handler
 def out_version():
     lnd_ver = get_data.get_info()
     lnd_ver = response_to_dict(lnd_ver)
@@ -265,6 +287,7 @@ def out_version():
     print('\r')
 
 
+@error_handler
 def out_channel_info(chan_id):
     chan_info = get_data.get_channel_info(chan_id)
     chan_info = response_to_dict(chan_info)
@@ -297,6 +320,7 @@ def out_channel_info(chan_id):
     print('\r')
 
 
+@error_handler
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
     node_info = response_to_dict(node_info)
@@ -318,6 +342,7 @@ def out_node_info(pub_key):
     print('\r')
 
 
+@error_handler
 def out_new_address():
     new_address = get_data.get_new_address()
     new_address = response_to_dict(new_address)
@@ -325,6 +350,7 @@ def out_new_address():
     print(new_address['address'], '\n')
 
 
+@error_handler
 def out_list_payments():
     payments = get_data.get_list_payments()
     payments = response_to_dict(payments)
@@ -345,32 +371,34 @@ def out_list_payments():
         print("\nNo payments to list")
     print("\r")
 
-
+@error_handler
 def out_delete_payments():
     delete_payments = get_data.get_delete_payments()
     print(delete_payments, '\nPayments deleted\n')
 
 
+@error_handler
 def out_list_invoices():
     invoices = get_data.get_list_invoices()
     invoices = response_to_dict(invoices)
     if len(invoices) > 0:
         print("\nInvoices: " + str(len(invoices['invoices'])), '\n' + "-" * 12)
-        flattened = invoices["invoices"]
+        invoice_list = invoices["invoices"]
         columns = ['creation_date', 'value', 'payment_request']
-        flattened_df = pd.DataFrame(flattened, columns=columns).fillna(0)
+        invoice_df = pd.DataFrame(invoice_list, columns=columns).fillna(0)
         # Convert Unix timestamps to readable date/time format
         timestamp_list = []
-        for time_stamp in flattened_df['creation_date']:
+        for time_stamp in invoice_df['creation_date']:
             time_stamp = convert_date(time_stamp)
             timestamp_list.append(time_stamp)
-        flattened_df['creation_date'] = timestamp_list
-        print(flattened_df.to_string(index=False))
+            invoice_df['creation_date'] = timestamp_list
+        print(invoice_df.to_string(index=False))
     else:
         print('\nNo invoices to list')
     print("\r")
 
 
+@error_handler
 def out_add_invoice(amount=0, memo=""):
     print('\nAdding Invoice:' + '\n' + '-' * 16)
     print('Amount in sats : ' + str(amount))
@@ -387,6 +415,7 @@ def out_add_invoice(amount=0, memo=""):
     print('\r')
 
 
+@error_handler
 def out_lookup_invoice(r_hash):
     print('\nInvoice Details:' + '\n' + '-' * 16)
     response = get_data.get_lookup_invoice(r_hash)
@@ -414,6 +443,7 @@ def out_lookup_invoice(r_hash):
     print('\r')
 
 
+@error_handler
 def out_fee_report():
     fee_report = get_data.get_fee_report()
     fee_report = response_to_dict(fee_report)
@@ -424,25 +454,27 @@ def out_fee_report():
     print('\r')
 
 
+@error_handler
 def out_connect_peer(peer_data):
     connect_peers = get_data.get_connect_peer(peer_data)
     get_data.get_peers()
     print(connect_peers, '\nPeer connected\n')
 
 
+@error_handler
 def out_disconnect_peer(pub_key):
     disconnect_peer = get_data.get_disconnect_peer(pub_key)
     print(disconnect_peer, '\nPeer disconnected\n')
 
 
-def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0, private=False):
+@error_handler
+def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     print('\nNew Channel Details:' + '\n' + '-' * 20)
     print('pubkey : ' + node_pubkey)
     print('localamt : ' + str(local_funding_amount))
     print('pushsat : ' + str(push_sat))
-    print('private : ' + str(private))
     print('\r')
-    open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat, private=private)
+    open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     # Convert tx_id to 32-bit hex
     tx_id = codecs.encode(open_channel.funding_txid_bytes, 'hex')
     # Convert tx_id to a string
@@ -450,14 +482,14 @@ def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0, priva
     print('Funding transaction ID :', tx_id, '\n')
 
 
-def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0, private=False):
+@error_handler
+def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
     print('\nNew Channel Details:' + '\n' + '-' * 20)
     print('pubkey : ' + node_pubkey)
     print('localamt : ' + str(local_funding_amount))
     print('pushsat : ' + str(push_sat))
-    print('private : ' + str(private))
     print('\r')
-    request = get_data.get_open_channel_wait(node_pubkey, local_funding_amount, push_sat, private)
+    request = get_data.get_open_channel_wait(node_pubkey, local_funding_amount, push_sat)
     for response in request:
         # Pull txid from response
         txid = response.chan_pending.txid
@@ -473,6 +505,7 @@ def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0, 
     print('\r')
 
 
+@error_handler
 def out_close_channel(funding_tx, output_index, force):
     print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
     request = get_data.get_close_channel(funding_tx, output_index, force)
@@ -480,9 +513,7 @@ def out_close_channel(funding_tx, output_index, force):
         if response.close_pending:
             txid_response = response.close_pending
             txid = txid_response.txid
-            # print(txid)
             txid_hex = codecs.encode(txid, 'hex')
-            # print(txid_hex)
             txid_str = codecs.decode(txid_hex, 'utf-8')
             if len(txid) > 0:
                 print('\nTransaction :', txid_str)
@@ -496,6 +527,7 @@ def out_close_channel(funding_tx, output_index, force):
     print('\r')
 
 
+@error_handler
 def out_close_all_channels():
     channel_list = get_data.get_channels()
     channel_list = response_to_dict(channel_list)
@@ -504,7 +536,7 @@ def out_close_all_channels():
         print('\nClosing ALL channels...' + '\r')
         for channel in channel_df['channels']:
 
-            # Force close all channels
+            # Force close each channel
             def force_close_all_channels():
                 for key, value in channel.items():
                     if 'point' in key:
@@ -534,16 +566,19 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
+@error_handler
 def out_unlock(password):
     get_data.wallet_unlock(password)
     print('\nWallet unlocked!\n')
     
 
+@error_handler
 def out_change_password(current_password, new_password):
     get_data.change_password(current_password, new_password)
     print('\nPassword changed\n')
 
 
+@error_handler
 def out_gen_seed():
     seed = get_data.get_gen_seed()
     seed = response_to_dict(seed)
@@ -552,27 +587,32 @@ def out_gen_seed():
     print('\r')
 
 
+@error_handler
 def out_create(wallet_password, cipher_seed_mnemonic):
     get_data.get_create(wallet_password, cipher_seed_mnemonic)
     print('\r')
 
 
+@error_handler
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
 
 
+@error_handler
 def out_send_payment(dest, amt, r_hash):
     response = get_data.get_send_payment(dest, amt, r_hash)
     print('\n', response)
 
 
+@error_handler
 def out_decode_payreq(payment_request):
     response = get_data.get_decode_payreq(payment_request)
     print('\nPayment request details:' + '\n' + '-' * 24)
     print(response)
 
 
+@error_handler
 def out_payinvoice(payment_request):
     print('\nInvoice Payment Request :\n' + '-' * 25)
     response = get_data.get_decode_payreq(payment_request)
@@ -581,8 +621,7 @@ def out_payinvoice(payment_request):
     answer = input()
     if answer == 'y':
         pay_response = get_data.get_payinvoice(payment_request)
-        payment_receipt = MessageToJson(pay_response)
-        payment_receipt = json.loads(payment_receipt)
+        payment_receipt = response_to_dict(pay_response)
         print('\nInvoice Payment Receipt :\n' + '-' * 25)
         for key, value in payment_receipt.items():
             if 'payment_route' in key:
@@ -602,6 +641,7 @@ def out_payinvoice(payment_request):
         exit(1)
 
 
+@error_handler
 def out_query_route(pub_key, amount, num_routes):
     route_data = get_data.get_query_route(pub_key, amount, num_routes)
     route_data = response_to_dict(route_data)

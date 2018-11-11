@@ -159,27 +159,26 @@ def get_disconnect_peer(pub_key):
     return response
 
 
-def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None, private=False):
+def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None):
     pubkey_bytes = codecs.decode(node_pubkey, 'hex')
     request = ln.OpenChannelRequest(
         node_pubkey=pubkey_bytes,
         node_pubkey_string=node_pubkey,
         local_funding_amount=int(local_funding_amount),
-        push_sat=int(push_sat),
-        private=bool(private)
+        push_sat=int(push_sat)
+        # private=bool(private)
     )
     response = APICall.stub.OpenChannelSync(request)
     return response
 
 
-def get_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0, private=False):
+def get_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
     pubkey_bytes = codecs.decode(node_pubkey, 'hex')
     request = ln.OpenChannelRequest(
         node_pubkey=pubkey_bytes,
         node_pubkey_string=node_pubkey,
         local_funding_amount=int(local_funding_amount),
-        push_sat=int(push_sat),
-        private=bool(private)
+        push_sat=int(push_sat)
     )
     response = APICall.stub.OpenChannel(request)
     return response
