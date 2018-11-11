@@ -28,13 +28,13 @@
       --version             LND version
       --data_dir DATA_DIR   Path to *.macaroon and tls.cert files
       --ip_port IP_PORT     <IP address>:<port> of the LND node
-      --status              Default MyLND output
       --macaroonpath [MACAROON_PATH]
                             Path to admin.macaroon
       --tlspath TLS_PATH    Path to tls.cert
       --genseed             Generate mnemonic seed
       --unlock              Unlock wallet
       --change_password     Change wallet password
+      --status              Equivalent to "--getinfo --walletbalance --channelbalance"
       --walletbalance       Wallet balance
       --getinfo             Lightning node info
       --networkinfo         Lightning network info
