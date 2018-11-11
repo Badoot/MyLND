@@ -399,51 +399,6 @@ def out_list_invoices():
 
 
 @error_handler
-def out_add_invoice(amount=0, memo=""):
-    print('\nAdding Invoice:' + '\n' + '-' * 16)
-    print('Amount in sats : ' + str(amount))
-    print('Memo : ' + str(memo), '\n')
-    response = get_data.get_add_invoice(amount, memo)
-    r_hash = response.r_hash
-    payment_request = response.payment_request
-    # Convert r_hash to 32-bit hex
-    r_hash_hex = codecs.encode(r_hash, 'hex')
-    # Convert r_hash to a string
-    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
-    print('r_hash :', r_hash_str)
-    print('payment_request :', payment_request)
-    print('\r')
-
-
-@error_handler
-def out_lookup_invoice(r_hash):
-    print('\nInvoice Details:' + '\n' + '-' * 16)
-    response = get_data.get_lookup_invoice(r_hash)
-    response_dict = response_to_dict(response)
-    r_hash = response.r_hash
-    r_preimage = response.r_preimage
-
-    # Convert r_hash to 32-bit hex
-    r_hash_hex = codecs.encode(r_hash, 'hex')
-    # Convert r_hash to a string
-    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
-
-    # Convert r_preimage to 32-bit hex
-    r_preimage_hex = codecs.encode(r_preimage, 'hex')
-    # Convert r_preimage to a string
-    r_preimage_str = codecs.decode(r_preimage_hex, 'utf-8')
-
-    for key, value in response_dict.items():
-        if 'r_hash' in key:
-            print('r_hash_hex :', r_hash_str)
-        elif 'r_preimage' in key:
-            print('r_preimage : ', r_preimage_str)
-        else:
-            print(key, ' : ', value)
-    print('\r')
-
-
-@error_handler
 def out_fee_report():
     fee_report = get_data.get_fee_report()
     fee_report = response_to_dict(fee_report)
@@ -469,12 +424,12 @@ def out_disconnect_peer(pub_key):
 
 @error_handler
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
+    open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
     print('pubkey : ' + node_pubkey)
     print('localamt : ' + str(local_funding_amount))
     print('pushsat : ' + str(push_sat))
     print('\r')
-    open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     # Convert tx_id to 32-bit hex
     tx_id = codecs.encode(open_channel.funding_txid_bytes, 'hex')
     # Convert tx_id to a string
@@ -484,12 +439,12 @@ def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
 
 @error_handler
 def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
+    request = get_data.get_open_channel_wait(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
     print('pubkey : ' + node_pubkey)
     print('localamt : ' + str(local_funding_amount))
     print('pushsat : ' + str(push_sat))
     print('\r')
-    request = get_data.get_open_channel_wait(node_pubkey, local_funding_amount, push_sat)
     for response in request:
         # Pull txid from response
         txid = response.chan_pending.txid
@@ -507,8 +462,8 @@ def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
 
 @error_handler
 def out_close_channel(funding_tx, output_index, force):
-    print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
     request = get_data.get_close_channel(funding_tx, output_index, force)
+    print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
     for response in request:
         if response.close_pending:
             txid_response = response.close_pending
@@ -613,9 +568,55 @@ def out_decode_payreq(payment_request):
 
 
 @error_handler
+def out_add_invoice(amount=0, memo=""):
+    response = get_data.get_add_invoice(amount, memo)
+    print('\nAdding Invoice:' + '\n' + '-' * 16)
+    print('Amount in sats : ' + str(amount))
+    print('Memo : ' + str(memo), '\n')
+    r_hash = response.r_hash
+    payment_request = response.payment_request
+    # Convert r_hash to 32-bit hex
+    r_hash_hex = codecs.encode(r_hash, 'hex')
+    # Convert r_hash to a string
+    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
+    print('r_hash :', r_hash_str)
+    print('payment_request :', payment_request)
+    print('\r')
+
+
+@error_handler
+def out_lookup_invoice(r_hash):
+
+    response = get_data.get_lookup_invoice(r_hash)
+    response_dict = response_to_dict(response)
+    r_hash = response.r_hash
+    r_preimage = response.r_preimage
+
+    # Convert r_hash to 32-bit hex
+    r_hash_hex = codecs.encode(r_hash, 'hex')
+    # Convert r_hash to a string
+    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
+
+    # Convert r_preimage to 32-bit hex
+    r_preimage_hex = codecs.encode(r_preimage, 'hex')
+    # Convert r_preimage to a string
+    r_preimage_str = codecs.decode(r_preimage_hex, 'utf-8')
+    print('\nInvoice Details:' + '\n' + '-' * 16)
+
+    for key, value in response_dict.items():
+        if 'r_hash' in key:
+            print('r_hash_hex :', r_hash_str)
+        elif 'r_preimage' in key:
+            print('r_preimage : ', r_preimage_str)
+        else:
+            print(key, ' : ', value)
+    print('\r')
+
+
+@error_handler
 def out_payinvoice(payment_request):
-    print('\nInvoice Payment Request :\n' + '-' * 25)
     response = get_data.get_decode_payreq(payment_request)
+    print('\nInvoice Payment Request :\n' + '-' * 25)
     print(response)
     print('Do you agree to send this payment?')
     answer = input()

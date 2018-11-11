@@ -9,8 +9,8 @@ def error_handler(fnc):
         try:
             return fnc(*args, **kwargs)
         except grpc.RpcError as er:
-            print('RPC call failed with {0}: {1}'.format(er.code(), er.details()))
+            print('\ngRPC error: {0}: {1}'.format(er.code(), er.details()))
             print('\r')
-        except (IndexError, ValueError, AttributeError):
-            print('What the hell are you doing? \n\nDo you even mylnd, bro? \n\nTry "mylnd.py -h" \n')
+        except (IndexError, ValueError, AttributeError, NameError, TypeError, SyntaxError):
+            print('\nWhat the hell are you doing? \n\nDo you even mylnd, bro? \n\nTry: mylnd.py -h\n')
     return wrapper
