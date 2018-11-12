@@ -27,8 +27,8 @@
     optional arguments:
       -h, --help            show this help message and exit
       --version             LND version
-      --data_dir </path/to/wallet>
-                            Path to wallet
+      --lnddir </path/to/.lnd>
+                            Path to LND's base dir
       --ip_port <ip_address>:<port>
                             IP address and port of the LND node
       --status              Same as '--getinfo --walletbalance --channelbalance'
