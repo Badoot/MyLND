@@ -625,7 +625,14 @@ def out_payinvoice(payment_request):
         payment_receipt = response_to_dict(pay_response)
         print('\nInvoice Payment Receipt :\n' + '-' * 25)
         for key, value in payment_receipt.items():
-            if 'payment_route' in key:
+            # Hex encode the payment_preimage
+            if 'payment_preimage' in key:
+                preimage_encoded = str(value).encode()
+                preimage_base64_decoded = codecs.decode(preimage_encoded, 'base64')
+                preimage_hex = codecs.encode(preimage_base64_decoded, 'hex')
+                preimage_str = codecs.decode(preimage_hex, 'utf-8')
+                print(key, ' : ', preimage_str)
+            elif 'payment_route' in key:
                 for k, v in value.items():
                     if 'hops' in k:
                         print('hops : \r')

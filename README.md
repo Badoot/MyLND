@@ -16,66 +16,80 @@
     6. Copy *.macaroon and tls.cert from your LND node to --data_dir ('.' by default)
        or --macaroonpath and --tlspath on your local machine.
 
-
 # Usage
 
-    usage: mylnd.py --option arg1 arg2 arg3
+    usage: mylnd.py --argument <value1> <value2>
 
-
-    options:
+    example: mylnd.py --addinvoice 100 "for hugs"
     
+        MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.
+    
+    optional arguments:
       -h, --help            show this help message and exit
       --version             LND version
-      --data_dir DATA_DIR   Path to *.macaroon and tls.cert files
-      --ip_port IP_PORT     <IP address>:<port> of the LND node
-      --macaroonpath [MACAROON_PATH]
+      --data_dir </path/to/wallet>
+                            Path to wallet
+      --ip_port <ip_address>:<port>
+                            IP address and port of the LND node
+      --status              Same as '--getinfo --walletbalance --channelbalance'
+      --macaroonpath </path/to/admin.macaroon>
                             Path to admin.macaroon
-      --tlspath TLS_PATH    Path to tls.cert
+      --tlspath </path/to/tls.cert>
+                            Path to tls.cert
       --genseed             Generate mnemonic seed
+      --create              Initialize a new wallet
       --unlock              Unlock wallet
       --change_password     Change wallet password
-      --status              Equivalent to "--getinfo --walletbalance --channelbalance"
       --walletbalance       Wallet balance
       --getinfo             Lightning node info
       --networkinfo         Lightning network info
       --describegraph       All nodes and edges that this node knows about
       --feereport           current fee schedule enforced by the node
-      --openchannel [PUB_KEY LOCAL_AMT PUSH_AMT PUBLIC]
+      --openchannel <public_key> <local_amount> <push_amount>
                             Attempt to open a channel with a remote peer
-      --closechannel [CHANNEL_POINT]
+      --openchannel-wait <public_key> <local_amount> <push_amount>
+                            Attempt to open a channel with a remote peer and wait
+                            for confirmation
+      --closechannel <channel_point> <force>
                             Attempt to close a channel with a remote peer
-      --closeallchannels    Attempt to close all currently open channels
+      --closeallchannels    Attempt to close all open channels
       --listchannels        List channels
-      --listchannels-detail  Details about open channels
-      --channelinfo [CHAN_ID]  Channel details by channel ID
+      --listchannels-detail
+                            Details about open channels
+      --channelinfo <channel_id>
+                            Channel details by channel ID
       --pendingchannels     Pending channels
       --closedchannels      Closed channels
       --channelbalance      Channel balance
       --listpeers           List peers connected to this node
       --listpeers-detail    Details about peers connected to this node
-      --nodeinfo [PUB_KEY]    Node details by pub_key
-      --connect [PEER_DATA]   Attempt to establish network connection to a remote
+      --nodeinfo <public_key>
+                            Node details by pub_key
+      --connect <public_key>@<ip_address>:<port>
+                            Attempt to establish network connection to a remote
                             peer
-      --disconnect [PUB_KEY]  Attempt to disconnect from a remote peer
+      --disconnect <public_key>
+                            Attempt to disconnect from a remote peer
       --newaddress          Create a new np2ksh address
-      --sendcoins [BTC_ADDRESS AMOUNT_IN_SATS]
+      --sendcoins <bitcoin_address> <amount_in_satoshis>
                             Send an on-chain bitcoin transaction
-      --transactions        On-chain transaction history
+      --sendpayment <public_key> <amount> <r_hash>
+                            Send satoshis to a Lightning node's public key
+      --transactions        Transaction list and counts
       --listpayments        List lightning network payments
       --deletepayments      Delete all outgoing payments from DB
       --listinvoices        List of all invoices in the db
-      --addinvoice [AMOUNT_IN_SATS "MEMO"]
+      --addinvoice <amount> <memo>
                             Add a new invoice
-      --lookupinvoice [R_HASH]
-                            Look up an invoice by hex encoded r_hash produced by --addinvoice
-      --payinvoice [PAYMENT_REQUEST]
+      --lookupinvoice <r_hash>
+                            Lookup an invoice by r_hash
+      --payinvoice <payment_request>
                             Pay an invoice
-      --decodepayreq [PAYMENT_REQUEST]
+      --decodepayreq <payment_request>
                             Decode an invoice's payment_request
-      --queryroutes [DESTINATION_PUBKEY AMOUNT NUMBER_OF_ROUTES]
-                            Look for a possible route capable of carrying x amount of satoshis
-
-
+      --queryroutes <destination_pub_key> <amount> <number_of_routes>
+                            Look for x number of routes to a node's public key for
+                            y amount of satoshis
 
 # Examples
     
@@ -104,7 +118,6 @@
     Channel Balance:
     ----------------
     balance: 125900
-
 
     
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -137,7 +150,6 @@
     capacity :  100000
     local_balance :  85950
     limbo_balance :  85950
-
 
 
      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -274,50 +286,64 @@
 
      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-   
-    root@bobuntu:/python/MyLND# mylnd-alice --addinvoice 100 'for drugs yo'
 
+    root@bobuntu:/python/MyLND# mylnd-danny --addinvoice 500 'for hugs'
+    
     Adding Invoice:
     ----------------
-    Amount in sats : 100
-    Memo : for drugs yo
+    Amount in sats : 500
+    Memo : for hugs
     
-    r_hash : c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c865dd
-    payment_request : lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqzys
-    fcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    r_hash : b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb
+    payment_request : lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqmqzftasdqdvehhygrgw4nhxcqzys5v5ay6
+    4wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9cpdv7ftezmv3smd5sscq5hfvzg
     
     
     
-    root@bobuntu:/python/MyLND# mylnd-alice --lookupinvoice c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c
-    865dd
+    root@bobuntu:/python/MyLND# mylnd-danny --lookupinvoice b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb
     
     Invoice Details:
     ----------------
-    memo  :  for drugs yo
-    r_preimage  :  x3tdv9ZICrpMeaGg71NYYAWJrGadTJCEOfkpDeUwZ7Q=
-    r_hash_hex : c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c865dd
-    r_hash  :  wM84tYIpo/tcYOeujIY6jqdiXj9ozVfvHfudFtTIZd0=
-    value  :  100
-    creation_date  :  1541791546
-    payment_request  :  lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalww3d4xgvhwsdq5vehhygrywf6kwueq09hscqz
-    ysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ysz74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    memo  :  for hugs
+    r_preimage :  5c73fa315418c04f507bcc2649d7c3bd6fbf9da44c14ae381f3ca9834e25b261
+    r_hash_hex : b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb
+    value  :  500
+    creation_date  :  1541992185
+    payment_request  :  lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqmqzftasdqdvehhygrgw4nhxcqzys5v5ay6
+    4wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9cpdv7ftezmv3smd5sscq5hfvzg
     expiry  :  3600
     cltv_expiry  :  144
     
     
     
-    root@bobuntu:/python/MyLND# mylnd-charlie --payinvoice lnsb1u1pd7the6pp5cr8n3dvz9x3lkhrqu7hgep3636nkyh3ldrx40mcalw
-    w3d4xgvhwsdq5vehhygrywf6kwueq09hscqzysfcs7mk5ls3g8f7qvl9jl4d7da67plzdpy8mszmqlrykglg0jgy0q70548gmhxz688s4exdmwe3ys
-    z74ygqwjnv9jhkyfaxnxkyg2thgp3xz56p
+    root@bobuntu:/python/MyLND# mylnd-alice --decodepayreq lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpk
+    gqmqzftasdqdvehhygrgw4nhxcqzys5v5ay64wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9
+    cpdv7ftezmv3smd5sscq5hfvzg
+    
+    Payment request details:
+    ------------------------
+    destination: "036b7debe9fc4e79fb7349c9d3e3d8f53abcc2ec9e5be3d8835c17c8a4954708e8"
+    payment_hash: "b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb"
+    num_satoshis: 500
+    timestamp: 1541992185
+    expiry: 3600
+    description: "for hugs"
+    cltv_expiry: 144
+    
+    
+    
+    root@bobuntu:/python/MyLND# mylnd-alice --payinvoice lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqm
+    qzftasdqdvehhygrgw4nhxcqzys5v5ay64wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9cpdv
+    7ftezmv3smd5sscq5hfvzg
     
     Invoice Payment Request :
     -------------------------
-    destination: "03d25ac3598492ba8a82d224d69aef635b5838890cb6dad9cd9391a141b823d918"
-    payment_hash: "c0cf38b58229a3fb5c60e7ae8c863a8ea7625e3f68cd57ef1dfb9d16d4c865dd"
-    num_satoshis: 100
-    timestamp: 1541791546
+    destination: "036b7debe9fc4e79fb7349c9d3e3d8f53abcc2ec9e5be3d8835c17c8a4954708e8"
+    payment_hash: "b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb"
+    num_satoshis: 500
+    timestamp: 1541992185
     expiry: 3600
-    description: "for drugs yo"
+    description: "for hugs"
     cltv_expiry: 144
     
     Do you agree to send this payment?
@@ -325,17 +351,18 @@
     
     Invoice Payment Receipt :
     -------------------------
-    payment_preimage  :  x3tdv9ZICrpMeaGg71NYYAWJrGadTJCEOfkpDeUwZ7Q=
-    total_time_lock  :  6545
-    total_fees  :  1
-    total_amt  :  101
+    payment_preimage  :  5c73fa315418c04f507bcc2649d7c3bd6fbf9da44c14ae381f3ca9834e25b261
+    total_time_lock  :  9717
+    total_fees  :  2
+    total_amt  :  502
     hops :
-      chan_id  :  6776290162049025
+      chan_id  :  6770792603910144
       chan_capacity  :  500000
-      amt_to_forward  :  100
+      amt_to_forward  :  501
       fee  :  1
-      expiry  :  6401
-      amt_to_forward_msat  :  100000
+      expiry  :  9573
+      amt_to_forward_msat  :  501000
       fee_msat  :  1000
-    total_fees_msat  :  1000
-    total_amt_msat  :  101000
+    total_fees_msat  :  2000
+    total_amt_msat  :  502000
+    
