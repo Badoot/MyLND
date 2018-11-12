@@ -14,8 +14,8 @@ def arg_parser_func():
     # Define arguments and actions
     parent_parser.add_argument("--version", help="LND version", action='store_true',
                                dest='lnd_version')
-    parent_parser.add_argument("--data_dir", help="Path to wallet", type=str, action='store',
-                                dest='data_dir', metavar='</path/to/wallet>')
+    parent_parser.add_argument("--lnddir", help="Path to LND's base dir", type=str, action='store',
+                                dest='lnddir', metavar='</path/to/.lnd>')
     parent_parser.add_argument("--ip_port", help="IP address and port of the LND node", type=str, action='store',
                                 dest='ip_port', metavar='<ip_address>:<port>')
     parent_parser.add_argument("--status", help="Same as '--getinfo --walletbalance --channelbalance'",
@@ -43,7 +43,7 @@ def arg_parser_func():
                                help="Attempt to open a channel with a remote peer and wait for confirmation",
                                action='store', dest='openchannel_wait', metavar=('<public_key>', '<local_amount>',
                                                                             '<push_amount>'))
-    parent_parser.add_argument("--closechannel", nargs=2, help="Attempt to close a channel with a remote peer",
+    parent_parser.add_argument("--closechannel", nargs="*", help="Attempt to close a channel with a remote peer",
                                action='store', metavar=('<channel_point>', '<force>'))
     parent_parser.add_argument("--closeallchannels", help="Attempt to close all open channels", action='store_true')
     parent_parser.add_argument("--listchannels", help="List channels", action='store_true')

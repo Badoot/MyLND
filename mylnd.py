@@ -11,6 +11,7 @@ from src.error_handler import error_handler
 # First, parse those arguments
 args = arg_parser.arg_parser_func()
 
+
 @error_handler
 # Run the option provided
 def run_it():

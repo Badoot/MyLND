@@ -121,35 +121,57 @@
 
     
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-   
-    root@bobuntu:~# mylnd --pendingchannels
+
+    root@bobuntu:/python/MyLND# mylnd-danny --pendingchannels
     
-    Pending Channels: 3
-    -------------------
+    Pending Channels:
+    -----------------
+    total_limbo_balance  :  237983
+    
     
     Pending open:
     --------------
+    remote_node_pub :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
+    channel_point :  492e600ce9617f7e817fae23cf7d3cd0f7849a671d7a942e8ba12118c7cd9a56:0
+    capacity :  50000
+    local_balance :  30950
+    remote_balance :  10000
+    
     remote_node_pub :  03d25ac3598492ba8a82d224d69aef635b5838890cb6dad9cd9391a141b823d918
-    channel_point :  0388801120933f2199b6d275dbe8662c99311fb984816bc007d33a80c8d6cf2c:1
-    capacity :  100000
-    local_balance :  85950
-    remote_balance :  5000
+    channel_point :  adf15924bb035aca77a2145bfe45eb054bbe3091409a8cae921c7ae67a0a5ef9:1
+    capacity :  12341241
+    local_balance :  12330960
+    remote_balance :  1231
+    
+    
+    Pending forced closing:
+    ----------------------
+    closing_txid  :  bda213d4318aa1682b54e2af6a0f3d4d44ae6f8bfe9981c3c4ce93c60525d8c7
+    limbo_balance  :  113184
+    maturity_height  :  9345
+    blocks_til_maturity  :  45
+    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
+    channel_point  :  e89283eb5e4eae8e536353b7e109e53f4e9f876051f4b8bedba0d4c3dde1c7a2:0
+    capacity  :  122234
+    local_balance  :  113184
+    
+    closing_txid  :  7161e390ed23a62f634ebdcc840ea269870e4bd5b2196c27ba10e87834383f7a
+    limbo_balance  :  10850
+    maturity_height  :  9345
+    blocks_til_maturity  :  45
+    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
+    channel_point  :  c16e688d4666a6c10f08075527b091a62dda0b162b0ab0832de436fa71a5d4d9:0
+    capacity  :  20000
+    local_balance  :  10850
+    
     
     Pending close:
     --------------
-    total_limbo_balance :  171900
-    
-    remote_node_pub :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point :  c454569da029c3c182425dd3724f7461c4a86ee17e14e15c8e7c17e4f4999fd1:0
-    capacity :  100000
-    local_balance :  85950
-    limbo_balance :  85950
-    
-    remote_node_pub :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point :  a6ac8a2a1aabd3aee86a9929a1bd5a9f2021e0a8e04176690163d21b47b368e5:1
-    capacity :  100000
-    local_balance :  85950
-    limbo_balance :  85950
+    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
+    channel_point  :  32c69d80b714af8aadd7c917caba4e1d680813f123d59c7d783790e5283587a2:0
+    capacity  :  123123
+    local_balance  :  113949
+    limbo_balance  :  113949
 
 
      +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

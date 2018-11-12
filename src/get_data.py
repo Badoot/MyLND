@@ -19,19 +19,19 @@ else:
 
 ''' Default data_dir is '.' '''
 
-if args.data_dir:
-    data_dir = args.data_dir
+if args.lnddir:
+    lnddir = args.lnddir
 else:
-    data_dir = '.'
+    lnddir = '.'
 
 
 class APICall:
 
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
-    cert = open(data_dir + '/tls.cert', 'rb').read()
+    cert = open(lnddir + '/tls.cert', 'rb').read()
 
     def metadata_callback(self, callback):
-        macaroon = codecs.encode(open(data_dir + '/admin.macaroon', 'rb').read(), 'hex')
+        macaroon = codecs.encode(open(lnddir + '/admin.macaroon', 'rb').read(), 'hex')
         callback([('macaroon', macaroon)], None)
 
     ssl_creds = grpc.ssl_channel_credentials(cert)

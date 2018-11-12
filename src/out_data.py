@@ -1,31 +1,15 @@
 # Reformat return data and print to stdout
 
-import json
+
 import pandas as pd
-from google.protobuf.json_format import MessageToJson
 import src.get_data as get_data
-from datetime import datetime
 import codecs
 from src.error_handler import error_handler
+import src.converters as converters
 
 # Pandas dataframe display options
 pd.set_option('colheader_justify', 'left')
 pd.set_option('display.max_colwidth', -1)
-
-
-# Convert Unix timestamp to US Date Format, if desired
-def convert_date(unix_timestamp):
-    date = int(unix_timestamp)
-    full_date = datetime.utcfromtimestamp(date).strftime('%m-%d-%Y %H:%M:%S')
-    return full_date
-
-
-# Convert gRPC response to json, then from json to dict, if desired.
-# This automatically does some encoding and decoding, though.
-def response_to_dict(response):
-    response = MessageToJson(response)
-    response = json.loads(response)
-    return response
 
 
 @error_handler
@@ -38,7 +22,7 @@ def out_get_info():
 @error_handler
 def out_list_peers():
     peers = get_data.get_peers()
-    peers = response_to_dict(peers)
+    peers = converters.response_to_dict(peers)
     if len(peers) > 0:
         print("\nPeers: " + str(len(peers["peers"])) + " total \n" + "-" * 15 + "\n")
         peers = peers['peers']
@@ -47,7 +31,7 @@ def out_list_peers():
             for key, value in peer.items():
                 if 'pub_key' in key:
                     node_info = get_data.get_node_info(value)
-                    node_info = response_to_dict(node_info)
+                    node_info = converters.response_to_dict(node_info)
                     node_info = node_info["node"]
                     for k, v in node_info.items():
                         if 'alias' in k:
@@ -64,7 +48,7 @@ def out_list_peers():
 @error_handler
 def out_list_peers_detail():
     peers = get_data.get_peers()
-    peers = response_to_dict(peers)
+    peers = converters.response_to_dict(peers)
     if len(peers) > 0:
         print("\nPeers: " + str(len(peers["peers"])) + " total \n" + "-" * 15 + "\n")
         df = pd.DataFrame.from_dict(peers["peers"]).fillna(0)
@@ -72,7 +56,7 @@ def out_list_peers_detail():
         for index, row in df.iterrows():
             # Pull NodeInfo and print right in line with PeerList output for a detailed peer list
             node_info = get_data.get_node_info(row["pub_key"])
-            node_info = response_to_dict(node_info)
+            node_info = converters.response_to_dict(node_info)
             node_info = node_info["node"]
             for key, value in sorted(node_info.items()):
                 if key != "pub_key":
@@ -94,7 +78,7 @@ def out_list_peers_detail():
 @error_handler
 def out_list_channels():
     channels = get_data.get_channels()
-    channels = response_to_dict(channels)
+    channels = converters.response_to_dict(channels)
     if len(channels) > 0:
         print("\nChannels: " + str(len(channels['channels'])) + " total \n" + "-" * 18 + "\n")
         channels = channels['channels']
@@ -110,7 +94,7 @@ def out_list_channels():
 @error_handler
 def out_list_channels_detail():
     channels = get_data.get_channels()
-    channels = response_to_dict(channels)
+    channels = converters.response_to_dict(channels)
     if len(channels) > 0:
         # Convert dictionary to dataframe, and replace empty values with 0s
         channels_df = pd.DataFrame.from_dict(channels['channels']).fillna(0)
@@ -120,7 +104,7 @@ def out_list_channels_detail():
             # Print the alias of the remote node
             remote_pubkey = row['remote_pubkey']
             node_info = get_data.get_node_info(remote_pubkey)
-            node_info = response_to_dict(node_info)
+            node_info = converters.response_to_dict(node_info)
             if 'alias' in node_info['node']:
                 alias = node_info['node']['alias']
                 print('Remote Node : ' + alias)
@@ -130,7 +114,7 @@ def out_list_channels_detail():
                     print(key + " : ", value)
             # Include channel details from GetChannelInfo.
             channel_info = get_data.get_channel_info(int(row['chan_id']))
-            channel_info = response_to_dict(channel_info)
+            channel_info = converters.response_to_dict(channel_info)
             for key, value in channel_info.items():
                 # Drop values already included in ListChannels output and print the rest
                 if key != 'channel_id':
@@ -145,15 +129,17 @@ def out_list_channels_detail():
 @error_handler
 def out_pending_channels():
     pending = get_data.get_pending_channels()
-    pending = response_to_dict(pending)
+    pending = converters.response_to_dict(pending)
     if len(pending) == 0:
         print('\nNo pending channels\n')
     else:
         print("\nPending Channels: " + "\n" + "-" * 17)
         for index, pen_type in pending.items():
+
             # Total limbo balance of all closing channels
             if 'limbo' in index:
-                print(index, ' : ', pen_type, '\r')
+                print(index, ' : ', pen_type, '\n')
+
             # If the pending channel is opening...
             elif 'open' in index:
                 # opening = pending['pending_open_channels'][0]['channel']
@@ -164,9 +150,20 @@ def out_pending_channels():
                         for key, value in channel.items():
                             if 'limbo' not in key:
                                 print(key + " : ", value)
-                    else:
-                        print(index, pen_type)
-                        print('\r')
+                    print('\r')
+
+            # If the pending channel is force-closing
+            elif 'closing' in index:
+                print('\nPending forced closing: \n' + "-" * 22)
+                closing = pending['pending_force_closing_channels']
+                for channel in closing:
+                    for key, value in channel.items():
+                        if key != 'channel':
+                            print(key, ' : ', value)
+                    channel_info = channel['channel']
+                    for key, value in channel_info.items():
+                        print(key, ' : ', value)
+                    print('\r')
 
             # If the pending channel is closing...
             elif 'close' in index:
@@ -178,20 +175,9 @@ def out_pending_channels():
                             print(k, ' : ', v)
                     else:
                         print(key, ' : ', value)
-
                 print('\r')
-                # If the pending channel is force-closing
-            elif 'closing' in index:
-                print('\nPending forced closing: \n' + "-" * 22)
-                closing = pending['pending_force_closing_channels']
-                for channel in closing:
-                    channel_info = channel['channel']
-                    for key, value in channel_info.items():
-                        print(key, ' : ', value)
-                    print('\r')
 
-            else:
-                print(index, ' : ', pen_type)
+
 
 
 @error_handler
@@ -224,7 +210,7 @@ def out_describe_graph():
 @error_handler
 def out_closed_channels():
     closed = get_data.get_closed_channels()
-    closed = response_to_dict(closed)
+    closed = converters.response_to_dict(closed)
     total_closed = str(len(closed['channels']))
     closed = (closed['channels'])
     print("\nClosed Channels: " + "\n" + "-" * 16)
@@ -238,7 +224,7 @@ def out_closed_channels():
 @error_handler
 def out_txns():
     txns = get_data.get_transactions()
-    txns = response_to_dict(txns)
+    txns = converters.response_to_dict(txns)
     df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
     # num_confirmations is too long - shorten to 'confs'
     df = df.rename(index=str, columns={'num_confirmations': 'confs'})
@@ -248,7 +234,7 @@ def out_txns():
     # Convert Unix timestamps to readable date/time format
     timestamp_list = []
     for time_stamp in df['time_stamp']:
-        time_stamp = convert_date(time_stamp)
+        time_stamp = converters.convert_date(time_stamp)
         timestamp_list.append(time_stamp)
     df['time_stamp'] = timestamp_list
     df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
@@ -282,7 +268,7 @@ def out_txns():
 @error_handler
 def out_version():
     lnd_ver = get_data.get_info()
-    lnd_ver = response_to_dict(lnd_ver)
+    lnd_ver = converters.response_to_dict(lnd_ver)
     print('\nLND Version: ' + lnd_ver['version'])
     print('\r')
 
@@ -290,19 +276,19 @@ def out_version():
 @error_handler
 def out_channel_info(chan_id):
     chan_info = get_data.get_channel_info(chan_id)
-    chan_info = response_to_dict(chan_info)
+    chan_info = converters.response_to_dict(chan_info)
     print("\nChannel Details:", '\n' + "-" * 16)
     for key, value in chan_info.items():
         if 'node1_pub' in key:
             node_info = get_data.get_node_info(value)
-            node_info = response_to_dict(node_info)
+            node_info = converters.response_to_dict(node_info)
             node_info = node_info['node']
             print('Node 1 : ')
             for k, v in node_info.items():
                 print(' ', k, ' : ', v)
         elif 'node2_pub' in key:
             node_info = get_data.get_node_info(value)
-            node_info = response_to_dict(node_info)
+            node_info = converters.response_to_dict(node_info)
             node_info = node_info['node']
             print('Node 2 : ')
             for k, v in node_info.items():
@@ -323,7 +309,7 @@ def out_channel_info(chan_id):
 @error_handler
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
-    node_info = response_to_dict(node_info)
+    node_info = converters.response_to_dict(node_info)
     print("\nNode Details:", '\n' + "-" * 13)
     node_details = node_info["node"]
     for key, value in sorted(node_details.items()):
@@ -345,7 +331,7 @@ def out_node_info(pub_key):
 @error_handler
 def out_new_address():
     new_address = get_data.get_new_address()
-    new_address = response_to_dict(new_address)
+    new_address = converters.response_to_dict(new_address)
     print("\nNew Address:", '\n' + "-" * 12)
     print(new_address['address'], '\n')
 
@@ -353,7 +339,7 @@ def out_new_address():
 @error_handler
 def out_list_payments():
     payments = get_data.get_list_payments()
-    payments = response_to_dict(payments)
+    payments = converters.response_to_dict(payments)
     if len(payments) > 0:
         print("\nPayments: " + str(len(payments['payments'])), '\n' + "-" * 12)
         payments_df = pd.DataFrame.from_dict(payments['payments']).fillna(0)
@@ -361,7 +347,7 @@ def out_list_payments():
         # Convert Unix timestamps to readable date/time format
         timestamp_list = []
         for time_stamp in payments_df['creation_date']:
-            time_stamp = convert_date(time_stamp)
+            time_stamp = converters.convert_date(time_stamp)
             timestamp_list.append(time_stamp)
         payments_df['creation_date'] = timestamp_list
         # Convert dataframe to string
@@ -380,7 +366,7 @@ def out_delete_payments():
 @error_handler
 def out_list_invoices():
     invoices = get_data.get_list_invoices()
-    invoices = response_to_dict(invoices)
+    invoices = converters.response_to_dict(invoices)
     if len(invoices) > 0:
         print("\nInvoices: " + str(len(invoices['invoices'])), '\n' + "-" * 12)
         invoice_list = invoices["invoices"]
@@ -389,9 +375,9 @@ def out_list_invoices():
         # Convert Unix timestamps to readable date/time format
         timestamp_list = []
         for time_stamp in invoice_df['creation_date']:
-            time_stamp = convert_date(time_stamp)
+            time_stamp = converters.convert_date(time_stamp)
             timestamp_list.append(time_stamp)
-            invoice_df['creation_date'] = timestamp_list
+        invoice_df['creation_date'] = timestamp_list
         print(invoice_df.to_string(index=False))
     else:
         print('\nNo invoices to list')
@@ -401,7 +387,7 @@ def out_list_invoices():
 @error_handler
 def out_fee_report():
     fee_report = get_data.get_fee_report()
-    fee_report = response_to_dict(fee_report)
+    fee_report = converters.response_to_dict(fee_report)
     df = pd.DataFrame.from_dict(fee_report['channel_fees'])
     df = df.to_string(index=False)
     print("\nFee Report:", '\n' + "-" * 11)
@@ -485,7 +471,7 @@ def out_close_channel(funding_tx, output_index, force):
 @error_handler
 def out_close_all_channels():
     channel_list = get_data.get_channels()
-    channel_list = response_to_dict(channel_list)
+    channel_list = converters.response_to_dict(channel_list)
     channel_df = pd.DataFrame.from_dict(channel_list)
     if len(channel_df) > 0:
         print('\nClosing ALL channels...' + '\r')
@@ -536,7 +522,7 @@ def out_change_password(current_password, new_password):
 @error_handler
 def out_gen_seed():
     seed = get_data.get_gen_seed()
-    seed = response_to_dict(seed)
+    seed = converters.response_to_dict(seed)
     seed = pd.DataFrame.from_dict(seed)
     print(seed)
     print('\r')
@@ -586,26 +572,22 @@ def out_add_invoice(amount=0, memo=""):
 
 @error_handler
 def out_lookup_invoice(r_hash):
-
     response = get_data.get_lookup_invoice(r_hash)
-    response_dict = response_to_dict(response)
+    response_dict = converters.response_to_dict(response)
     r_hash = response.r_hash
     r_preimage = response.r_preimage
-
     # Convert r_hash to 32-bit hex
     r_hash_hex = codecs.encode(r_hash, 'hex')
     # Convert r_hash to a string
     r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
-
     # Convert r_preimage to 32-bit hex
     r_preimage_hex = codecs.encode(r_preimage, 'hex')
     # Convert r_preimage to a string
     r_preimage_str = codecs.decode(r_preimage_hex, 'utf-8')
     print('\nInvoice Details:' + '\n' + '-' * 16)
-
     for key, value in response_dict.items():
         if 'r_hash' in key:
-            print('r_hash_hex :', r_hash_str)
+            print('r_hash :', r_hash_str)
         elif 'r_preimage' in key:
             print('r_preimage : ', r_preimage_str)
         else:
@@ -622,10 +604,10 @@ def out_payinvoice(payment_request):
     answer = input()
     if answer == 'y':
         pay_response = get_data.get_payinvoice(payment_request)
-        payment_receipt = response_to_dict(pay_response)
+        payment_receipt = converters.response_to_dict(pay_response)
         print('\nInvoice Payment Receipt :\n' + '-' * 25)
         for key, value in payment_receipt.items():
-            # Hex encode the payment_preimage
+            # Decode base64, encode hex the preimage
             if 'payment_preimage' in key:
                 preimage_encoded = str(value).encode()
                 preimage_base64_decoded = codecs.decode(preimage_encoded, 'base64')
@@ -652,7 +634,7 @@ def out_payinvoice(payment_request):
 @error_handler
 def out_query_route(pub_key, amount, num_routes):
     route_data = get_data.get_query_route(pub_key, amount, num_routes)
-    route_data = response_to_dict(route_data)
+    route_data = converters.response_to_dict(route_data)
     print('\n' + str(len(route_data['routes'])) + ' possible routes\n' + '-' * 18 + '\n')
     route_count = 1
     for route in route_data['routes']:
