@@ -2,10 +2,6 @@
 
     A gRPC Client for Lightning Network Daemon (LND) in Python
 
-    A work-in-progress to learn Python and Lightning Network.
-
-    Comments and PRs welcome!
-
 # Setup
 
     1. Install Python 3 (apt-get install python3)
@@ -13,7 +9,7 @@
     3. git clone https://github.com/Badoot/MyLND.git
     4. pip3 install grpcio grpcio-tools googleapis-common-protos pandas
     5. If you don't already have a wallet, please use 'lncli create' to create a new wallet (for now).
-    6. Copy *.macaroon and tls.cert from your LND node to --data_dir ('.' by default)
+    6. Copy *.macaroon and tls.cert from your LND node to --lnddir ('.' by default)
        or --macaroonpath and --tlspath on your local machine.
 
 # Usage
