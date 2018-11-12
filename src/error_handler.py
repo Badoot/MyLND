@@ -3,7 +3,7 @@ import grpc
 
 
 def error_handler(fnc):
-    # Cleaner RPC errors
+    # Cleaner error output
     @wraps(fnc)
     def wrapper(*args, **kwargs):
         try:
