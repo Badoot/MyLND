@@ -11,6 +11,18 @@ import src.converters as converters
 pd.set_option('colheader_justify', 'left')
 pd.set_option('display.max_colwidth', -1)
 
+# # # # # # # # # # # # # # # # # # #
+#           My LND Node
+# # # # # # # # # # # # # # # # # # #
+
+
+@error_handler
+def out_version():
+    lnd_ver = get_data.get_info()
+    lnd_ver = converters.response_to_dict(lnd_ver)
+    print('\nLND Version: ' + lnd_ver['version'])
+    print('\r')
+
 
 @error_handler
 def out_get_info():
@@ -19,12 +31,58 @@ def out_get_info():
     print(get_info)
 
 
-
 @error_handler
 def out_debug_level(show, level_spec):
     debug_level = get_data.get_set_debug_level(show, level_spec)
     print("\nDebug Level:\n" + "-" * 12)
     print(debug_level)
+
+
+@error_handler
+def out_fee_report():
+    fee_report = get_data.get_fee_report()
+    fee_report = converters.response_to_dict(fee_report)
+    df = pd.DataFrame.from_dict(fee_report['channel_fees'])
+    df = df.to_string(index=False)
+    print("\nFee Report:", '\n' + "-" * 11)
+    print(df)
+    print('\r')
+
+
+# # # # # # # # # # # # # # # # # # #
+#       Lightning Network info
+# # # # # # # # # # # # # # # # # # #
+
+
+@error_handler
+def out_network_info():
+    net_info = get_data.get_network_info()
+    print("\nLightning Network Stats:\n" + "-" * 24)
+    print(net_info)
+
+
+@error_handler
+def out_describe_graph():
+    describe_graph = get_data.get_describe_graph()
+    print(describe_graph)
+
+
+# # # # # # # # # # # # # # # # # # #
+#               Peers
+# # # # # # # # # # # # # # # # # # #
+
+
+@error_handler
+def out_connect_peer(peer_data):
+    connect_peers = get_data.get_connect_peer(peer_data)
+    get_data.get_peers()
+    print(connect_peers, '\nPeer connected\n')
+
+
+@error_handler
+def out_disconnect_peer(pub_key):
+    disconnect_peer = get_data.get_disconnect_peer(pub_key)
+    print(disconnect_peer, '\nPeer disconnected\n')
 
 
 @error_handler
@@ -81,6 +139,67 @@ def out_list_peers_detail():
             print('\r')
     else:
         print('\nNo peers connected\n')
+
+
+
+@error_handler
+def out_node_info(pub_key):
+    node_info = get_data.get_node_info(pub_key)
+    node_info = converters.response_to_dict(node_info)
+    print("\nNode Details:", '\n' + "-" * 13)
+    node_details = node_info["node"]
+    for key, value in sorted(node_details.items()):
+        if 'addresses' in key:
+            addresses = value[0]
+            for k, v in addresses.items():
+                print(k + " : ", v)
+        else:
+            print(key + " : ", value)
+    if 'num_channels' in node_info:
+            print('num_channels : ' + str(node_info['num_channels']))
+            print('total_capacity : ' + str(node_info['total_capacity']))
+    else:
+            print('num_channels : 0')
+            print('total_capacity : 0')
+    print('\r')
+
+
+# # # # # # # # # # # # # # # # # # #
+#           Channels
+# # # # # # # # # # # # # # # # # # #
+
+
+@error_handler
+def out_channel_info(chan_id):
+    chan_info = get_data.get_channel_info(chan_id)
+    chan_info = converters.response_to_dict(chan_info)
+    print("\nChannel Details:", '\n' + "-" * 16)
+    for key, value in chan_info.items():
+        if 'node1_pub' in key:
+            node_info = get_data.get_node_info(value)
+            node_info = converters.response_to_dict(node_info)
+            node_info = node_info['node']
+            print('Node 1 : ')
+            for k, v in node_info.items():
+                print(' ', k, ' : ', v)
+        elif 'node2_pub' in key:
+            node_info = get_data.get_node_info(value)
+            node_info = converters.response_to_dict(node_info)
+            node_info = node_info['node']
+            print('Node 2 : ')
+            for k, v in node_info.items():
+                print(' ', k, ' : ', v)
+        elif 'node1_policy' in key:
+            print('Node 1 Policy : ')
+            for k, v in value.items():
+                print(' ', k, ' : ', v)
+        elif 'node2_policy' in key:
+            print('Node 2 Policy : ')
+            for k, v in value.items():
+                print(' ', k, ' : ', v)
+        else:
+            print(key + " : ", value)
+    print('\r')
 
 
 @error_handler
@@ -186,33 +305,11 @@ def out_pending_channels():
                 print('\r')
 
 
-
-
-@error_handler
-def out_wallet_balance():
-    wallet_balance = get_data.get_wallet_balance()
-    print("\nWallet Balance:\n" + "-" * 15)
-    print(wallet_balance)
-
-
 @error_handler
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     print("\nChannel Balance:\n" + "-" * 16)
     print(channel_balance)
-
-
-@error_handler
-def out_network_info():
-    net_info = get_data.get_network_info()
-    print("\nLightning Network Stats:\n" + "-" * 24)
-    print(net_info)
-
-
-@error_handler
-def out_describe_graph():
-    describe_graph = get_data.get_describe_graph()
-    print(describe_graph)
 
 
 @error_handler
@@ -227,193 +324,6 @@ def out_closed_channels():
             print(key, ' : ', value)
         print('\r')
     print(total_closed + " total closed channels\n")
-
-
-@error_handler
-def out_txns():
-    txns = get_data.get_transactions()
-    txns = converters.response_to_dict(txns)
-    df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
-    # num_confirmations is too long - shorten to 'confs'
-    df = df.rename(index=str, columns={'num_confirmations': 'confs'})
-    dropcols = ['block_hash']
-    df = df.drop(columns=dropcols)
-    print("\nTransactions: " + str(len(txns['transactions'])) + " total \n" + "-" * 22)
-    # Convert Unix timestamps to readable date/time format
-    timestamp_list = []
-    for time_stamp in df['time_stamp']:
-        time_stamp = converters.convert_date(time_stamp)
-        timestamp_list.append(time_stamp)
-    df['time_stamp'] = timestamp_list
-    df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
-    txns_df = df.to_string(index=False)
-    # Print transactions
-    print(txns_df + '\n')
-    # Print total tx amounts and fees
-    print("Transaction Totals\n" + "-" * 18)
-
-    def sum_totals():
-        tx_amt = list(pd.to_numeric(df['amount']))
-        amt_sum = 0
-        for x in tx_amt:
-            amt_sum += x
-        return amt_sum
-
-    def fees_totals():
-        tx_fee = list(pd.to_numeric(df['total_fees']))
-        fee_sum = 0
-        for x in tx_fee:
-            fee_sum += x
-        return fee_sum
-
-    # Print TX totals
-    print("Total TX Count : " + str(len(txns['transactions'])))
-    print("Total TX Amount : " + str(sum_totals()))
-    print("Total TX Fees : " + str(fees_totals()))
-    print('\r')
-
-
-@error_handler
-def out_version():
-    lnd_ver = get_data.get_info()
-    lnd_ver = converters.response_to_dict(lnd_ver)
-    print('\nLND Version: ' + lnd_ver['version'])
-    print('\r')
-
-
-@error_handler
-def out_channel_info(chan_id):
-    chan_info = get_data.get_channel_info(chan_id)
-    chan_info = converters.response_to_dict(chan_info)
-    print("\nChannel Details:", '\n' + "-" * 16)
-    for key, value in chan_info.items():
-        if 'node1_pub' in key:
-            node_info = get_data.get_node_info(value)
-            node_info = converters.response_to_dict(node_info)
-            node_info = node_info['node']
-            print('Node 1 : ')
-            for k, v in node_info.items():
-                print(' ', k, ' : ', v)
-        elif 'node2_pub' in key:
-            node_info = get_data.get_node_info(value)
-            node_info = converters.response_to_dict(node_info)
-            node_info = node_info['node']
-            print('Node 2 : ')
-            for k, v in node_info.items():
-                print(' ', k, ' : ', v)
-        elif 'node1_policy' in key:
-            print('Node 1 Policy : ')
-            for k, v in value.items():
-                print(' ', k, ' : ', v)
-        elif 'node2_policy' in key:
-            print('Node 2 Policy : ')
-            for k, v in value.items():
-                print(' ', k, ' : ', v)
-        else:
-            print(key + " : ", value)
-    print('\r')
-
-
-@error_handler
-def out_node_info(pub_key):
-    node_info = get_data.get_node_info(pub_key)
-    node_info = converters.response_to_dict(node_info)
-    print("\nNode Details:", '\n' + "-" * 13)
-    node_details = node_info["node"]
-    for key, value in sorted(node_details.items()):
-        if 'addresses' in key:
-            addresses = value[0]
-            for k, v in addresses.items():
-                print(k + " : ", v)
-        else:
-            print(key + " : ", value)
-    if 'num_channels' in node_info:
-            print('num_channels : ' + str(node_info['num_channels']))
-            print('total_capacity : ' + str(node_info['total_capacity']))
-    else:
-            print('num_channels : 0')
-            print('total_capacity : 0')
-    print('\r')
-
-
-@error_handler
-def out_new_address():
-    new_address = get_data.get_new_address()
-    new_address = converters.response_to_dict(new_address)
-    print("\nNew Address:", '\n' + "-" * 12)
-    print(new_address['address'], '\n')
-
-
-@error_handler
-def out_list_payments():
-    payments = get_data.get_list_payments()
-    payments = converters.response_to_dict(payments)
-    if len(payments) > 0:
-        print("\nPayments: " + str(len(payments['payments'])), '\n' + "-" * 12)
-        payments_df = pd.DataFrame.from_dict(payments['payments']).fillna(0)
-        payments_df = payments_df.drop(columns='path')
-        # Convert Unix timestamps to readable date/time format
-        timestamp_list = []
-        for time_stamp in payments_df['creation_date']:
-            time_stamp = converters.convert_date(time_stamp)
-            timestamp_list.append(time_stamp)
-        payments_df['creation_date'] = timestamp_list
-        # Convert dataframe to string
-        payments_str = pd.DataFrame.to_string(payments_df, index=False)
-        print(payments_str)
-    else:
-        print("\nNo payments to list")
-    print("\r")
-
-@error_handler
-def out_delete_payments():
-    delete_payments = get_data.get_delete_payments()
-    print(delete_payments, '\nPayments deleted\n')
-
-
-@error_handler
-def out_list_invoices():
-    invoices = get_data.get_list_invoices()
-    invoices = converters.response_to_dict(invoices)
-    if len(invoices) > 0:
-        print("\nInvoices: " + str(len(invoices['invoices'])), '\n' + "-" * 12)
-        invoice_list = invoices["invoices"]
-        columns = ['creation_date', 'value', 'payment_request']
-        invoice_df = pd.DataFrame(invoice_list, columns=columns).fillna(0)
-        # Convert Unix timestamps to readable date/time format
-        timestamp_list = []
-        for time_stamp in invoice_df['creation_date']:
-            time_stamp = converters.convert_date(time_stamp)
-            timestamp_list.append(time_stamp)
-        invoice_df['creation_date'] = timestamp_list
-        print(invoice_df.to_string(index=False))
-    else:
-        print('\nNo invoices to list')
-    print("\r")
-
-
-@error_handler
-def out_fee_report():
-    fee_report = get_data.get_fee_report()
-    fee_report = converters.response_to_dict(fee_report)
-    df = pd.DataFrame.from_dict(fee_report['channel_fees'])
-    df = df.to_string(index=False)
-    print("\nFee Report:", '\n' + "-" * 11)
-    print(df)
-    print('\r')
-
-
-@error_handler
-def out_connect_peer(peer_data):
-    connect_peers = get_data.get_connect_peer(peer_data)
-    get_data.get_peers()
-    print(connect_peers, '\nPeer connected\n')
-
-
-@error_handler
-def out_disconnect_peer(pub_key):
-    disconnect_peer = get_data.get_disconnect_peer(pub_key)
-    print(disconnect_peer, '\nPeer disconnected\n')
 
 
 @error_handler
@@ -515,7 +425,68 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
+# # # # # # # # # # # # # # # # # # #
+#       On-chain Transactions
+# # # # # # # # # # # # # # # # # # #
 
+
+@error_handler
+def out_new_address():
+    new_address = get_data.get_new_address()
+    new_address = converters.response_to_dict(new_address)
+    print("\nNew Address:", '\n' + "-" * 12)
+    print(new_address['address'], '\n')
+
+
+@error_handler
+def out_wallet_balance():
+    wallet_balance = get_data.get_wallet_balance()
+    print("\nWallet Balance:\n" + "-" * 15)
+    print(wallet_balance)
+
+
+@error_handler
+def out_txns():
+    txns = get_data.get_transactions()
+    txns = converters.response_to_dict(txns)
+    df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
+    # num_confirmations is too long - shorten to 'confs'
+    df = df.rename(index=str, columns={'num_confirmations': 'confs'})
+    dropcols = ['block_hash']
+    df = df.drop(columns=dropcols)
+    print("\nTransactions: " + str(len(txns['transactions'])) + " total \n" + "-" * 22)
+    # Convert Unix timestamps to readable date/time format
+    timestamp_list = []
+    for time_stamp in df['time_stamp']:
+        time_stamp = converters.convert_date(time_stamp)
+        timestamp_list.append(time_stamp)
+    df['time_stamp'] = timestamp_list
+    df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
+    txns_df = df.to_string(index=False)
+    # Print transactions
+    print(txns_df + '\n')
+    # Print total tx amounts and fees
+    print("Transaction Totals\n" + "-" * 18)
+
+    def sum_totals():
+        tx_amt = list(pd.to_numeric(df['amount']))
+        amt_sum = 0
+        for x in tx_amt:
+            amt_sum += x
+        return amt_sum
+
+    def fees_totals():
+        tx_fee = list(pd.to_numeric(df['total_fees']))
+        fee_sum = 0
+        for x in tx_fee:
+            fee_sum += x
+        return fee_sum
+
+    # Print TX totals
+    print("Total TX Count : " + str(len(txns['transactions'])))
+    print("Total TX Amount : " + str(sum_totals()))
+    print("Total TX Fees : " + str(fees_totals()))
+    print('\r')
 
 
 @error_handler
@@ -524,7 +495,59 @@ def out_sendcoins(addr, amount):
     print('\n', response)
 
 
-# Lightning Payments
+# # # # # # # # # # # # # # # # # # #
+#         Lightning Payments
+# # # # # # # # # # # # # # # # # # #
+
+
+@error_handler
+def out_list_payments():
+    payments = get_data.get_list_payments()
+    payments = converters.response_to_dict(payments)
+    if len(payments) > 0:
+        print("\nPayments: " + str(len(payments['payments'])), '\n' + "-" * 12)
+        payments_df = pd.DataFrame.from_dict(payments['payments']).fillna(0)
+        payments_df = payments_df.drop(columns='path')
+        # Convert Unix timestamps to readable date/time format
+        timestamp_list = []
+        for time_stamp in payments_df['creation_date']:
+            time_stamp = converters.convert_date(time_stamp)
+            timestamp_list.append(time_stamp)
+        payments_df['creation_date'] = timestamp_list
+        # Convert dataframe to string
+        payments_str = pd.DataFrame.to_string(payments_df, index=False)
+        print(payments_str)
+    else:
+        print("\nNo payments to list")
+    print("\r")
+
+
+@error_handler
+def out_delete_payments():
+    delete_payments = get_data.get_delete_payments()
+    print(delete_payments, '\nPayments deleted\n')
+
+
+@error_handler
+def out_list_invoices():
+    invoices = get_data.get_list_invoices()
+    invoices = converters.response_to_dict(invoices)
+    if len(invoices) > 0:
+        print("\nInvoices: " + str(len(invoices['invoices'])), '\n' + "-" * 12)
+        invoice_list = invoices["invoices"]
+        columns = ['creation_date', 'value', 'payment_request']
+        invoice_df = pd.DataFrame(invoice_list, columns=columns).fillna(0)
+        # Convert Unix timestamps to readable date/time format
+        timestamp_list = []
+        for time_stamp in invoice_df['creation_date']:
+            time_stamp = converters.convert_date(time_stamp)
+            timestamp_list.append(time_stamp)
+        invoice_df['creation_date'] = timestamp_list
+        print(invoice_df.to_string(index=False))
+    else:
+        print('\nNo invoices to list')
+    print("\r")
+
 
 @error_handler
 def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
@@ -565,7 +588,7 @@ def out_decode_payreq(payment_request):
     print(response)
 
 
-# @error_handler
+@error_handler
 def out_add_invoice(amount, memo):
     response = get_data.get_add_invoice(amount, memo)
     print('\nAdding Invoice:' + '\n' + '-' * 16)
@@ -663,7 +686,9 @@ def out_query_route(pub_key, amount, num_routes):
         print('\r')
 
 
-#  Wallet Stuff
+# # # # # # # # # # # # # # # # # # #
+#        Wallet Stub Stuff
+# # # # # # # # # # # # # # # # # # #
 
 @error_handler
 def out_unlock(password):
