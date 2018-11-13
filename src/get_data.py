@@ -39,6 +39,10 @@ class APICall():
     wallet_stub = lnrpc.WalletUnlockerStub(channel)
 
 
+# # # # # # # # # #
+#   My LND node
+# # # # # # # # # #
+
 def get_info():
     response = APICall.stub.GetInfo(ln.GetInfoRequest())
     return response
@@ -53,10 +57,18 @@ def get_set_debug_level(show, level_spec):
     return response
 
 
+# # # # # # # # # #
+#      Peers
+# # # # # # # # # #
+
 def get_peers():
     response = APICall.stub.ListPeers(ln.ListPeersRequest())
     return response
 
+
+# # # # # # # # # #
+#    Channels
+# # # # # # # # # #
 
 def get_channels():
     response = APICall.stub.ListChannels(ln.ListChannelsRequest())

@@ -17,7 +17,9 @@ args = arg_parser.arg_parser_func()
 @error_handler
 def run_it():
 
-    # My LND node
+    # # # # # # # # # #
+    #   My LND node
+    # # # # # # # # # #
 
     if args.lnd_version:
         output.out_version()
@@ -46,7 +48,9 @@ def run_it():
         level_spec = None
         output.out_debug_level(show, level_spec)
 
-    # On-chain transactions
+    # # # # # # # # # # # # # # #
+    #   On-chain transactions
+    # # # # # # # # # # # # # # #
 
     if args.sendcoins:
         addr = args.sendcoins[0]
@@ -63,7 +67,9 @@ def run_it():
         # Python does not like the type= argument that LND requires for this, so accepting default from LND
         output.out_new_address()
 
-    # Peers
+    # # # # # # # # # #
+    #       Peers
+    # # # # # # # # # #
 
     if args.listpeers:
         output.out_list_peers()
@@ -83,7 +89,9 @@ def run_it():
         pub_key = args.disconnect
         output.out_disconnect_peer(pub_key)
 
-    # Channels
+    # # # # # # # # # #
+    #     Channels
+    # # # # # # # # # #
 
     if args.listchannels_detail:
         output.out_list_channels_detail()
@@ -129,7 +137,9 @@ def run_it():
     if args.closeallchannels:
         output.out_close_all_channels()
 
-    #  Lightning Payments
+    # # # # # # # # # # # # # # # #
+    #      Lightning Payments
+    # # # # # # # # # # # # # # # #
 
     if args.listpayments:
         output.out_list_payments()
@@ -176,7 +186,9 @@ def run_it():
         num_routes = int(route_data[2])
         output.out_query_route(pub_key, amount, num_routes)
 
-    # Wallet stub stuff
+    # # # # # # # # # # # # # # #
+    #      Wallet stub stuff
+    # # # # # # # # # # # # # # #
 
     def wallet_file_check():
         walletfile = os.path.isfile(args.data_dir + '/wallet.db')
@@ -209,4 +221,5 @@ def run_it():
         exit(0)
 
 
+# Run it!
 run_it()
