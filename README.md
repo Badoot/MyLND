@@ -71,7 +71,7 @@
       --newaddress          Create a new np2ksh address
       --sendcoins <bitcoin_address> <amount_in_satoshis>
                             Send an on-chain bitcoin transaction
-      --sendpayment <payment_hash> 
+      --sendpayment <payment_request> 
       OR
       --sendpayment <public_key> <amount> <payment_hash> <final cltv>
                             Send satoshis with either a payment_request,
