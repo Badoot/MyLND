@@ -71,9 +71,11 @@
       --newaddress          Create a new np2ksh address
       --sendcoins <bitcoin_address> <amount_in_satoshis>
                             Send an on-chain bitcoin transaction
-      --sendpayment [SENDPAYMENT [SENDPAYMENT ...]]
-                            Send satoshis with either a) just a payment_request,
-                            or b) a public key, amount, payment hash, and
+      --sendpayment <payment_hash> 
+      OR
+      --sendpayment <public_key> <amount> <payment_hash> <final cltv>
+                            Send satoshis with either a payment_request,
+                            or a public key, amount, payment hash, and
                             final_cltv_delta from --addinvoice
       --transactions        Transaction list and counts
       --listpayments        List lightning network payments
