@@ -12,15 +12,16 @@ from src.error_handler import error_handler
 args = arg_parser.arg_parser_func()
 
 
-@error_handler
 # Run the option provided
+
+@error_handler
 def run_it():
 
-    # LND software info
+    # My LND node
+
     if args.lnd_version:
         output.out_version()
 
-    # My LND node info
     if args.status:
         output.out_get_info()
         output.out_wallet_balance()
@@ -29,11 +30,40 @@ def run_it():
     if args.getinfo:
         output.out_get_info()
 
+    if args.fee_report:
+        output.out_fee_report()
+
+    # Lightning Network Info
+
     if args.networkinfo:
         output.out_network_info()
 
     if args.describegraph:
         output.out_describe_graph()
+
+    if args.debug_level:
+        show = bool(args.debug_level[0])
+        level_spec = None
+        output.out_debug_level(show, level_spec)
+
+    # On-chain transactions
+
+    if args.sendcoins:
+        addr = args.sendcoins[0]
+        amount = args.sendcoins[1]
+        output.out_sendcoins(addr, amount)
+
+    if args.transactions:
+        output.out_txns()
+
+    if args.walletbalance:
+        output.out_wallet_balance()
+
+    if args.newaddress:
+        # Python does not like the type= argument that LND requires for this, so accepting default from LND
+        output.out_new_address()
+
+    # Peers
 
     if args.listpeers:
         output.out_list_peers()
@@ -41,20 +71,25 @@ def run_it():
     if args.listpeers_detail:
         output.out_list_peers_detail()
 
-    if args.listchannels:
-        output.out_list_channels()
+    if args.node_info:
+        pub_key = args.node_info[0]
+        output.out_node_info(pub_key)
+
+    if args.connect:
+        peer_data = args.connect
+        output.out_connect_peer(peer_data)
+
+    if args.disconnect:
+        pub_key = args.disconnect
+        output.out_disconnect_peer(pub_key)
+
+    # Channels
 
     if args.listchannels_detail:
         output.out_list_channels_detail()
 
     if args.closedchannels:
         output.out_closed_channels()
-
-    if args.transactions:
-        output.out_txns()
-
-    if args.walletbalance:
-        output.out_wallet_balance()
 
     if args.channelbalance:
         output.out_channel_balance()
@@ -65,25 +100,6 @@ def run_it():
     if args.channel_info:
         chan_id = args.channel_info[0]
         output.out_channel_info(chan_id)
-
-    if args.node_info:
-        pub_key = args.node_info[0]
-        output.out_node_info(pub_key)
-
-    if args.newaddress:
-        # Python does not like the type= argument that LND requires for this, so accepting default from LND
-        output.out_new_address()
-
-    if args.fee_report:
-        output.out_fee_report()
-
-    if args.connect:
-        peer_data = args.connect
-        output.out_connect_peer(peer_data)
-
-    if args.disconnect:
-        pub_key = args.disconnect
-        output.out_disconnect_peer(pub_key)
 
     if args.openchannel:
         node_pubkey = args.openchannel[0]
@@ -113,10 +129,7 @@ def run_it():
     if args.closeallchannels:
         output.out_close_all_channels()
 
-    if args.sendcoins:
-        addr = args.sendcoins[0]
-        amount = args.sendcoins[1]
-        output.out_sendcoins(addr, amount)
+    #  Lightning Payments
 
     if args.listpayments:
         output.out_list_payments()
@@ -164,6 +177,7 @@ def run_it():
         output.out_query_route(pub_key, amount, num_routes)
 
     # Wallet stub stuff
+
     def wallet_file_check():
         walletfile = os.path.isfile(args.data_dir + '/wallet.db')
         if walletfile:

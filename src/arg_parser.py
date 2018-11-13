@@ -24,6 +24,8 @@ def arg_parser_func():
                                 dest='macaroon_path', metavar='</path/to/admin.macaroon>')
     parent_parser.add_argument("--tlspath", help="Path to tls.cert", type=str, action='store',
                                 dest='tls_path', metavar='</path/to/tls.cert>')
+    parent_parser.add_argument("--debug_level", nargs="*", help="Logging verbosity of LND", type=str, action='store',
+                                dest='debug_level')
     parent_parser.add_argument("--genseed", help="Generate mnemonic seed", action='store_true')
     parent_parser.add_argument("--create", help="Initialize a new wallet", action='store_true')
     parent_parser.add_argument("--unlock", help="Unlock wallet", action='store_true')

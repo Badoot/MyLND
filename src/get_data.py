@@ -9,23 +9,20 @@ import codecs
 
 args = arg_parser.arg_parser_func()
 
-
-''' Default ip:port is localhost:10009'''
-
+# Default ip:port is localhost:10009
 if args.ip_port:
     ip_port = args.ip_port
 else:
     ip_port = 'localhost:10009'
 
-''' Default data_dir is '.' '''
-
+# Default data_dir is '/root/.lnd'
 if args.lnddir:
     lnddir = args.lnddir
 else:
-    lnddir = '.'
+    lnddir = '/root/.lnd'
 
 
-class APICall:
+class APICall():
 
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
     cert = open(lnddir + '/tls.cert', 'rb').read()
@@ -44,6 +41,15 @@ class APICall:
 
 def get_info():
     response = APICall.stub.GetInfo(ln.GetInfoRequest())
+    return response
+
+
+def get_set_debug_level(show, level_spec):
+    request = ln.DebugLevelRequest(
+        show=show,
+        level_spec=level_spec
+    )
+    response = APICall.stub.DebugLevel(request)
     return response
 
 
@@ -78,8 +84,7 @@ def get_network_info():
 
 
 def get_describe_graph():
-    request = ln.ChannelGraphRequest()
-    response = APICall.stub.DescribeGraph(request)
+    response = APICall.stub.DescribeGraph(ln.ChannelGraphRequest())
     return response
 
 

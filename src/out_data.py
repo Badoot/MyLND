@@ -19,6 +19,14 @@ def out_get_info():
     print(get_info)
 
 
+
+# @error_handler
+def out_debug_level(show, level_spec):
+    debug_level = get_data.get_set_debug_level(show, level_spec)
+    print("\nDebug Level:\n" + "-" * 12)
+    print(debug_level)
+
+
 @error_handler
 def out_list_peers():
     peers = get_data.get_peers()
@@ -507,31 +515,7 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
-@error_handler
-def out_unlock(password):
-    get_data.wallet_unlock(password)
-    print('\nWallet unlocked!\n')
-    
 
-@error_handler
-def out_change_password(current_password, new_password):
-    get_data.change_password(current_password, new_password)
-    print('\nPassword changed\n')
-
-
-@error_handler
-def out_gen_seed():
-    seed = get_data.get_gen_seed()
-    seed = converters.response_to_dict(seed)
-    seed = pd.DataFrame.from_dict(seed)
-    print(seed)
-    print('\r')
-
-
-@error_handler
-def out_create(wallet_password, cipher_seed_mnemonic):
-    get_data.get_create(wallet_password, cipher_seed_mnemonic)
-    print('\r')
 
 
 @error_handler
@@ -539,6 +523,8 @@ def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
 
+
+# Lightning Payments
 
 @error_handler
 def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
@@ -675,3 +661,32 @@ def out_query_route(pub_key, amount, num_routes):
             else:
                 print(key, ':', value)
         print('\r')
+
+
+#  Wallet Stuff
+
+@error_handler
+def out_unlock(password):
+    get_data.wallet_unlock(password)
+    print('\nWallet unlocked!\n')
+
+
+@error_handler
+def out_change_password(current_password, new_password):
+    get_data.change_password(current_password, new_password)
+    print('\nPassword changed\n')
+
+
+@error_handler
+def out_gen_seed():
+    seed = get_data.get_gen_seed()
+    seed = converters.response_to_dict(seed)
+    seed = pd.DataFrame.from_dict(seed)
+    print(seed)
+    print('\r')
+
+
+@error_handler
+def out_create(wallet_password, cipher_seed_mnemonic):
+    get_data.get_create(wallet_password, cipher_seed_mnemonic)
+    print('\r')
