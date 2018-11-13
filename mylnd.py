@@ -21,6 +21,11 @@ def run_it():
         output.out_version()
 
     # My LND node info
+    if args.status:
+        output.out_get_info()
+        output.out_wallet_balance()
+        output.out_channel_balance()
+
     if args.getinfo:
         output.out_get_info()
 
@@ -69,24 +74,6 @@ def run_it():
         # Python does not like the type= argument that LND requires for this, so accepting default from LND
         output.out_new_address()
 
-    if args.listpayments:
-        output.out_list_payments()
-
-    if args.deletepayments:
-        output.out_delete_payments()
-
-    if args.add_invoice:
-        amount = int(args.add_invoice[0])
-        memo = str(args.add_invoice[1])
-        output.out_add_invoice(amount, memo)
-
-    if args.lookup_invoice:
-        r_hash = args.lookup_invoice[0]
-        output.out_lookup_invoice(r_hash)
-
-    if args.listinvoices:
-        output.out_list_invoices()
-
     if args.fee_report:
         output.out_fee_report()
 
@@ -131,11 +118,35 @@ def run_it():
         amount = args.sendcoins[1]
         output.out_sendcoins(addr, amount)
 
+    if args.listpayments:
+        output.out_list_payments()
+
+    if args.deletepayments:
+        output.out_delete_payments()
+
+    if args.add_invoice:
+        amount = int(args.add_invoice[0])
+        memo = str(args.add_invoice[1])
+        output.out_add_invoice(amount, memo)
+
+    if args.lookup_invoice:
+        r_hash = args.lookup_invoice[0]
+        output.out_lookup_invoice(r_hash)
+
+    if args.listinvoices:
+        output.out_list_invoices()
+
     if args.sendpayment:
-        dest = args.sendpayment[0]
-        amt = int(args.sendpayment[1])
-        r_hash = args.sendpayment[2]
-        output.out_send_payment(dest, amt, r_hash)
+        if len(args.sendpayment) == 1:
+            payment_request = args.sendpayment[0]
+            output.out_send_payment(payment_request, dest=None, amt=None, payment_hash_str=None, final_cltv_delta=None)
+        else:
+            payment_request = None
+            dest = args.sendpayment[0].encode()
+            amt = int(args.sendpayment[1])
+            payment_hash_str = args.sendpayment[2]
+            final_cltv_delta = args.sendpayment[3]
+            output.out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
 
     if args.payinvoice:
         payment_request = args.payinvoice[0]
@@ -152,19 +163,12 @@ def run_it():
         num_routes = int(route_data[2])
         output.out_query_route(pub_key, amount, num_routes)
 
-    if args.status:
-        output.out_get_info()
-        output.out_wallet_balance()
-        output.out_channel_balance()
-
-
     # Wallet stub stuff
     def wallet_file_check():
         walletfile = os.path.isfile(args.data_dir + '/wallet.db')
         if walletfile:
             print('\nWallet exists... exiting\n')
             exit(1)
-
 
     if args.genseed:
         wallet_file_check()
@@ -189,5 +193,6 @@ def run_it():
         #  in-progress....
         print('\nPlease use "lncli create"\n')
         exit(0)
+
 
 run_it()

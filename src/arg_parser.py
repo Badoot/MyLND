@@ -66,14 +66,16 @@ def arg_parser_func():
     parent_parser.add_argument("--newaddress", help="Create a new np2ksh address", action='store_true')
     parent_parser.add_argument("--sendcoins", nargs=2, help="Send an on-chain bitcoin transaction", action='store',
                                dest='sendcoins', metavar=('<bitcoin_address>', '<amount_in_satoshis>'))
-    parent_parser.add_argument("--sendpayment", nargs=3,
-                               help="Send satoshis to a Lightning node's public key",
-                               action='store', dest='sendpayment', metavar=('<public_key>', '<amount>', '<r_hash>'))
+    parent_parser.add_argument("--sendpayment", nargs="*",
+                               help="Send satoshis with either a) just a payment_request, or b) a public key, "
+                                    "amount, payment hash, and final_cltv_delta from --addinvoice", action='store',
+                               dest='sendpayment'
+                                )
     parent_parser.add_argument("--transactions", help="Transaction list and counts", action='store_true')
     parent_parser.add_argument("--listpayments", help="List lightning network payments", action='store_true')
     parent_parser.add_argument("--deletepayments", help="Delete all outgoing payments from DB", action='store_true')
     parent_parser.add_argument("--listinvoices", help="List of all invoices in the db", action='store_true')
-    parent_parser.add_argument("--addinvoice", nargs=2, help="Add a new invoice", action='store', dest='add_invoice',
+    parent_parser.add_argument("--addinvoice", nargs="*", help="Add a new invoice", action='store', dest='add_invoice',
                                metavar=('<amount>', '<memo>'))
     parent_parser.add_argument("--lookupinvoice", nargs=1, help="Lookup an invoice by r_hash", action='store',
                                dest='lookup_invoice', metavar='<r_hash>')

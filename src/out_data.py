@@ -541,9 +541,35 @@ def out_sendcoins(addr, amount):
 
 
 @error_handler
-def out_send_payment(dest, amt, r_hash):
-    response = get_data.get_send_payment(dest, amt, r_hash)
-    print('\n', response)
+def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
+    response = get_data.get_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
+    response_dict = converters.response_to_dict(response)
+    print('\nPayment Receipt:' + '\n' + '-' * 16)
+    for key, value in response_dict.items():
+        if 'payment_preimage' in key:
+            preimage_str = value
+            # Convert str to bytes
+            primage_bytes = codecs.encode(preimage_str, 'utf-8')
+            # Decode base64
+            preimage_64 = codecs.decode(primage_bytes, 'base64')
+            # Encode hex
+            preimage_hex = codecs.encode(preimage_64, 'hex')
+            # Decode utf-8
+            preimage_print = codecs.decode(preimage_hex, 'utf-8')
+            print('payment_preimage : ', preimage_print)
+        elif 'payment_route' in key:
+            print('payment_route :\r')
+            for k, v in value.items():
+                if 'hops' in k:
+                    print(' hops : \r')
+                    for k2, v2 in v[0].items():
+                        print('  ', k2, ' : ', v2)
+                elif 'hops' not in key:
+                    print(' ', k, ' : ', v)
+            # print(key, ' : ', value)
+        else:
+            print(key, ' : ', value)
+    print('\r')
 
 
 @error_handler
@@ -553,8 +579,8 @@ def out_decode_payreq(payment_request):
     print(response)
 
 
-@error_handler
-def out_add_invoice(amount=0, memo=""):
+# @error_handler
+def out_add_invoice(amount, memo):
     response = get_data.get_add_invoice(amount, memo)
     print('\nAdding Invoice:' + '\n' + '-' * 16)
     print('Amount in sats : ' + str(amount))
@@ -565,7 +591,7 @@ def out_add_invoice(amount=0, memo=""):
     r_hash_hex = codecs.encode(r_hash, 'hex')
     # Convert r_hash to a string
     r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
-    print('r_hash :', r_hash_str)
+    print('r_hash (aka payment_hash) :', r_hash_str)
     print('payment_request :', payment_request)
     print('\r')
 
@@ -587,9 +613,9 @@ def out_lookup_invoice(r_hash):
     print('\nInvoice Details:' + '\n' + '-' * 16)
     for key, value in response_dict.items():
         if 'r_hash' in key:
-            print('r_hash :', r_hash_str)
+            print('payment_hash :', r_hash_str)
         elif 'r_preimage' in key:
-            print('r_preimage : ', r_preimage_str)
+            print('payment_preimage : ', r_preimage_str)
         else:
             print(key, ' : ', value)
     print('\r')

@@ -15,7 +15,7 @@
 # Usage
 
     usage: mylnd.py --argument <value1> <value2>
-
+    
     example: mylnd.py --addinvoice 100 "for hugs"
     
         MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.
@@ -46,7 +46,7 @@
       --openchannel-wait <public_key> <local_amount> <push_amount>
                             Attempt to open a channel with a remote peer and wait
                             for confirmation
-      --closechannel <channel_point> <force>
+      --closechannel [<channel_point> [<force> ...]]
                             Attempt to close a channel with a remote peer
       --closeallchannels    Attempt to close all open channels
       --listchannels        List channels
@@ -69,13 +69,15 @@
       --newaddress          Create a new np2ksh address
       --sendcoins <bitcoin_address> <amount_in_satoshis>
                             Send an on-chain bitcoin transaction
-      --sendpayment <public_key> <amount> <r_hash>
-                            Send satoshis to a Lightning node's public key
+      --sendpayment [SENDPAYMENT [SENDPAYMENT ...]]
+                            Send satoshis with either a) just a payment_request,
+                            or b) a public key, amount, payment hash, and
+                            final_cltv_delta from --addinvoice
       --transactions        Transaction list and counts
       --listpayments        List lightning network payments
       --deletepayments      Delete all outgoing payments from DB
       --listinvoices        List of all invoices in the db
-      --addinvoice <amount> <memo>
+      --addinvoice [<amount> [<memo> ...]]
                             Add a new invoice
       --lookupinvoice <r_hash>
                             Lookup an invoice by r_hash

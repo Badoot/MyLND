@@ -118,26 +118,6 @@ def get_new_address():
     return response
 
 
-def get_list_invoices():
-    response = APICall.stub.ListInvoices(ln.ListInvoiceRequest())
-    return response
-
-
-def get_add_invoice(amount=None, memo=""):
-    request = ln.Invoice(
-        memo=memo,
-        value=amount,
-    )
-    response = APICall.stub.AddInvoice(request)
-    return response
-
-
-def get_lookup_invoice(r_hash):
-    request = ln.PaymentHash(r_hash_str=r_hash)
-    response = APICall.stub.LookupInvoice(request)
-    return response
-
-
 def get_fee_report():
     response = APICall.stub.FeeReport(ln.FeeReportRequest())
     return response
@@ -243,9 +223,34 @@ def get_send_coins(addr, amount):
     return response
 
 
-def get_send_payment(dest, amt, r_hash):
-    dest_bytes = codecs.decode(dest, 'hex')
-    request = ln.SendRequest(dest=dest_bytes, amt=amt, payment_hash_string=r_hash)
+def get_list_invoices():
+    response = APICall.stub.ListInvoices(ln.ListInvoiceRequest())
+    return response
+
+
+def get_add_invoice(amount, memo):
+    request = ln.Invoice(
+        memo=memo,
+        value=amount,
+    )
+    response = APICall.stub.AddInvoice(request)
+    return response
+
+
+def get_lookup_invoice(r_hash):
+    request = ln.PaymentHash(r_hash_str=r_hash)
+    response = APICall.stub.LookupInvoice(request)
+    return response
+
+
+def get_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
+    request = ln.SendRequest(
+        payment_request=payment_request,
+        dest_string=dest,
+        amt=int(amt),
+        payment_hash_string=payment_hash_str,
+        final_cltv_delta=int(final_cltv_delta)
+    )
     response = APICall.stub.SendPaymentSync(request)
     return response
 
