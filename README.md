@@ -79,8 +79,8 @@
                             final_cltv_delta from --addinvoice
       --transactions        Transaction list and counts
       --listpayments        List lightning network payments
-      --deletepayments      Delete all outgoing payments from DB
-      --listinvoices        List of all invoices in the db
+      --deletepayments      Delete all outgoing payments from database
+      --listinvoices        List of all invoices in the database
       --addinvoice [<amount> [<memo> ...]]
                             Add a new invoice
       --lookupinvoice <r_hash>

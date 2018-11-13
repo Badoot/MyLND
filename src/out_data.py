@@ -1,6 +1,5 @@
 # Reformat return data and print to stdout
 
-
 import pandas as pd
 import src.get_data as get_data
 import codecs

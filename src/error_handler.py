@@ -1,3 +1,5 @@
+# Handle errors in entertaining ways
+
 from functools import wraps
 import grpc
 

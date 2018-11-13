@@ -22,7 +22,7 @@ else:
     lnddir = '/root/.lnd'
 
 
-class APICall():
+class APICall:
 
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
     cert = open(lnddir + '/tls.cert', 'rb').read()
@@ -327,7 +327,3 @@ def get_create(wallet_password, cipher_seed_mnemonic):
         cipher_seed_mnemonic=cipher_seed_mnemonic)
     response = APICall.wallet_stub.InitWallet(request)
     return response
-
-
-
-
