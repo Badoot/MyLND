@@ -20,7 +20,7 @@ def out_get_info():
 
 
 
-# @error_handler
+@error_handler
 def out_debug_level(show, level_spec):
     debug_level = get_data.get_set_debug_level(show, level_spec)
     print("\nDebug Level:\n" + "-" * 12)
