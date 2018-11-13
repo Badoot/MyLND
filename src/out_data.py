@@ -425,6 +425,19 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
+@error_handler
+def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta):
+    response = get_data.get_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta)
+    if response:
+        print("\nChannel Policy Updated:", '\n' + "-" * 23)
+        channel_point = (str(funding_tx) + ':' + str(output_index))
+        print('channel point : ', channel_point, '\r')
+        print('base fee msat : ', base_fee_msat, '\r')
+        print('fee rate : ', fee_rate, '\r')
+        print('time lock delta : ', time_lock_delta, '\r')
+    print('\r')
+
+
 # # # # # # # # # # # # # # # # # # #
 #       On-chain Transactions
 # # # # # # # # # # # # # # # # # # #

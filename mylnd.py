@@ -93,6 +93,9 @@ def run_it():
     #     Channels
     # # # # # # # # # #
 
+    if args.listchannels:
+        output.out_list_channels()
+
     if args.listchannels_detail:
         output.out_list_channels_detail()
 
@@ -136,6 +139,22 @@ def run_it():
 
     if args.closeallchannels:
         output.out_close_all_channels()
+
+    if args.update_channel_policy:
+        chan_point = args.update_channel_policy[0]
+        data = chan_point.split(':')
+        funding_tx = str(data[0][2:])
+        output_index = int((data[1][0]))
+        base_fee_msat = int(args.update_channel_policy[1])
+        fee_rate = float(args.update_channel_policy[2])
+        time_lock_delta = int(args.update_channel_policy[3])
+        output.out_update_channel_policy(
+            funding_tx=funding_tx,
+            output_index=output_index,
+            base_fee_msat=base_fee_msat,
+            fee_rate=fee_rate,
+            time_lock_delta=time_lock_delta
+        )
 
     # # # # # # # # # # # # # # # #
     #      Lightning Payments

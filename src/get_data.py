@@ -130,6 +130,7 @@ def get_closed_channels():
     response = APICall.stub.ClosedChannels(ln.ClosedChannelsRequest())
     return response
 
+
 def get_channel_info(chan_id):
     response = APICall.stub.GetChanInfo(ln.ChanInfoRequest(chan_id=chan_id))
     return response
@@ -158,6 +159,41 @@ def get_close_channel(funding_tx, output_index, force):
         target_conf=None,
         sat_per_byte=None)
     response = APICall.stub.CloseChannel(request)
+    return response
+
+
+def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None):
+    pubkey_bytes = codecs.decode(node_pubkey, 'hex')
+    request = ln.OpenChannelRequest(
+        node_pubkey=pubkey_bytes,
+        node_pubkey_string=node_pubkey,
+        local_funding_amount=int(local_funding_amount),
+        push_sat=int(push_sat)
+        # TODO
+        # Need to add option to create a private channel
+        # If I tried to include the option, every channel was private,
+        # even with multiple "private=False" in the different modules. The
+        # default is "private=False", so accepting that my code is shit and just
+        # forcing that for now.
+        #
+        # private=bool(private)
+    )
+    response = APICall.stub.OpenChannelSync(request)
+    return response
+
+
+def get_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta):
+    channel_point = ln.ChannelPoint(
+        funding_txid_str=str(funding_tx),
+        output_index=int(output_index),
+    )
+    request = ln.PolicyUpdateRequest(
+        chan_point=channel_point,
+        base_fee_msat=base_fee_msat,
+        fee_rate=fee_rate,
+        time_lock_delta=time_lock_delta
+    )
+    response = APICall.stub.UpdateChannelPolicy(request)
     return response
 
 
@@ -202,26 +238,6 @@ def get_list_payments():
 
 def get_delete_payments():
     response = APICall.stub.DeleteAllPayments(ln.DeleteAllPaymentsRequest())
-    return response
-
-
-def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None):
-    pubkey_bytes = codecs.decode(node_pubkey, 'hex')
-    request = ln.OpenChannelRequest(
-        node_pubkey=pubkey_bytes,
-        node_pubkey_string=node_pubkey,
-        local_funding_amount=int(local_funding_amount),
-        push_sat=int(push_sat)
-        # TODO
-        # Need to add option to create a private channel
-        # If I tried to include the option, every channel was private,
-        # even with multiple "private=False" in the different modules. The
-        # default is "private=False", so accepting that my code is shit and just
-        # forcing that for now.
-        #
-        # private=bool(private)
-    )
-    response = APICall.stub.OpenChannelSync(request)
     return response
 
 

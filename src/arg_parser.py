@@ -12,6 +12,11 @@ def arg_parser_func():
                                       '\nexample: mylnd.py --addinvoice 100 "for hugs"',
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     # Define arguments and actions
+
+    # # # # # # # # # #
+    #   My LND node
+    # # # # # # # # # #
+
     parent_parser.add_argument("--version", help="LND version", action='store_true',
                                dest='lnd_version')
     parent_parser.add_argument("--lnddir", help="Path to LND's base dir", type=str, action='store',
@@ -26,18 +31,36 @@ def arg_parser_func():
                                 dest='tls_path', metavar='</path/to/tls.cert>')
     parent_parser.add_argument("--debug_level", nargs="*", help="Logging verbosity of LND", type=str, action='store',
                                 dest='debug_level')
-    parent_parser.add_argument("--genseed", help="Generate mnemonic seed", action='store_true')
-    parent_parser.add_argument("--create", help="Initialize a new wallet", action='store_true')
-    parent_parser.add_argument("--unlock", help="Unlock wallet", action='store_true')
-    parent_parser.add_argument("--change_password", help="Change wallet password", action='store_true')
-    parent_parser.add_argument("--walletbalance", help="Wallet balance", action='store_true')
-
     parent_parser.add_argument("--getinfo", help="Lightning node info", action='store_true')
+    parent_parser.add_argument("--feereport", help="current fee schedule enforced by the node", action='store_true',
+                               dest='fee_report')
+
+    # # # # # # # # # # # # #
+    #   Lightning Network
+    # # # # # # # # # # # # #
+
     parent_parser.add_argument("--networkinfo", help="Lightning network info", action='store_true')
     parent_parser.add_argument("--describegraph", help="All nodes and edges that this node knows about",
                                action='store_true')
-    parent_parser.add_argument("--feereport", help="current fee schedule enforced by the node", action='store_true',
-                               dest='fee_report')
+
+    # # # # # # # # # # #
+    #       Peers
+    # # # # # # # # # # #
+
+    parent_parser.add_argument("--listpeers", help="List peers connected to this node", action='store_true')
+    parent_parser.add_argument("--listpeers-detail", help="Details about peers connected to this node",
+                               action='store_true', dest='listpeers_detail')
+    parent_parser.add_argument("--nodeinfo", nargs=1, help="Node details by pub_key", action='store', dest='node_info',
+                               metavar='<public_key>')
+    parent_parser.add_argument("--connect", help="Attempt to establish network connection to a remote peer",
+                               action='store', dest='connect', metavar='<public_key>@<ip_address>:<port>')
+    parent_parser.add_argument("--disconnect", help="Attempt to disconnect from a remote peer",
+                               action='store', dest='disconnect', metavar='<public_key>')
+
+    # # # # # # # # # # # #
+    #       Channels
+    # # # # # # # # # # # #
+
     parent_parser.add_argument("--openchannel", nargs=3, help="Attempt to open a channel with a remote peer",
                                action='store', dest='openchannel', metavar=('<public_key>', '<local_amount>',
                                                                             '<push_amount>'))
@@ -56,24 +79,17 @@ def arg_parser_func():
     parent_parser.add_argument("--pendingchannels", help="Pending channels", action='store_true')
     parent_parser.add_argument("--closedchannels", help="Closed channels", action='store_true')
     parent_parser.add_argument("--channelbalance", help="Channel balance", action='store_true')
-    parent_parser.add_argument("--listpeers", help="List peers connected to this node", action='store_true')
-    parent_parser.add_argument("--listpeers-detail", help="Details about peers connected to this node",
-                               action='store_true', dest='listpeers_detail')
-    parent_parser.add_argument("--nodeinfo", nargs=1, help="Node details by pub_key", action='store', dest='node_info',
-                               metavar='<public_key>')
-    parent_parser.add_argument("--connect", help="Attempt to establish network connection to a remote peer",
-                               action='store', dest='connect', metavar='<public_key>@<ip_address>:<port>')
-    parent_parser.add_argument("--disconnect", help="Attempt to disconnect from a remote peer",
-                               action='store', dest='disconnect', metavar='<public_key>')
-    parent_parser.add_argument("--newaddress", help="Create a new np2ksh address", action='store_true')
-    parent_parser.add_argument("--sendcoins", nargs=2, help="Send an on-chain bitcoin transaction", action='store',
-                               dest='sendcoins', metavar=('<bitcoin_address>', '<amount_in_satoshis>'))
+    parent_parser.add_argument("--update_channel_policy", nargs="*", help="Update fee schedule and channel policies "
+                                                                          "for a particular channel", action='store')
+
+    # # # # # # # # # # # # # # # # # # # #
+    #     Lightning Network Payments
+    # # # # # # # # # # # # # # # # # # # #
+
     parent_parser.add_argument("--sendpayment", nargs="*",
                                help="Send satoshis with either a) just a payment_request, or b) a public key, "
                                     "amount, payment hash, and final_cltv_delta from --addinvoice", action='store',
-                               dest='sendpayment'
-                                )
-    parent_parser.add_argument("--transactions", help="Transaction list and counts", action='store_true')
+                               dest='sendpayment')
     parent_parser.add_argument("--listpayments", help="List lightning network payments", action='store_true')
     parent_parser.add_argument("--deletepayments", help="Delete all outgoing payments from DB", action='store_true')
     parent_parser.add_argument("--listinvoices", help="List of all invoices in the db", action='store_true')
@@ -88,6 +104,25 @@ def arg_parser_func():
     parent_parser.add_argument("--queryroutes", nargs=3,
                                help="Look for x number of routes to a node's public key for y amount of satoshis",
                                action='store', metavar=('<destination_pub_key>', '<amount>', '<number_of_routes>'))
+
+    # # # # # # # # # # # # # # # #
+    #   On-chain Transactions
+    # # # # # # # # # # # # # # # #
+
+    parent_parser.add_argument("--walletbalance", help="Wallet balance", action='store_true')
+    parent_parser.add_argument("--newaddress", help="Create a new np2ksh address", action='store_true')
+    parent_parser.add_argument("--sendcoins", nargs=2, help="Send an on-chain bitcoin transaction", action='store',
+                               dest='sendcoins', metavar=('<bitcoin_address>', '<amount_in_satoshis>'))
+    parent_parser.add_argument("--transactions", help="Transaction list and counts", action='store_true')
+
+    # # # # # # # # # # # # #
+    #   Wallet stub stuff
+    # # # # # # # # # # # # #
+
+    parent_parser.add_argument("--genseed", help="Generate mnemonic seed", action='store_true')
+    parent_parser.add_argument("--create", help="Initialize a new wallet", action='store_true')
+    parent_parser.add_argument("--unlock", help="Unlock wallet", action='store_true')
+    parent_parser.add_argument("--change_password", help="Change wallet password", action='store_true')
 
     args = parent_parser.parse_args()
     return args

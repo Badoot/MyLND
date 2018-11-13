@@ -57,6 +57,8 @@
       --pendingchannels     Pending channels
       --closedchannels      Closed channels
       --channelbalance      Channel balance
+      --update_channel_policy <channel_point> <base_fee_msat> <fee_rate> <time_lock_delta>
+                            Update the fee schedule and channel policies for a channel
       --listpeers           List peers connected to this node
       --listpeers-detail    Details about peers connected to this node
       --nodeinfo <public_key>
