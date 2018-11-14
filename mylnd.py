@@ -285,9 +285,25 @@ def run_it():
                 mnemonic = input()
                 return mnemonic
 
+        # Set aezeed passphrase
+        def set_aezeed_passphrase():
+            print('\nWould you like to enter a passphrase to encrypt the cipher seed? (y/n)')
+            answer = input()
+            if answer == 'y':
+                passphrase = getpass.getpass('\nPlease enter a passphrase:')
+                passphrase_conf = getpass.getpass('\nPlease confirm passphrase:')
+                if passphrase == passphrase_conf:
+                    passphrase = passphrase.encode('utf-8')
+                    return passphrase
+                else:
+                    print('\nPassphrases do not match... Please try again:')
+                    exit(1)
+
+
         password = set_wallet_password()
         mnemonic = set_mnemonic()
-        output.out_create(password, mnemonic)
+        aezeed_passphrase = set_aezeed_passphrase()
+        output.out_create(password, mnemonic, aezeed_passphrase)
 
 # Run it!
 run_it()

@@ -321,9 +321,12 @@ def get_gen_seed():
     return response
 
 
-def get_create(wallet_password, cipher_seed_mnemonic):
+def get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
     request = ln.InitWalletRequest(
         wallet_password=wallet_password,
-        cipher_seed_mnemonic=cipher_seed_mnemonic)
+        cipher_seed_mnemonic=cipher_seed_mnemonic,
+        aezeed_passphrase=aezeed_passphrase,
+        recovery_window=int(0)
+    )
     response = APICall.wallet_stub.InitWallet(request)
     return response

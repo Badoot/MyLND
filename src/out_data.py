@@ -723,9 +723,28 @@ def out_gen_seed():
     print('\r')
 
 
-@error_handler
-def out_create(wallet_password, cipher_seed_mnemonic):
-    response = get_data.get_create(wallet_password, cipher_seed_mnemonic)
-    print(cipher_seed_mnemonic)
+# @error_handler
+def out_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
+    response = get_data.get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase)
+    datadf = pd.DataFrame({'listcol': [cipher_seed_mnemonic][0]})
+    col1 = datadf[0:6].values[0:, 0]
+    col2 = datadf[6:12].values[0:, 0]
+    col3 = datadf[12:18].values[0:, 0]
+    col4 = datadf[18:24].values[0:, 0]
     print(response)
     print('\rWallet created!\n')
+    print('Here is your 24 word mnemonic recovery phrase:\n')
+    print('-' * 72)
+    print('!!!  You can use this passphrase to recover your wallet, so    !!!')
+    print('!!!  make sure to write this down and keep it som eplace safe. !!!')
+    print('-' * 72)
+    print('\n')
+    newdf = pd.DataFrame.from_records([col1, col2, col3, col4])
+    newdf = pd.DataFrame.to_string(newdf, index=False, header=False)
+    print(newdf)
+    print('\n')
+
+
+
+
+
