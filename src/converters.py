@@ -18,3 +18,4 @@ def response_to_dict(response):
     response = MessageToJson(response)
     response = json.loads(response)
     return response
+

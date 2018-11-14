@@ -32,6 +32,9 @@
                             Path to admin.macaroon
       --tlspath </path/to/tls.cert>
                             Path to tls.cert
+      --debug_level <level> <subsystem>]
+                        Logging verbosity of LND
+
       --genseed             Generate mnemonic seed
       --create              Initialize a new wallet
       --unlock              Unlock wallet
@@ -68,7 +71,7 @@
                             peer
       --disconnect <public_key>
                             Attempt to disconnect from a remote peer
-      --newaddress          Create a new np2ksh address
+      --newaddress          Create a new Bitcoin address to receive an on-chain transaction
       --sendcoins <bitcoin_address> <amount_in_satoshis>
                             Send an on-chain bitcoin transaction
       --sendpayment <payment_request> 

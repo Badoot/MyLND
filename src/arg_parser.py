@@ -29,8 +29,8 @@ def arg_parser_func():
                                 dest='macaroon_path', metavar='</path/to/admin.macaroon>')
     parent_parser.add_argument("--tlspath", help="Path to tls.cert", type=str, action='store',
                                 dest='tls_path', metavar='</path/to/tls.cert>')
-    parent_parser.add_argument("--debug_level", nargs="*", help="Logging verbosity of LND", type=str, action='store',
-                                dest='debug_level')
+    parent_parser.add_argument("--debug_level", nargs=2, help="Logging verbosity of LND", type=str, action='store',
+                                dest='debug_level', metavar=('<level>', '<subsystem>'))
     parent_parser.add_argument("--getinfo", help="Lightning node info", action='store_true')
     parent_parser.add_argument("--feereport", help="current fee schedule enforced by the node", action='store_true',
                                dest='fee_report')

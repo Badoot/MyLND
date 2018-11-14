@@ -725,5 +725,7 @@ def out_gen_seed():
 
 @error_handler
 def out_create(wallet_password, cipher_seed_mnemonic):
-    get_data.get_create(wallet_password, cipher_seed_mnemonic)
-    print('\r')
+    response = get_data.get_create(wallet_password, cipher_seed_mnemonic)
+    print(cipher_seed_mnemonic)
+    print(response)
+    print('\rWallet created!\n')

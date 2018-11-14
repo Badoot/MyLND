@@ -14,7 +14,7 @@ args = arg_parser.arg_parser_func()
 
 # Run the option provided
 
-@error_handler
+# @error_handler
 def run_it():
 
     # # # # # # # # # #
@@ -35,7 +35,9 @@ def run_it():
     if args.fee_report:
         output.out_fee_report()
 
-    # Lightning Network Info
+    # # # # # # # # # # # # # # # # #
+    #     Lightning Network Info
+    # # # # # # # # # # # # # # # # #
 
     if args.networkinfo:
         output.out_network_info()
@@ -43,9 +45,12 @@ def run_it():
     if args.describegraph:
         output.out_describe_graph()
 
+    # TODO
+    # This returns like it works, but tailing the
+    # logs shows no change whatsoever
     if args.debug_level:
         show = bool(args.debug_level[0])
-        level_spec = None
+        level_spec = args.debug_level[1]
         output.out_debug_level(show, level_spec)
 
     # # # # # # # # # # # # # # #
@@ -64,7 +69,6 @@ def run_it():
         output.out_wallet_balance()
 
     if args.newaddress:
-        # Python does not like the type= argument that LND requires for this, so accepting default from LND
         output.out_new_address()
 
     # # # # # # # # # #
@@ -140,6 +144,9 @@ def run_it():
     if args.closeallchannels:
         output.out_close_all_channels()
 
+    # TODO
+    # This returns like it works, but if you run --channelinfo
+    # on the channel the node1 and node2 policies do not change
     if args.update_channel_policy:
         chan_point = args.update_channel_policy[0]
         data = chan_point.split(':')
@@ -166,10 +173,19 @@ def run_it():
     if args.deletepayments:
         output.out_delete_payments()
 
+    # TODO
+    # Need to be able to add a blank invoice with just
+    # a payment_hash and payment_request as outputs, so
+    # that a --sendpayment can be performed with any
+    # value the sender wants as long as there is channel
+    # capacity.
     if args.add_invoice:
-        amount = int(args.add_invoice[0])
-        memo = str(args.add_invoice[1])
-        output.out_add_invoice(amount, memo)
+        if len(args.add_invoice) == 0:
+            output.out_add_invoice(amount=None, memo=None)
+        else:
+            amount = int(args.add_invoice[0])
+            memo = str(args.add_invoice[1])
+            output.out_add_invoice(amount, memo)
 
     if args.lookup_invoice:
         r_hash = args.lookup_invoice[0]
@@ -210,11 +226,13 @@ def run_it():
     # # # # # # # # # # # # # # #
 
     def wallet_file_check():
-        walletfile = os.path.isfile(args.data_dir + '/wallet.db')
+        walletfile = os.path.isfile(args.lnddir + '/wallet.db')
         if walletfile:
             print('\nWallet exists... exiting\n')
             exit(1)
 
+    # TODO
+    # Kill this once --create is finished
     if args.genseed:
         wallet_file_check()
         output.out_gen_seed()
@@ -234,11 +252,42 @@ def run_it():
         output.out_unlock(password)
 
     if args.create:
+        # Check for an existing wallet
         wallet_file_check()
-        #  in-progress....
-        print('\nPlease use "lncli create"\n')
-        exit(0)
 
+        # Establish a password for the new wallet
+        def set_wallet_password():
+            print('\nPlease enter a new password for this new wallet:\r')
+            new_password = getpass.getpass('\nEnter New Password:')
+            if len(new_password) < 8:
+                print('\n Please use a passwords that is at least 8 characters\n')
+                exit(1)
+            conf_new_password = getpass.getpass('Confirm New Password:')
+            if new_password == conf_new_password:
+                password = conf_new_password.encode('utf-8')
+                return password
+            else:
+                print("\nNew passwords do not match... try again\n")
+                exit(1)
+
+        # Set 24 word mnemonic recover passphrase
+        def set_mnemonic():
+            print('\nWould you like to specify your own mnemonic recovery passphrase? (y/n) : ')
+            answer = input()
+            if answer == 'n':
+                # Generate cipher seed
+                import src.get_data as get_data
+                genseed = get_data.get_gen_seed()
+                mnemonic = genseed.cipher_seed_mnemonic
+                return mnemonic
+            else:
+                print('\nPlease enter 24 words with spaces between them :')
+                mnemonic = input()
+                return mnemonic
+
+        password = set_wallet_password()
+        mnemonic = set_mnemonic()
+        output.out_create(password, mnemonic)
 
 # Run it!
 run_it()
