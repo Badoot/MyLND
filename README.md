@@ -32,7 +32,7 @@
       --tlspath </path/to/tls.cert>
                             Path to tls.cert
       --debug_level <level> <subsystem>]
-                        Logging verbosity of LND
+                            Logging verbosity of LND
       --create              Initialize a new wallet
       --unlock              Unlock wallet
       --change_password     Change wallet password
