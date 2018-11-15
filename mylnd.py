@@ -224,7 +224,6 @@ def run_it():
     #      Wallet stub stuff
     # # # # # # # # # # # # # # #
 
-
     if args.change_password:
         current_password = getpass.getpass('Current Password:')
         new_password = getpass.getpass('\nEnter New Password:')
