@@ -11,7 +11,6 @@ from src.error_handler import error_handler
 # First, parse those arguments
 args = arg_parser.arg_parser_func()
 
-
 # Run the option provided
 
 @error_handler
@@ -225,11 +224,6 @@ def run_it():
     #      Wallet stub stuff
     # # # # # # # # # # # # # # #
 
-    def wallet_file_check():
-        walletfile = os.path.isfile(args.lnddir + '/wallet.db')
-        if walletfile:
-            print('\nWallet exists... exiting\n')
-            exit(1)
 
     if args.change_password:
         current_password = getpass.getpass('Current Password:')
@@ -247,56 +241,12 @@ def run_it():
 
     if args.create:
         # Check for an existing wallet
-        wallet_file_check()
-
-        # Establish a password for the new wallet
-        def set_wallet_password():
-            print('\nPlease enter a new password for this new wallet:\r')
-            new_password = getpass.getpass('\nEnter New Password:')
-            if len(new_password) < 8:
-                print('\n Please use a passwords that is at least 8 characters\n')
-                exit(1)
-            conf_new_password = getpass.getpass('Confirm New Password:')
-            if new_password == conf_new_password:
-                password = conf_new_password.encode('utf-8')
-                return password
-            else:
-                print("\nNew passwords do not match... try again\n")
-                exit(1)
-
-        # Set 24 word mnemonic recover passphrase
-        def set_mnemonic():
-            print('\nWould you like to specify your own mnemonic recovery passphrase? (y/n) : ')
-            answer = input()
-            if answer == 'n':
-                # Generate cipher seed
-                import src.get_data as get_data
-                genseed = get_data.get_gen_seed()
-                mnemonic = genseed.cipher_seed_mnemonic
-                return mnemonic
-            else:
-                print('\nPlease enter 24 words with spaces between them :')
-                mnemonic = input()
-                return mnemonic
-
-        # Set aezeed passphrase
-        def set_aezeed_passphrase():
-            print('\nWould you like to enter a passphrase to encrypt the cipher seed? (y/n)')
-            answer = input()
-            if answer == 'y':
-                passphrase = getpass.getpass('\nPlease enter a passphrase:')
-                passphrase_conf = getpass.getpass('\nPlease confirm passphrase:')
-                if passphrase == passphrase_conf:
-                    passphrase = passphrase.encode('utf-8')
-                    return passphrase
-                else:
-                    print('\nPassphrases do not match... Please try again:')
-                    exit(1)
-
-        password = set_wallet_password()
-        mnemonic = set_mnemonic()
-        aezeed_passphrase = set_aezeed_passphrase()
-        output.out_create(password, mnemonic, aezeed_passphrase)
+        walletfile = os.path.isfile(args.lnddir + '/wallet.db')
+        if walletfile:
+            print('\nWallet already exists... exiting\n')
+            exit(1)
+        else:
+            output.out_create()
 
 
 # Run it!

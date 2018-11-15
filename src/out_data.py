@@ -5,6 +5,7 @@ import src.get_data as get_data
 import codecs
 from src.error_handler import error_handler
 import src.converters as converters
+import getpass
 
 # Pandas dataframe display options
 pd.set_option('colheader_justify', 'left')
@@ -708,13 +709,65 @@ def out_unlock(password):
 
 
 @error_handler
+def out_genseed():
+    get_data.get_gen_seed()
+
+@error_handler
 def out_change_password(current_password, new_password):
     get_data.change_password(current_password, new_password)
     print('\nPassword changed\n')
 
 
 @error_handler
-def out_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
+def out_create():
+    # Establish a password for the new wallet
+    def set_wallet_password():
+        print('\nPlease enter a new password for this new wallet:\r')
+        new_password = getpass.getpass('\nEnter New Password:')
+        if len(new_password) < 8:
+            print('\n Please use a passwords that is at least 8 characters\n')
+            exit(1)
+        conf_new_password = getpass.getpass('Confirm New Password:')
+        if new_password == conf_new_password:
+            password = conf_new_password.encode('utf-8')
+            return password
+        else:
+            print("\nNew passwords do not match... try again\n")
+            exit(1)
+
+    # Set 24 word mnemonic recover passphrase
+    def set_mnemonic():
+        print('\nWould you like to specify your own mnemonic recovery passphrase? (y/n) : ')
+        answer = input()
+        if answer == 'n':
+            # Generate cipher seed
+            import src.get_data as get_data
+            genseed = get_data.get_gen_seed()
+            mnemonic = genseed.cipher_seed_mnemonic
+            return mnemonic
+        else:
+            print('\nPlease enter 24 words with spaces between them :')
+            mnemonic = input()
+            return mnemonic
+
+    # Set aezeed passphrase
+    def set_aezeed_passphrase():
+        print('\nWould you like to enter a passphrase to encrypt the cipher seed? (y/n)')
+        answer = input()
+        if answer == 'y':
+            passphrase = getpass.getpass('\nPlease enter a passphrase:')
+            passphrase_conf = getpass.getpass('\nPlease confirm passphrase:')
+            if passphrase == passphrase_conf:
+                passphrase = passphrase.encode('utf-8')
+                return passphrase
+            else:
+                print('\nPassphrases do not match... Please try again:')
+                exit(1)
+
+    wallet_password = set_wallet_password()
+    cipher_seed_mnemonic = set_mnemonic()
+    aezeed_passphrase = set_aezeed_passphrase()
+
     response = get_data.get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase)
     datadf = pd.DataFrame({'listcol': [cipher_seed_mnemonic][0]})
     col1 = datadf[0:6].values[0:, 0]
