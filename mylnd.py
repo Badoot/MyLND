@@ -14,7 +14,7 @@ args = arg_parser.arg_parser_func()
 
 # Run the option provided
 
-# @error_handler
+@error_handler
 def run_it():
 
     # # # # # # # # # #
@@ -231,12 +231,6 @@ def run_it():
             print('\nWallet exists... exiting\n')
             exit(1)
 
-    # TODO
-    # Kill this once --create is finished
-    if args.genseed:
-        wallet_file_check()
-        output.out_gen_seed()
-
     if args.change_password:
         current_password = getpass.getpass('Current Password:')
         new_password = getpass.getpass('\nEnter New Password:')
@@ -299,11 +293,11 @@ def run_it():
                     print('\nPassphrases do not match... Please try again:')
                     exit(1)
 
-
         password = set_wallet_password()
         mnemonic = set_mnemonic()
         aezeed_passphrase = set_aezeed_passphrase()
         output.out_create(password, mnemonic, aezeed_passphrase)
+
 
 # Run it!
 run_it()

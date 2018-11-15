@@ -140,7 +140,6 @@ def out_list_peers_detail():
         print('\nNo peers connected\n')
 
 
-
 @error_handler
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
@@ -715,15 +714,6 @@ def out_change_password(current_password, new_password):
 
 
 @error_handler
-def out_gen_seed():
-    seed = get_data.get_gen_seed()
-    seed = converters.response_to_dict(seed)
-    seed = pd.DataFrame.from_dict(seed)
-    print(seed)
-    print('\r')
-
-
-# @error_handler
 def out_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
     response = get_data.get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase)
     datadf = pd.DataFrame({'listcol': [cipher_seed_mnemonic][0]})
@@ -743,8 +733,3 @@ def out_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
     newdf = pd.DataFrame.to_string(newdf, index=False, header=False)
     print(newdf)
     print('\n')
-
-
-
-
-

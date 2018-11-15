@@ -119,7 +119,6 @@ def arg_parser_func():
     #   Wallet stub stuff
     # # # # # # # # # # # # #
 
-    parent_parser.add_argument("--genseed", help="Generate mnemonic seed", action='store_true')
     parent_parser.add_argument("--create", help="Initialize a new wallet", action='store_true')
     parent_parser.add_argument("--unlock", help="Unlock wallet", action='store_true')
     parent_parser.add_argument("--change_password", help="Change wallet password", action='store_true')
