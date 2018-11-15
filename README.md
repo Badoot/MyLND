@@ -33,8 +33,6 @@
                             Path to tls.cert
       --debug_level <level> <subsystem>]
                         Logging verbosity of LND
-
-      --genseed             Generate mnemonic seed
       --create              Initialize a new wallet
       --unlock              Unlock wallet
       --change_password     Change wallet password
