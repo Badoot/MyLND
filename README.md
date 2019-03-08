@@ -8,8 +8,6 @@
     2. Install pip3 (apt-get install python3-pip)
     3. git clone https://github.com/Badoot/MyLND.git
     4. pip3 install grpcio grpcio-tools googleapis-common-protos pandas
-    5. Copy *.macaroon and tls.cert from your LND node to --lnddir ('/root/.lnd' by default)
-       or --macaroonpath and --tlspath on your local machine.
 
 # Usage
 
