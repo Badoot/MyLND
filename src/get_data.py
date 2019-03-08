@@ -21,14 +21,26 @@ if args.lnddir:
 else:
     lnddir = '/root/.lnd'
 
+# Default tlspath is '/root/.lnd'
+if args.tlspath:
+    tlspath = args.tlspath
+else:
+    tlspath = '/root/.lnd'
+
+# Default macaroonpath is '/root/.lnd'
+if args.macaroonpath:
+    macaroonpath = args.macaroonpath
+else:
+    macaroonpath = '/root/.lnd'
+
 
 class APICall:
 
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
-    cert = open(lnddir + '/tls.cert', 'rb').read()
+    cert = open(tlspath + '/tls.cert', 'rb').read()
 
     def metadata_callback(self, callback):
-        macaroon = codecs.encode(open(lnddir + '/admin.macaroon', 'rb').read(), 'hex')
+        macaroon = codecs.encode(open(macaroonpath + '/admin.macaroon', 'rb').read(), 'hex')
         callback([('macaroon', macaroon)], None)
 
     ssl_creds = grpc.ssl_channel_credentials(cert)
