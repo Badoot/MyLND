@@ -91,7 +91,7 @@
 
 # Examples
     
-    root@bobuntu:~# mylnd --status
+    # mylnd.py --status
     
     My Lightning Node:
     ------------------
@@ -117,64 +117,10 @@
     ----------------
     balance: 125900
 
-    
+  
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    root@bobuntu:/python/MyLND# mylnd --pendingchannels
-    
-    Pending Channels:
-    -----------------
-    total_limbo_balance  :  237983
-    
-    
-    Pending open:
-    --------------
-    remote_node_pub :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point :  492e600ce9617f7e817fae23cf7d3cd0f7849a671d7a942e8ba12118c7cd9a56:0
-    capacity :  50000
-    local_balance :  30950
-    remote_balance :  10000
-    
-    remote_node_pub :  03d25ac3598492ba8a82d224d69aef635b5838890cb6dad9cd9391a141b823d918
-    channel_point :  adf15924bb035aca77a2145bfe45eb054bbe3091409a8cae921c7ae67a0a5ef9:1
-    capacity :  12341241
-    local_balance :  12330960
-    remote_balance :  1231
-    
-    
-    Pending forced closing:
-    ----------------------
-    closing_txid  :  bda213d4318aa1682b54e2af6a0f3d4d44ae6f8bfe9981c3c4ce93c60525d8c7
-    limbo_balance  :  113184
-    maturity_height  :  9345
-    blocks_til_maturity  :  45
-    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point  :  e89283eb5e4eae8e536353b7e109e53f4e9f876051f4b8bedba0d4c3dde1c7a2:0
-    capacity  :  122234
-    local_balance  :  113184
-    
-    closing_txid  :  7161e390ed23a62f634ebdcc840ea269870e4bd5b2196c27ba10e87834383f7a
-    limbo_balance  :  10850
-    maturity_height  :  9345
-    blocks_til_maturity  :  45
-    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point  :  c16e688d4666a6c10f08075527b091a62dda0b162b0ab0832de436fa71a5d4d9:0
-    capacity  :  20000
-    local_balance  :  10850
-    
-    
-    Pending close:
-    --------------
-    remote_node_pub  :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    channel_point  :  32c69d80b714af8aadd7c917caba4e1d680813f123d59c7d783790e5283587a2:0
-    capacity  :  123123
-    local_balance  :  113949
-    limbo_balance  :  113949
-
-
-     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
-    root@bobuntu:~# mylnd --listpeers
+    # mylnd.py --listpeers
 
     Peers: 3 total
     ---------------
@@ -184,7 +130,7 @@
     127.0.0.1:10013  Charlie  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f  168406     164733     4154
     127.0.0.1:10012  Bob      02ac3a63b851a0171524015bfd496f81ea6786c77af401a2c778586733b59fd554  96468      117087     230
     
-    root@bobuntu:~# mylnd --listpeers-detail
+    # mylnd.py --listpeers-detail
     
     Peers: 3 total
     ---------------
@@ -223,18 +169,19 @@
     total_capacity : 0
 
     
-     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    root@bobuntu:~# mylnd --listchannels
-    
+    # mylnd.py --listchannels
+
     Channels: 2 total
     ------------------
+
+    active alias  capacity chan_id           channel_point                                                       local_balance remote_balance remote_pubkey
+    True    Danny  4000000  3249056860274689  298f91edf8f365f814f38210c8fc0d069e30939c340c7820c2304eae0f264585:1  0             3990950        020285ca01ce18a0e9b5bae2ba6b67be9dba368afa6b51f8c57abfb2ad59c489f3
+    True    Bob    4000000  3235862720610304  157ab869b6a23e0321f1b4b9aae5aaca912aa59b386b3ba4a4f9fac0493b1dba:0  3990950       0              023ae447644330869004364bcdaab654a518d059c602aa5dc8de1b6daef753e1c4
+
     
-    active capacity chan_id           channel_point                                                       commit_fee commit_weight  csv_delay fee_per_kw local_balance remote_balance remote_pubkey
-    True    200000   4863139929718785  1f3b5f89897f21a6a265537ed43c3477f777db4168eaacfa1d9fce4c4c7f18fc:1  9050       724           144        12500      100000        90950          03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    True    200000   4863139929784321  cd74aed20423a889827b9ec3e5d8195164b9d295c4c6e2dd39544c3aaee63429:1  9050       724           144        12500      100000        90950          03d25ac3598492ba8a82d224d69aef635b5838890cb6dad9cd9391a141b823d918
-    
-    root@bobuntu:~# mylnd --listchannels-detail
+    # mylnd.py --listchannels-detail
     
     Channels: 2 total
     ------------------
@@ -304,10 +251,10 @@
       fee_rate_milli_msat  :  1
 
 
-     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    root@bobuntu:/python/MyLND# mylnd --addinvoice 500 'for hugs'
+    # mylnd.py --addinvoice 500 'for hugs'
     
     Adding Invoice:
     ----------------
@@ -318,9 +265,9 @@
     payment_request : lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqmqzftasdqdvehhygrgw4nhxcqzys5v5ay6
     4wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9cpdv7ftezmv3smd5sscq5hfvzg
     
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    
-    root@bobuntu:/python/MyLND# mylnd --lookupinvoice b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb
+    # mylnd.py --lookupinvoice b32488d3aad8cdb310082b28ffb590dfd8bd97a1892624d523f86c806c024afb
     
     Invoice Details:
     ----------------
@@ -334,9 +281,9 @@
     expiry  :  3600
     cltv_expiry  :  144
     
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    
-    root@bobuntu:/python/MyLND# mylnd --decodepayreq lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpk
+    # mylnd.py --decodepayreq lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpk
     gqmqzftasdqdvehhygrgw4nhxcqzys5v5ay64wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9
     cpdv7ftezmv3smd5sscq5hfvzg
     
@@ -350,9 +297,9 @@
     description: "for hugs"
     cltv_expiry: 144
     
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
-    
-    root@bobuntu:/python/MyLND# mylnd --payinvoice lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqm
+    # mylnd.py --payinvoice lnsb5u1pd73mhepp5kvjg35a2mrxmxyqg9v50ldvsmlvtm9ap3ynzf4frlpkgqm
     qzftasdqdvehhygrgw4nhxcqzys5v5ay64wrvjx5sdrjyt9qnt3sq684tnm3w8jjdglvqzz53p2kr9qpxeyfvdzf3z8flfvx6tgydg9nwvlsqm9cpdv
     7ftezmv3smd5sscq5hfvzg
     
