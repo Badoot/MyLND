@@ -50,7 +50,7 @@ def arg_parser_func():
     parser.add_argument("--listpeers", help="List peers connected to this node", action='store_true')
     parser.add_argument("--listpeers-detail", help="Details about peers connected to this node",
                                action='store_true', dest='listpeers_detail')
-    parser.add_argument("--nodeinfo", nargs=1, help="Node details by pub_key", action='store', dest='node_info',
+    parser.add_argument("--nodeinfo", nargs="?", help="Node details by pub_key", action='store', dest='node_info',
                                metavar='<public_key>')
     parser.add_argument("--connect", help="Attempt to establish network connection to a remote peer",
                                action='store', dest='connect', metavar='<public_key>@<ip_address>:<port>')

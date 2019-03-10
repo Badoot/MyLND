@@ -99,9 +99,7 @@ def out_list_peers():
                         if 'alias' in k:
                             alias_list.append(v)
         df = pd.DataFrame.from_dict(peers).fillna(0)
-        df['alias'] = alias_list
-        df = df[['address', 'alias', 'pub_key', 'bytes_recv', 'bytes_sent', 'ping_time']]
-        df.columns = ['Address', 'Alias', 'Public Key', 'Bytes Rec', 'Bytes Sent', 'Ping Time']
+        df.insert(loc=1, column='alias', value=alias_list)
         df = pd.DataFrame.to_string(df, index=False)
         print(df, '\n')
     else:
@@ -142,7 +140,7 @@ def out_list_peers_detail():
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
     node_info = converters.response_to_dict(node_info)
-    print("\nNode Details:", '\n' + "-" * 13)
+    print("\nNode Info:", '\n' + "-" * 10)
     node_details = node_info["node"]
     for key, value in sorted(node_details.items()):
         if 'addresses' in key:

@@ -180,14 +180,6 @@ def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None):
         node_pubkey_string=node_pubkey,
         local_funding_amount=int(local_funding_amount),
         push_sat=int(push_sat)
-        # TODO
-        # Need to add option to create a private channel
-        # If I tried to include the option, every channel was private,
-        # even with multiple "private=False" in the different modules. The
-        # default is "private=False", so accepting that my code is shit and just
-        # forcing that for now.
-        #
-        # private=bool(private)
     )
     response = APICall.stub.OpenChannelSync(request)
     return response
