@@ -140,7 +140,7 @@ def out_list_peers_detail():
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
     node_info = converters.response_to_dict(node_info)
-    print("\nNode Details:", '\n' + "-" * 13)
+    print("\nNode Info:", '\n' + "-" * 10)
     node_details = node_info["node"]
     for key, value in sorted(node_details.items()):
         if 'addresses' in key:

@@ -9,7 +9,7 @@ import os
 from error_handler import error_handler
 
 
-@error_handler
+# @error_handler
 def run_it():
     
     # First, parse those arguments
@@ -81,7 +81,7 @@ def run_it():
         output.out_list_peers_detail()
 
     if args.node_info:
-        pub_key = args.node_info[0]
+        pub_key = args.node_info
         output.out_node_info(pub_key)
 
     if args.connect:
