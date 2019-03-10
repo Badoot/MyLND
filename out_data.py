@@ -99,9 +99,7 @@ def out_list_peers():
                         if 'alias' in k:
                             alias_list.append(v)
         df = pd.DataFrame.from_dict(peers).fillna(0)
-        df['alias'] = alias_list
-        df = df[['address', 'alias', 'pub_key', 'bytes_recv', 'bytes_sent', 'ping_time']]
-        df.columns = ['Address', 'Alias', 'Public Key', 'Bytes Rec', 'Bytes Sent', 'Ping Time']
+        df.insert(loc=1, column='alias', value=alias_list)
         df = pd.DataFrame.to_string(df, index=False)
         print(df, '\n')
     else:
