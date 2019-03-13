@@ -114,7 +114,7 @@
 
     Channel Balance:
     ----------------
-    Satoshis: 4990950
+    Channel Balance: 4990950
     USD value: $19.5545421
 
     BTC/USD Converstion Rate:
