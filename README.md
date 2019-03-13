@@ -92,37 +92,36 @@
 
 # Examples
     
-    # mylnd.py --status
-    
+    # mylnd-danny --status
+
     My Lightning Node:
     ------------------
-    identity_pubkey: "036b7debe9fc4e79fb7349c9d3e3d8f53abcc2ec9e5be3d8835c17c8a4954708e8"
+    identity_pubkey: "020285ca01ce18a0e9b5bae2ba6b67be9dba368afa6b51f8c57abfb2ad59c489f3"
     alias: "Danny"
     num_active_channels: 2
     num_peers: 2
-    block_height: 4308
-    block_hash: "197769a8d4c900b5b56edacdcf1a4554656755c4c372c64576dfae3c68be4dd2"
-    synced_to_chain: true
-    chains: "bitcoin"
-    best_header_timestamp: 1541190855
-    version: "0.5.0-beta commit=v0.5-beta-153-g1b0d8e8f13359d361cd957d2a18bf8d2801c6c86"
-       
-    
+    block_height: 2964
+    block_hash: "5924e3b6aac8243a09d08b4757eadce6fdf01878da26577bd286663d0e084720"
+    best_header_timestamp: 1552236068
+    version: "0.5.2-99-beta commit="
+
     Wallet Balance:
-    ---------------
-    total_balance: 5104055303
-    confirmed_balance: 5104055303
-    
-    
+    ----------------
+    Total Balance: 1999995926451
+    Total USD value: $7835984.039835018
+    Confirmed Balance: 1999995926451
+    Confirmed USD value: $7835984.039835018
+
     Channel Balance:
     ----------------
-    balance: 125900
+    Satoshis: 4990950
+    USD value: $19.5545421
 
+    BTC/USD Converstion Rate:
+    -------------------------
+    Price 1hr 24hr 7d
+    3918 0.04 1.11 0.83
 
-    Current BTC/USD Converstion Rate:
-    ---------------------------------
-    Price          1hr  24hr  7d
-    3908.52821065 -0.11 0.21 0.61
 
   
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
