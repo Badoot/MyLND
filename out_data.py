@@ -122,7 +122,10 @@ def out_list_peers_detail():
             node_info = converters.response_to_dict(node_info)
             node_info = node_info["node"]
             for key, value in sorted(node_info.items()):
-                if key != "pub_key":
+                if 'last_update' in key:
+                    value = converters.convert_date(value)
+                    print(key + " : ", value)
+                elif key != "pub_key":
                     print(key + " : ", value)
             peer_list_info = dict(row)
             for key, value in peer_list_info.items():
@@ -149,6 +152,9 @@ def out_node_info(pub_key):
             addresses = value[0]
             for k, v in addresses.items():
                 print(k + " : ", v)
+        if 'last_update' in key:
+            value = converters.convert_date(value)
+            print(key + " : ", value)
         else:
             print(key + " : ", value)
     if 'num_channels' in node_info:

@@ -20,6 +20,7 @@ def response_to_dict(response):
     response = json.loads(response)
     return response
 
+# Convert satoshis to USD
 def btc_to_usd(satoshis):
     api = "https://api.coinmarketcap.com/v2/ticker/"
     raw_data = requests.get(api).json()
@@ -27,8 +28,5 @@ def btc_to_usd(satoshis):
     for currency in data.values():
         name = currency['name']
         price = round(currency['quotes']['USD']['price'])
-        change_1h = currency['quotes']['USD']['percent_change_1h']
-        change_24h = currency['quotes']['USD']['percent_change_24h']
-        change_7d = currency['quotes']['USD']['percent_change_7d']
         if name == 'Bitcoin':
             return price * satoshis
