@@ -174,8 +174,14 @@ def out_node_info(pub_key):
 @error_handler
 def out_channel_info(chan_id):
     chan_info = get_data.get_channel_info(chan_id)
+    chan_info = converters.response_to_dict(chan_info)
     print("\nChannel Details:", '\n' + "-" * 16)
-    print(chan_info)
+    for key, value in chan_info.items():
+        if key == 'last_update':
+            value = converters.convert_date(value)
+            print(key + " : ", value)
+        else:
+            print(key + " : ", value)
     print('\r')
 
 
