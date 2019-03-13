@@ -781,12 +781,12 @@ def out_cmcconverter():
     data = raw_data['data']
     for currency in data.values():
         name = currency['name']
-        price = currency['quotes']['USD']['price']
+        price = round(currency['quotes']['USD']['price'])
         change_1h = currency['quotes']['USD']['percent_change_1h']
         change_24h = currency['quotes']['USD']['percent_change_24h']
         change_7d = currency['quotes']['USD']['percent_change_7d']
         if name == 'Bitcoin':
-            print("\nCurrent BTC/USD Converstion Rate:\n" + "-" * 33)
-            print("\rPrice          1hr  24hr  7d\r")
+            print("\nBTC/USD Converstion Rate:\n" + "-" * 25)
+            print("\rPrice 1hr 24hr 7d\r")
             print(price, change_1h, change_24h, change_7d, "\n")
         
