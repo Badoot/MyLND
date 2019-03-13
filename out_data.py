@@ -446,7 +446,7 @@ def out_wallet_balance():
     confirmed_balance = wallet_balance.confirmed_balance
     print("Wallet Balance:\n" + "-" * 16)
     print("Total Balance: " + str(wallet_balance.total_balance))
-    satoshis = float(total_balance) * .000000001
+    satoshis = float(total_balance) * .00000001
     usdvalue = converters.btc_to_usd(satoshis) 
     print('Total USD value: $' + str(usdvalue))
     print("Confirmed Balance: " + str(wallet_balance.confirmed_balance))
