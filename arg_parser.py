@@ -124,5 +124,11 @@ def arg_parser_func():
     parser.add_argument("--unlock", help="Unlock wallet", action='store_true')
     parser.add_argument("--change_password", help="Change wallet password", action='store_true')
 
+    # # # # # # # # # # # # # # # # # # # # 
+    #  Conmarketcap.com BTC/USD Converter
+    # # # # # # # # # # # # # # # # # # # #
+
+    parser.add_argument("--btcusd", help="Current BTC/USD Conversion Rate", action='store_true')
+
     args = parser.parse_args()
     return args

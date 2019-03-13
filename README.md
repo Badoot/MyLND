@@ -23,6 +23,7 @@
       --ip_port <ip_address>:<port>
                             IP address and port of the LND node
       --status              Same as '--getinfo --walletbalance --channelbalance'
+      --btcusd              Current BTC/USD Conversion Rate
       --macaroonpath </path/to/admin.macaroon>
                             Path to admin.macaroon
       --tlspath </path/to/tls.cert>
@@ -117,6 +118,12 @@
     ----------------
     balance: 125900
 
+
+    Current BTC/USD Converstion Rate:
+    ---------------------------------
+    Price          1hr  24hr  7d
+    3908.52821065 -0.11 0.21 0.61
+
   
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
    
@@ -130,6 +137,8 @@
     127.0.0.1:10013  Charlie  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f  168406     164733     4154
     127.0.0.1:10012  Bob      02ac3a63b851a0171524015bfd496f81ea6786c77af401a2c778586733b59fd554  96468      117087     230
     
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     # mylnd.py --listpeers-detail
     
     Peers: 3 total
@@ -180,6 +189,7 @@
     True    Danny  4000000  3249056860274689  298f91edf8f365f814f38210c8fc0d069e30939c340c7820c2304eae0f264585:1  0             3990950        020285ca01ce18a0e9b5bae2ba6b67be9dba368afa6b51f8c57abfb2ad59c489f3
     True    Bob    4000000  3235862720610304  157ab869b6a23e0321f1b4b9aae5aaca912aa59b386b3ba4a4f9fac0493b1dba:0  3990950       0              023ae447644330869004364bcdaab654a518d059c602aa5dc8de1b6daef753e1c4
 
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
     # mylnd.py --listchannels-detail
     
@@ -220,8 +230,9 @@
     node1_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
     node2_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
 
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    root@bobuntu:/python/MyLND# mylnd --channelinfo 4868637487857664
+    # mylnd.py --channelinfo 4868637487857664
     
     Channel Details:
     ----------------

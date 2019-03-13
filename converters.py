@@ -3,6 +3,8 @@
 import json
 from google.protobuf.json_format import MessageToJson
 from datetime import datetime
+import requests
+from prettytable import PrettyTable
 
 
 # Convert Unix timestamp to US Date Format, if desired
@@ -18,4 +20,3 @@ def response_to_dict(response):
     response = MessageToJson(response)
     response = json.loads(response)
     return response
-
