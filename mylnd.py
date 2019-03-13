@@ -27,6 +27,7 @@ def run_it():
         output.out_get_info()
         output.out_wallet_balance()
         output.out_channel_balance()
+        output.out_cmcconverter()
 
     if args.getinfo:
         output.out_get_info()
@@ -245,6 +246,14 @@ def run_it():
             exit(1)
         else:
             output.out_create()
+
+    # # # # # # # # # # # # # # # # # # # # 
+    #  Conmarketcap.com BTC/USD Converter
+    # # # # # # # # # # # # # # # # # # # #
+
+    if args.btcusd:
+        output.out_cmcconverter()
+        
     return args
 
 

@@ -6,6 +6,8 @@ import codecs
 from error_handler import error_handler
 import converters as converters
 import getpass
+import requests
+
 
 # Pandas dataframe display options
 pd.set_option('colheader_justify', 'left')
@@ -768,3 +770,23 @@ def out_create():
     newdf = pd.DataFrame.to_string(newdf, index=False, header=False)
     print(newdf)
     print('\n')
+
+# # # # # # # # # # # # # # # # # # # # # 
+#  Coinmarketcap.com BTC/USD converter
+# # # # # # # # # # # # # # # # # # # # # 
+
+def out_cmcconverter():
+    api = "https://api.coinmarketcap.com/v2/ticker/"
+    raw_data = requests.get(api).json()
+    data = raw_data['data']
+    for currency in data.values():
+        name = currency['name']
+        price = currency['quotes']['USD']['price']
+        change_1h = currency['quotes']['USD']['percent_change_1h']
+        change_24h = currency['quotes']['USD']['percent_change_24h']
+        change_7d = currency['quotes']['USD']['percent_change_7d']
+        if name == 'Bitcoin':
+            print("\nCurrent BTC/USD Converstion Rate:\n" + "-" * 33)
+            print("\rPrice          1hr  24hr  7d\r")
+            print(price, change_1h, change_24h, change_7d, "\n")
+        
