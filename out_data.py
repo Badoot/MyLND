@@ -293,8 +293,8 @@ def out_channel_balance():
     channel_balance = converters.response_to_dict(channel_balance)
     satoshis = float(channel_balance['balance']) * .000000001
     usdvalue = converters.btc_to_usd(satoshis)
-
     print('USD value: $' + str(usdvalue))
+
 
 @error_handler
 def out_closed_channels():
@@ -311,6 +311,7 @@ def out_closed_channels():
         print(total_closed + " total closed channels\n")
     else:
         print('\nNo closed channels\n')
+
 
 @error_handler
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
@@ -441,8 +442,23 @@ def out_new_address():
 @error_handler
 def out_wallet_balance():
     wallet_balance = get_data.get_wallet_balance()
-    print("\nWallet Balance:\n" + "-" * 15)
-    print(wallet_balance)
+    total_balance = wallet_balance.total_balance
+    confirmed_balance = wallet_balance.confirmed_balance
+    print("Wallet Balance:\n" + "-" * 16)
+
+    print("Total Balance: " + str(wallet_balance.total_balance))
+    satoshis = float(total_balance) * .000000001
+    usdvalue = converters.btc_to_usd(satoshis) 
+    print('Total USD value: $' + str(usdvalue))
+
+    print("Confirmed Balance: " + str(wallet_balance.confirmed_balance))
+    satoshis = float(wallet_balance.confirmed_balance) * .000000001
+    usdvalue = converters.btc_to_usd(satoshis)
+    print('Confirmed USD value: $' + str(usdvalue))
+
+    # wallet_balance = get_data.get_wallet_balance()
+    # print("\nWallet Balance:\n" + "-" * 15)
+    # print(wallet_balance)
 
 
 @error_handler
