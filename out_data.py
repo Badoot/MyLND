@@ -291,7 +291,7 @@ def out_channel_balance():
     print("\nChannel Balance:\n" + "-" * 16)
     print("Channel Balance: " + str(channel_balance.balance))
     channel_balance = converters.response_to_dict(channel_balance)
-    satoshis = float(channel_balance['balance']) * .000000001
+    satoshis = float(channel_balance['balance']) * .00000001
     usdvalue = converters.btc_to_usd(satoshis)
     print('USD value: $' + str(usdvalue))
 
@@ -450,7 +450,7 @@ def out_wallet_balance():
     usdvalue = converters.btc_to_usd(satoshis) 
     print('Total USD value: $' + str(usdvalue))
     print("Confirmed Balance: " + str(wallet_balance.confirmed_balance))
-    satoshis = float(wallet_balance.confirmed_balance) * .000000001
+    satoshis = float(wallet_balance.confirmed_balance) * .00000001
     usdvalue = converters.btc_to_usd(satoshis)
     print('Confirmed USD value: $' + str(usdvalue))
 
