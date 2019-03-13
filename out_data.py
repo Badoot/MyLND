@@ -289,7 +289,11 @@ def out_pending_channels():
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     print("\nChannel Balance:\n" + "-" * 16)
-    print(channel_balance)
+    print("Channel Balance: " + str(channel_balance.balance))
+    channel_balance = converters.response_to_dict(channel_balance)
+    satoshis = float(channel_balance['balance']) * .000000001
+    usdvalue = converters.btc_to_usd(satoshis)
+    print('USD value: $' + str(usdvalue))
 
 
 @error_handler
@@ -307,6 +311,7 @@ def out_closed_channels():
         print(total_closed + " total closed channels\n")
     else:
         print('\nNo closed channels\n')
+
 
 @error_handler
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
@@ -437,8 +442,17 @@ def out_new_address():
 @error_handler
 def out_wallet_balance():
     wallet_balance = get_data.get_wallet_balance()
-    print("\nWallet Balance:\n" + "-" * 15)
-    print(wallet_balance)
+    total_balance = wallet_balance.total_balance
+    confirmed_balance = wallet_balance.confirmed_balance
+    print("Wallet Balance:\n" + "-" * 16)
+    print("Total Balance: " + str(wallet_balance.total_balance))
+    satoshis = float(total_balance) * .000000001
+    usdvalue = converters.btc_to_usd(satoshis) 
+    print('Total USD value: $' + str(usdvalue))
+    print("Confirmed Balance: " + str(wallet_balance.confirmed_balance))
+    satoshis = float(wallet_balance.confirmed_balance) * .000000001
+    usdvalue = converters.btc_to_usd(satoshis)
+    print('Confirmed USD value: $' + str(usdvalue))
 
 
 @error_handler
@@ -775,18 +789,18 @@ def out_create():
 #  Coinmarketcap.com BTC/USD converter
 # # # # # # # # # # # # # # # # # # # # # 
 
-def out_cmcconverter():
+def out_btcusd():
     api = "https://api.coinmarketcap.com/v2/ticker/"
     raw_data = requests.get(api).json()
     data = raw_data['data']
     for currency in data.values():
         name = currency['name']
-        price = currency['quotes']['USD']['price']
+        price = round(currency['quotes']['USD']['price'])
         change_1h = currency['quotes']['USD']['percent_change_1h']
         change_24h = currency['quotes']['USD']['percent_change_24h']
         change_7d = currency['quotes']['USD']['percent_change_7d']
         if name == 'Bitcoin':
-            print("\nCurrent BTC/USD Converstion Rate:\n" + "-" * 33)
-            print("\rPrice          1hr  24hr  7d\r")
+            print("\nBTC/USD Converstion Rate:\n" + "-" * 25)
+            print("\rPrice 1hr 24hr 7d\r")
             print(price, change_1h, change_24h, change_7d, "\n")
         
