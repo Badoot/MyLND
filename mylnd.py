@@ -27,7 +27,7 @@ def run_it():
         output.out_get_info()
         output.out_wallet_balance()
         output.out_channel_balance()
-        output.out_cmcconverter()
+        output.out_btcusd()
 
     if args.getinfo:
         output.out_get_info()
@@ -252,7 +252,7 @@ def run_it():
     # # # # # # # # # # # # # # # # # # # #
 
     if args.btcusd:
-        output.out_cmcconverter()
+        output.out_btcusd()
         
     return args
 

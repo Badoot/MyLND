@@ -3,6 +3,7 @@
 import json
 from google.protobuf.json_format import MessageToJson
 from datetime import datetime
+import requests
 
 
 # Convert Unix timestamp to US Date Format, if desired
@@ -18,3 +19,16 @@ def response_to_dict(response):
     response = MessageToJson(response)
     response = json.loads(response)
     return response
+
+def btc_to_usd(satoshis):
+    api = "https://api.coinmarketcap.com/v2/ticker/"
+    raw_data = requests.get(api).json()
+    data = raw_data['data']
+    for currency in data.values():
+        name = currency['name']
+        price = round(currency['quotes']['USD']['price'])
+        change_1h = currency['quotes']['USD']['percent_change_1h']
+        change_24h = currency['quotes']['USD']['percent_change_24h']
+        change_7d = currency['quotes']['USD']['percent_change_7d']
+        if name == 'Bitcoin':
+            return price * satoshis
