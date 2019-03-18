@@ -303,9 +303,10 @@ def out_channel_balance():
     print("\nChannel Balance:\n" + "-" * 16)
     print("Channel Balance: " + str(channel_balance.balance))
     channel_balance = converters.response_to_dict(channel_balance)
-    satoshis = float(channel_balance['balance']) * .00000001
-    usdvalue = converters.btc_to_usd(satoshis)
-    print('USD value: $' + str(usdvalue))
+    if channel_balance:
+        satoshis = float(channel_balance['balance']) * .00000001
+        usdvalue = converters.btc_to_usd(satoshis)
+        print('USD value: $' + str(usdvalue))
 
 
 @error_handler
