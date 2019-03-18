@@ -122,7 +122,10 @@ def out_list_peers_detail():
             node_info = converters.response_to_dict(node_info)
             node_info = node_info["node"]
             for key, value in sorted(node_info.items()):
-                if key != "pub_key":
+                if 'last_update' in key:
+                    value = converters.convert_date(value)
+                    print(key + " : ", value)
+                elif key != "pub_key":
                     print(key + " : ", value)
             peer_list_info = dict(row)
             for key, value in peer_list_info.items():
@@ -149,6 +152,9 @@ def out_node_info(pub_key):
             addresses = value[0]
             for k, v in addresses.items():
                 print(k + " : ", v)
+        if 'last_update' in key:
+            value = converters.convert_date(value)
+            print(key + " : ", value)
         else:
             print(key + " : ", value)
     if 'num_channels' in node_info:
@@ -168,8 +174,14 @@ def out_node_info(pub_key):
 @error_handler
 def out_channel_info(chan_id):
     chan_info = get_data.get_channel_info(chan_id)
+    chan_info = converters.response_to_dict(chan_info)
     print("\nChannel Details:", '\n' + "-" * 16)
-    print(chan_info)
+    for key, value in chan_info.items():
+        if key == 'last_update':
+            value = converters.convert_date(value)
+            print(key + " : ", value)
+        else:
+            print(key + " : ", value)
     print('\r')
 
 
@@ -291,9 +303,10 @@ def out_channel_balance():
     print("\nChannel Balance:\n" + "-" * 16)
     print("Channel Balance: " + str(channel_balance.balance))
     channel_balance = converters.response_to_dict(channel_balance)
-    satoshis = float(channel_balance['balance']) * .00000001
-    usdvalue = converters.btc_to_usd(satoshis)
-    print('USD value: $' + str(usdvalue))
+    if channel_balance:
+        satoshis = float(channel_balance['balance']) * .00000001
+        usdvalue = converters.btc_to_usd(satoshis)
+        print('USD value: $' + str(usdvalue))
 
 
 @error_handler
