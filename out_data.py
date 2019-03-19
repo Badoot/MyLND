@@ -301,10 +301,11 @@ def out_pending_channels():
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     print("\nChannel Balance:\n" + "-" * 16)
+    channel_balance_dict = converters.response_to_dict(channel_balance)
     print("Channel Balance: " + str(channel_balance.balance))
-    channel_balance = converters.response_to_dict(channel_balance)
-    if channel_balance:
-        satoshis = float(channel_balance['balance']) * .00000001
+    print("Pending Channel Balance: " + str(channel_balance_dict['pending_open_balance']))
+    if 'channel' in channel_balance_dict.items():
+        satoshis = float(channel_balance_dict['balance']) * .00000001
         usdvalue = converters.btc_to_usd(satoshis)
         print('USD value: $' + str(usdvalue))
 
