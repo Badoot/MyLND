@@ -25,8 +25,9 @@ def btc_to_usd(satoshis):
     api = "https://api.coinmarketcap.com/v2/ticker/"
     raw_data = requests.get(api).json()
     data = raw_data['data']
+    btc_amt = satoshis * .00000001
     for currency in data.values():
         name = currency['name']
         price = round(currency['quotes']['USD']['price'])
         if name == 'Bitcoin':
-            return price * satoshis
+            return price * btc_amt

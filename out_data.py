@@ -305,12 +305,14 @@ def out_channel_balance():
     pending = channel_balance.pending_open_balance
     print("\nChannel Balance:\n" + "-" * 16)
     print("Channel Balance: " + str(balance))
-    if pending:
-        print("Pending Channel Balance: " + str(pending))
     if balance > 0:
-        satoshis = float(channel_balance_dict['balance']) * .00000001
-        usdvalue = converters.btc_to_usd(satoshis)
-        print('USD value: $' + str(usdvalue))
+        balance_usd = converters.btc_to_usd(balance)
+        print('Total Channel USD Value: $' + str(balance_usd))
+    if pending:
+        balance_pending = converters.btc_to_usd(pending)
+        print("Pending Channel Balance: " + str(pending))
+        print('Pending Channel USD Value: $' + str(balance_pending))
+    print("\r")
 
 
 @error_handler
@@ -824,6 +826,6 @@ def out_btcusd():
 def out_satstousd(satoshis):
     btc_amt = float(satoshis) * 0.00000001
     dollar_value = converters.btc_to_usd(btc_amt)
-    print("\n", int(satoshis), "sats are currently worth $" + str(dollar_value) + "\n")
+    print("\n" + int(satoshis), "sats are currently worth $" + str(dollar_value) + "\n")
       
 
