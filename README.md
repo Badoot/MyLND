@@ -117,7 +117,7 @@
     Channel Balance: 4990950
     USD value: $19.5545421
 
-    BTC/USD Converstion Rate:
+    BTC/USD Conversion Rate:
     -------------------------
     Price 1hr 24hr 7d
     3918 0.04 1.11 0.83
