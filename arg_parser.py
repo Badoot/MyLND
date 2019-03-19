@@ -129,6 +129,7 @@ def arg_parser_func():
     # # # # # # # # # # # # # # # # # # # #
 
     parser.add_argument("--btcusd", help="Current BTC/USD Conversion Rate", action='store_true')
+    parser.add_argument("--satstousd", help="Convert # of sats to USD", action='store')
 
     args = parser.parse_args()
     return args

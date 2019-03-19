@@ -253,6 +253,10 @@ def run_it():
 
     if args.btcusd:
         output.out_btcusd()
+
+    if args.satstousd:
+        satoshis = args.satstousd
+        output.out_satstousd(satoshis)
         
     return args
 
