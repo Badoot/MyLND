@@ -463,15 +463,14 @@ def out_wallet_balance():
     wallet_balance = get_data.get_wallet_balance()
     total_balance = wallet_balance.total_balance
     confirmed_balance = wallet_balance.confirmed_balance
-    print("Wallet Balance:\n" + "-" * 16)
-    print("Total Balance: " + str(wallet_balance.total_balance))
-    satoshis = float(total_balance) * .00000001
-    usdvalue = converters.btc_to_usd(satoshis) 
-    print('Total USD value: $' + str(usdvalue))
-    print("Confirmed Balance: " + str(wallet_balance.confirmed_balance))
-    satoshis = float(wallet_balance.confirmed_balance) * .00000001
-    usdvalue = converters.btc_to_usd(satoshis)
-    print('Confirmed USD value: $' + str(usdvalue))
+    print("\nWallet Balance:\n" + "-" * 16)
+    print("Total Balance: " + str(total_balance))
+    total_usd_value = converters.btc_to_usd(total_balance)
+    print('Total USD value: $' + str(total_usd_value))
+    print("Confirmed Balance: " + str(confirmed_balance))
+    conf_usd_value = converters.btc_to_usd(confirmed_balance)
+    print('Confirmed USD value: $' + str(conf_usd_value))
+    print("\r")
 
 
 @error_handler
