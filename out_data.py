@@ -818,13 +818,12 @@ def out_btcusd():
         change_24h = currency['quotes']['USD']['percent_change_24h']
         change_7d = currency['quotes']['USD']['percent_change_7d']
         if name == 'Bitcoin':
-            print("\nBTC/USD Converstion Rate:\n" + "-" * 25)
+            print("\nBTC/USD Conversion Rate:\n" + "-" * 25)
             print("\rPrice 1hr 24hr 7d\r")
             print(price, change_1h, change_24h, change_7d, "\n")
 
 def out_satstousd(satoshis):
-    btc_amt = float(satoshis) * 0.00000001
-    dollar_value = converters.btc_to_usd(btc_amt)
+    dollar_value = converters.btc_to_usd(satoshis)
     print("\n" + int(satoshis), "sats are currently worth $" + str(dollar_value) + "\n")
       
 
