@@ -2,6 +2,8 @@
 
 import gRPCfiles.rpc_pb2 as ln
 import gRPCfiles.rpc_pb2_grpc as lnrpc
+import gRPCfiles.client_pb2 as loop
+import gRPCfiles.client_pb2_grpc as looprpc
 import grpc
 import os
 import arg_parser as arg_parser
@@ -333,3 +335,17 @@ def get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
     )
     response = APICall.wallet_stub.InitWallet(request)
     return response
+
+
+# # # # # # 
+#   Loop
+# # # # # # 
+
+def get_loop(amount):
+    channel = grpc.insecure_channel('localhost:11010')
+    stub = looprpc.SwapClientStub(channel)
+    request = loop.LoopOutRequest(
+        amt=amount     
+    )
+    response = stub.LoopOut(request)
+    print(response)

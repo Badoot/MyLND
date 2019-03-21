@@ -827,3 +827,11 @@ def out_satstousd(satoshis):
     print("\n" + int(satoshis), "sats are currently worth $" + str(dollar_value) + "\n")
       
 
+
+# # # # # # 
+#   Loop
+# # # # # # 
+
+def out_loop(amount):
+    response = get_data.get_loop(amount)
+    return response

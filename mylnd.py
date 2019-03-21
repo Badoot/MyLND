@@ -6,7 +6,7 @@ import out_data as output
 import arg_parser as arg_parser
 import getpass
 import os
-from error_handler import error_handler
+from error_handler import error_handler 
 
 
 # @error_handler
@@ -257,7 +257,19 @@ def run_it():
     if args.satstousd:
         satoshis = args.satstousd
         output.out_satstousd(satoshis)
-        
+
+
+    # # # # # #
+    #  Loop
+    # # # # # #
+
+    if args.loop:
+        amount = int(args.loop[0])
+        # dest = args.loop[1]
+        # loop_out_channel = args.loop[1]
+        # output.out_loop(amount=amount, dest=dest, loop_out_channel=loop_out_channel)
+        output.out_loop(amount=amount)
+
     return args
 
 
