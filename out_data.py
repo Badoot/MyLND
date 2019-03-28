@@ -824,7 +824,7 @@ def out_btcusd():
 
 def out_satstousd(satoshis):
     dollar_value = converters.btc_to_usd(satoshis)
-    print("\n" + int(satoshis), "sats are currently worth $" + str(dollar_value) + "\n")
+    print("\n" + str(satoshis), "sats are currently worth $" + str(dollar_value), "\n")
       
 
 
