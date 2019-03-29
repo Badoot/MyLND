@@ -221,39 +221,36 @@ def out_channel_info(chan_id):
 @error_handler
 def out_list_channels():
     channels = get_data.get_channels()
-    channels = converters.response_to_dict(channels)
-    if len(channels) > 0:
-        # Convert dictionary to dataframe, and replace empty values with 0s
-        channels_df = pd.DataFrame.from_dict(channels['channels']).fillna(0)
-        # Print it
-        print("\nChannels: " + str(len(channels_df)) + " total \n" + "-" * 18 + "\n")
-        for index, row in channels_df.iterrows():
-            # Print the alias of the remote node
-            remote_pubkey = row['remote_pubkey']
-            node_info = get_data.get_node_info(remote_pubkey)
-            node_info = converters.response_to_dict(node_info)
-            if 'alias' in node_info['node']:
-                alias = node_info['node']['alias']
-                print('Remote Node : ' + alias)
-            # Print the output from ListChannels
-            for key, value in row.items():
-                if key != 'remote_pubkey':
-                    print(key + " : ", value)
-            # Include channel details from GetChannelInfo.
-            channel_info = get_data.get_channel_info(int(row['chan_id']))
-            channel_info = converters.response_to_dict(channel_info)
-            node1_pub = channel_info['node1_pub']
-            node1_policy = channel_info['node1_policy']
-            node2_pub = channel_info['node2_pub']
-            node2_policy = channel_info['node2_policy']
-            print('remote_node_pubkey :', node1_pub)
-            print('remote_node_policy :', node1_policy)
-            print('local_node_pubkey :', node2_pub)
-            print('local_node_policy :', node2_policy)
-   
-            print('\r')
-    else:
-        print('\nNo channels open\n')
+    channels = channels.channels
+    # Build list of channels from RPC response
+    channel_list = []
+    for channel in channels:
+        active = channel.active
+        remote_pubkey = channel.remote_pubkey
+        channel_point = channel.channel_point
+        chan_id = channel.chan_id
+        capacity = channel.capacity
+        local_balance = channel.local_balance
+        remote_balance = channel.remote_balance
+        commit_fee = channel.commit_fee
+        commit_weight = channel.commit_weight
+        fee_per_kw = channel.fee_per_kw
+        unsettled_balance = channel.unsettled_balance
+        total_satoshis_sent = channel.total_satoshis_sent
+        total_satoshis_received = channel.total_satoshis_received
+        num_updates = channel.num_updates
+        csv_delay = channel.csv_delay
+        private = channel.private
+
+
+        channel = [active, private, chan_id, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
+        channel_list.append(channel)
+    # Build the DataFrame from list of channels
+    channels_df_columns = ['Active', 'Private', 'Channel ID', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
+    channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
+    # Print it
+    print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
+    print(channels_df, '\n')
 
 
 @error_handler

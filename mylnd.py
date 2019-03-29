@@ -9,40 +9,12 @@ import os
 from error_handler import error_handler 
 
 
-# @error_handler
+@error_handler
 def run_it():
     
     # First, parse those arguments
     args = arg_parser.arg_parser_func()
-
-    # # # # # # # # # # # # # 
-    #   Set node variables
-    # # # # # # # # # # # # # 
-
-    # Default ip:port is localhost:10009
-    if args.ip_port:
-        ip_port = args.ip_port
-    else:
-        ip_port = 'localhost:10009'
-
-    # Default data_dir is '/root/.lnd'
-    if args.lnddir:
-        lnddir = args.lnddir
-    else:
-        lnddir = '/root/.lnd'
-
-    # Default tlspath is '/root/.lnd'
-    if args.tlspath:
-        tlspath = args.tlspath
-    else:
-        tlspath = '/root/.lnd'
-
-    # Default macaroonpath is '/root/.lnd'
-    if args.macaroonpath:
-        macaroonpath = args.macaroonpath
-    else:
-        macaroonpath = '/root/.lnd'
-        
+   
 
     # # # # # # # # # #
     #   My LND node
