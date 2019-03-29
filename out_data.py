@@ -213,10 +213,10 @@ def out_list_channels():
             node1_policy = channel_info['node1_policy']
             node2_pub = channel_info['node2_pub']
             node2_policy = channel_info['node2_policy']
-            print('node1_pub :', node1_pub)
-            print('node1_policy :', node1_policy)
-            print('node2_pub :', node2_pub)
-            print('node2_policy :', node2_policy)
+            print('remote_node_pubkey :', node1_pub)
+            print('remote_node_policy :', node1_policy)
+            print('local_node_pubkey :', node2_pub)
+            print('local_node_policy :', node2_policy)
    
             print('\r')
     else:

@@ -72,8 +72,6 @@ def arg_parser_func():
                                action='store', metavar=('<channel_point>', '<force>'))
     parser.add_argument("--closeallchannels", help="Attempt to close all open channels", action='store_true')
     parser.add_argument("--listchannels", help="List channels", action='store_true')
-    parser.add_argument("--listchannels-detail", help="Details about open channels",
-                               action='store_true', dest='listchannels_detail')
     parser.add_argument("--channelinfo", nargs=1, help="Channel details by channel ID", type=int, action='store',
                                dest='channel_info', metavar='<channel_id>')
     parser.add_argument("--pendingchannels", help="Pending channels", action='store_true')
