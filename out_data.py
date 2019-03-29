@@ -241,14 +241,21 @@ def out_list_channels():
         num_updates = channel.num_updates
         csv_delay = channel.csv_delay
         private = channel.private
+        
+         # Get alias of the remote node
+        node_info = get_data.get_node_info(remote_pubkey)
+        node_info = converters.response_to_dict(node_info)
+        alias = node_info['node']['alias']
 
-
-        channel = [active, private, chan_id, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
+        # List of fields to include in the output
+        channel = [active, private, chan_id, alias, num_updates, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
         channel_list.append(channel)
+       
     # Build the DataFrame from list of channels
-    channels_df_columns = ['Active', 'Private', 'Channel ID', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
+    channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
     channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
-    # Print it
+   
+
     print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
     print(channels_df, '\n')
 
