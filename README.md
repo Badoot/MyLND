@@ -182,50 +182,44 @@
     Channels: 2 total
     ------------------
 
-    active alias  capacity chan_id           channel_point                                                       local_balance remote_balance remote_pubkey
-    True    Danny  4000000  3249056860274689  298f91edf8f365f814f38210c8fc0d069e30939c340c7820c2304eae0f264585:1  0             3990950        020285ca01ce18a0e9b5bae2ba6b67be9dba368afa6b51f8c57abfb2ad59c489f3
-    True    Bob    4000000  3235862720610304  157ab869b6a23e0321f1b4b9aae5aaca912aa59b386b3ba4a4f9fac0493b1dba:0  3990950       0              023ae447644330869004364bcdaab654a518d059c602aa5dc8de1b6daef753e1c4
+    Remote Node : Danny
+    active :  True
+    capacity :  5000000
+    chan_id :  3419481162448896
+    channel_point :  3be3a9d9cf10d44c0e56dd422e3888d17d78ccdcc7ae03a84cbf033759ea4657:0
+    commit_fee :  9050
+    commit_weight :  600
+    csv_delay :  600
+    fee_per_kw :  12500
+    local_balance :  4990950
+    num_updates :  0
+    remote_balance :  0
+    total_satoshis_received :  0
+    node1_pub :  020285ca01ce18a0e9b5bae2ba6b67be9dba368afa6b51f8c57abfb2ad59c489f3
+    node2_policy :  {'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1', 'time_lock_delta': 144}
+    last_update :  1553821658
+    node1_policy :  {'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1', 'time_lock_delta': 144}
+    node2_pub :  03f52428a097c1c118d59874cb744ec2650823f66e593f55afcab70bcb92b45cb0
 
-    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    
-    # mylnd.py --listchannels-detail
-    
-    Channels: 2 total
-    ------------------
-    
-    Remote Node : Charlie
+    Remote Node : Bob
     active :  True
-    capacity :  200000
-    chan_id :  4863139929718785
-    channel_point :  1f3b5f89897f21a6a265537ed43c3477f777db4168eaacfa1d9fce4c4c7f18fc:1
+    capacity :  4000000
+    chan_id :  3242459790376960
+    channel_point :  4f4ddeeafef1560b3b02bcbd112a9220dc3baaf905a79f09fe013fbb9b594292:0
     commit_fee :  9050
     commit_weight :  724
-    csv_delay :  144
+    csv_delay :  480
     fee_per_kw :  12500
-    local_balance :  100000
-    remote_balance :  90950
-    last_update :  1541454641
-    node1_pub :  02ac3a63b851a0171524015bfd496f81ea6786c77af401a2c778586733b59fd554
-    node2_pub :  03a98291d7938e7d4df15bdf7e77acd24c0bdefe685a9d419446df58cb13a86c2f
-    node1_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
-    node2_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
-    
-    Remote Node : Alice
-    active :  True
-    capacity :  200000
-    chan_id :  4863139929784321
-    channel_point :  cd74aed20423a889827b9ec3e5d8195164b9d295c4c6e2dd39544c3aaee63429:1
-    commit_fee :  9050
-    commit_weight :  724
-    csv_delay :  144
-    fee_per_kw :  12500
-    local_balance :  100000
-    remote_balance :  90950
-    last_update :  1541454641
-    node1_pub :  02ac3a63b851a0171524015bfd496f81ea6786c77af401a2c778586733b59fd554
-    node2_pub :  03d25ac3598492ba8a82d224d69aef635b5838890cb6dad9cd9391a141b823d918
-    node1_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
-    node2_policy :  {'time_lock_delta': 144, 'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1'}
+    local_balance :  1000002
+    num_updates :  2
+    remote_balance :  2990948
+    total_satoshis_received :  1000002
+    node1_pub :  023ae447644330869004364bcdaab654a518d059c602aa5dc8de1b6daef753e1c4
+    node2_policy :  {'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1', 'time_lock_delta': 144}
+    last_update :  1553788712
+    node1_policy :  {'min_htlc': '1000', 'fee_base_msat': '1000', 'fee_rate_milli_msat': '1', 'time_lock_delta': 144}
+    node2_pub :  03f52428a097c1c118d59874cb744ec2650823f66e593f55afcab70bcb92b45cb0
+
 
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
