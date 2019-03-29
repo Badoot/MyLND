@@ -47,8 +47,6 @@
                             Attempt to close a channel with a remote peer
       --closeallchannels    Attempt to close all open channels
       --listchannels        List channels
-      --listchannels-detail
-                            Details about open channels
       --channelinfo <channel_id>
                             Channel details by channel ID
       --pendingchannels     Pending channels

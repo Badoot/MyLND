@@ -100,9 +100,6 @@ def run_it():
     if args.listchannels:
         output.out_list_channels()
 
-    if args.listchannels_detail:
-        output.out_list_channels_detail()
-
     if args.closedchannels:
         output.out_closed_channels()
 

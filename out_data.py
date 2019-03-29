@@ -188,31 +188,6 @@ def out_channel_info(chan_id):
 @error_handler
 def out_list_channels():
     channels = get_data.get_channels()
-    channels_dict = converters.response_to_dict(channels)
-    if len(channels_dict) > 0:
-        print("\nChannels: " + str(len(channels_dict['channels'])) + " total \n" + "-" * 18 + "\n")
-        channels = channels_dict['channels']
-        channels_df = pd.DataFrame.from_dict(channels).fillna(0)
-        dropcols = ['commit_weight', 'csv_delay', 'commit_fee', 'fee_per_kw']
-        channels_df = channels_df.drop(columns=dropcols)
-        alias_list = []
-        for key in channels_df.remote_pubkey:
-            node_info = get_data.get_node_info(key)
-            node_info = converters.response_to_dict(node_info)
-            node_info = node_info["node"]
-            for k, v in node_info.items():
-                if 'alias' in k:
-                    alias_list.append(v)
-        channels_df.insert(loc=1, column='alias', value=alias_list)
-        channels_str = pd.DataFrame.to_string(channels_df, index=False)
-        print(channels_str, '\n')
-    else:
-        print('\nNo channels open\n')
-
-
-@error_handler
-def out_list_channels_detail():
-    channels = get_data.get_channels()
     channels = converters.response_to_dict(channels)
     if len(channels) > 0:
         # Convert dictionary to dataframe, and replace empty values with 0s
