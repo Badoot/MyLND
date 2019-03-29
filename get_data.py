@@ -9,7 +9,12 @@ import os
 import arg_parser as arg_parser
 import codecs
 
+
 args = arg_parser.arg_parser_func()
+
+# # # # # # # # # # # # # 
+#   Set node variables
+# # # # # # # # # # # # # 
 
 # Default ip:port is localhost:10009
 if args.ip_port:
@@ -35,8 +40,7 @@ if args.macaroonpath:
 else:
     macaroonpath = '/root/.lnd'
 
-class APICall:
-
+class APICall():
     os.environ['GRPC_SSL_CIPHER_SUITES'] = 'HIGH+ECDSA'
     cert = open(tlspath + '/tls.cert', 'rb').read()
 
@@ -341,7 +345,6 @@ def get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
 #   Loop 
 # # # # # # 
 
-# Just playing with the new loopd api here... Do not use this on mainnet...
 def get_loop(amount):
     channel = grpc.insecure_channel('localhost:11010')
     stub = looprpc.SwapClientStub(channel)

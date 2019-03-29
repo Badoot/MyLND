@@ -831,7 +831,6 @@ def out_satstousd(satoshis):
     print("\n" + str(satoshis), "sats are currently worth $" + str(dollar_value), "\n")
       
 
-
 # # # # # # 
 #   Loop
 # # # # # # 

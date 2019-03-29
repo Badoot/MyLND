@@ -8,9 +8,8 @@ def arg_parser_func():
     # Argparser with help description
     parser = argparse.ArgumentParser(prog='mylnd.py', description="""
     MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""", usage='%(prog)s [--option] [value]')
-   
-    
 
+    
     # # # # # # # # # #
     #   My LND node
     # # # # # # # # # #
