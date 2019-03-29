@@ -22,12 +22,8 @@ def response_to_dict(response):
 
 # Convert satoshis to USD
 def btc_to_usd(satoshis):
-    api = "https://api.coinmarketcap.com/v2/ticker/"
+    api = "https://api.gemini.com/v1/pubticker/btcusd"
     raw_data = requests.get(api).json()
-    data = raw_data['data']
+    price = float(raw_data['last'])
     btc_amt = int(satoshis) * .00000001
-    for currency in data.values():
-        name = currency['name']
-        price = round(currency['quotes']['USD']['price'])
-        if name == 'Bitcoin':
-            return price * btc_amt
+    return(price * btc_amt)
