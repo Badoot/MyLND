@@ -209,12 +209,15 @@ def out_list_channels():
             # Include channel details from GetChannelInfo.
             channel_info = get_data.get_channel_info(int(row['chan_id']))
             channel_info = converters.response_to_dict(channel_info)
-            for key, value in channel_info.items():
-                # Drop values already included in ListChannels output and print the rest
-                if key != 'channel_id':
-                    if key != 'chan_point':
-                        if key != 'capacity':
-                            print(key + " : ", value)
+            node1_pub = channel_info['node1_pub']
+            node1_policy = channel_info['node1_policy']
+            node2_pub = channel_info['node2_pub']
+            node2_policy = channel_info['node2_policy']
+            print('node1_pub :', node1_pub)
+            print('node1_policy :', node1_policy)
+            print('node2_pub :', node2_pub)
+            print('node2_policy :', node2_policy)
+   
             print('\r')
     else:
         print('\nNo channels open\n')
