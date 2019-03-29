@@ -9,7 +9,7 @@ import os
 from error_handler import error_handler 
 
 
-# @error_handler
+@error_handler
 def run_it():
     
     # First, parse those arguments

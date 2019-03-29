@@ -786,19 +786,12 @@ def out_create():
 # # # # # # # # # # # # # # # # # # # # # 
 
 def out_btcusd():
-    api = "https://api.coinmarketcap.com/v2/ticker/"
+    api = "https://api.gemini.com/v1/pubticker/btcusd"
     raw_data = requests.get(api).json()
-    data = raw_data['data']
-    for currency in data.values():
-        name = currency['name']
-        price = round(currency['quotes']['USD']['price'])
-        change_1h = currency['quotes']['USD']['percent_change_1h']
-        change_24h = currency['quotes']['USD']['percent_change_24h']
-        change_7d = currency['quotes']['USD']['percent_change_7d']
-        if name == 'Bitcoin':
-            print("\nBTC/USD Conversion Rate:\n" + "-" * 25)
-            print("\rPrice 1hr 24hr 7d\r")
-            print(price, change_1h, change_24h, change_7d, "\n")
+    price = raw_data['last']
+    print("\nGemini BTC/USD Conversion Rate:\n" + "-" * 31)
+    print('1 BTC = ' + '$' + str(price), '\n')
+
 
 def out_satstousd(satoshis):
     dollar_value = converters.btc_to_usd(satoshis)
