@@ -7,18 +7,14 @@ def arg_parser_func():
 
     # Argparser with help description
     parser = argparse.ArgumentParser(prog='mylnd.py', description="""
-    MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""",
-                                usage='mylnd.py --argument <value1> <value2> \n'
-                                      '\nexample: mylnd.py --addinvoice 100 "for hugs"',
-                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""", usage='%(prog)s [options]')
+   
     
 
     # # # # # # # # # #
     #   My LND node
     # # # # # # # # # #
-
-    parser.add_argument("--version", help="LND version", action='store_true',
-                               dest='lnd_version')
+    parser.add_argument("--version", help="LND version", action='store_true', dest='version')
     parser.add_argument("--lnddir", help="Path to LND's base dir", type=str, action='store',
                                 dest='lnddir', metavar='</path/to/.lnd>')
     parser.add_argument("--ip_port", help="IP address and port of the LND node", type=str, action='store',
@@ -40,8 +36,8 @@ def arg_parser_func():
     # # # # # # # # # # # # #
 
     parser.add_argument("--networkinfo", help="Lightning network info", action='store_true')
-    parser.add_argument("--describegraph", help="All nodes and edges that this node knows about",
-                               action='store_true')
+    parser.add_argument("--describegraph", help="All nodes and edges that this node knows about", 
+                        action='store_true')
 
     # # # # # # # # # # #
     #       Peers

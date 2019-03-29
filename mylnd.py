@@ -9,7 +9,7 @@ import os
 from error_handler import error_handler 
 
 
-@error_handler
+# @error_handler
 def run_it():
     
     # First, parse those arguments
@@ -20,7 +20,7 @@ def run_it():
     #   My LND node
     # # # # # # # # # #
 
-    if args.lnd_version:
+    if args.version:
         output.out_version()
 
     if args.status:
@@ -257,9 +257,10 @@ def run_it():
 
 
     # # # # # #
-    #  Loop
+    #  Loop 
     # # # # # #
 
+    # Just playing with the new loopd api here... Do not use this on mainnet...
     if args.loop:
         amount = int(args.loop[0])
         # dest = args.loop[1]

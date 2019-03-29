@@ -338,9 +338,10 @@ def get_create(wallet_password, cipher_seed_mnemonic, aezeed_passphrase):
 
 
 # # # # # # 
-#   Loop
+#   Loop 
 # # # # # # 
 
+# Just playing with the new loopd api here... Do not use this on mainnet...
 def get_loop(amount):
     channel = grpc.insecure_channel('localhost:11010')
     stub = looprpc.SwapClientStub(channel)
