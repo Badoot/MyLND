@@ -43,10 +43,43 @@ def out_debug_level(show, level_spec):
 @error_handler
 def out_fee_report():
     fee_report = get_data.get_fee_report()
+    fee_report = converters.response_to_dict(fee_report)
+    channel_fees = fee_report['channel_fees'] 
     print("\nFee Report:", '\n' + "-" * 11)
-    print(fee_report)
+    fee_df = pd.DataFrame.from_dict(channel_fees)
+    fee_df = fee_df[['channel_point', 'base_fee_msat', 'fee_per_mil', 'fee_rate']]
+    fee_df = fee_df.to_string(index=False)
+    print(fee_df,"\n")
+    # If daily/weekly/monthly fee sums exist, set their object names
+    for key,value in fee_report.items():
+        if 'day' in key:
+            daily_fees = value
+        elif 'week' in key:
+            weekly_fees = value
+        elif 'month' in key:
+            monthly_fees = value
+    # If the object name was actually set because a value was there, print it... if not, print 0   
+    try:
+        daily_fees
+    except:
+        print('daily_fees : 0') 
+    else:
+        print('daily_fees:', daily_fees)
+    try:
+        weekly_fees
+    except:
+        print('weekly_fees : 0') 
+    else:
+        print('weekly_fees:', weekly_fees)
+    try:
+        monthly_fees
+    except:
+        print('monthly_fees : 0') 
+    else:
+        print('monthly_fees:', monthly_fees)
+    print('\r')
 
-
+        
 # # # # # # # # # # # # # # # # # # #
 #       Lightning Network info
 # # # # # # # # # # # # # # # # # # #
