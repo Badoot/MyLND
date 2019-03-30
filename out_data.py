@@ -43,41 +43,33 @@ def out_debug_level(show, level_spec):
 @error_handler
 def out_fee_report():
     fee_report = get_data.get_fee_report()
-    fee_report = converters.response_to_dict(fee_report)
-    channel_fees = fee_report['channel_fees'] 
-    print("\nFee Report:", '\n' + "-" * 11)
-    fee_df = pd.DataFrame.from_dict(channel_fees)
-    fee_df = fee_df[['channel_point', 'base_fee_msat', 'fee_per_mil', 'fee_rate']]
-    fee_df = fee_df.to_string(index=False)
-    print(fee_df,"\n")
-    # If daily/weekly/monthly fee sums exist, set their object names
-    for key,value in fee_report.items():
-        if 'day' in key:
-            daily_fees = value
-        elif 'week' in key:
-            weekly_fees = value
-        elif 'month' in key:
-            monthly_fees = value
-    # If the object name was actually set because a value was there, print it... if not, print 0   
-    try:
-        daily_fees
-    except:
-        print('daily_fees : 0') 
+    # Create a list of channel fee responses
+    channel_fee_list = []
+    for channel_fees in fee_report.channel_fees:
+        chan_point = channel_fees.chan_point
+        base_fee_msat = channel_fees.base_fee_msat
+        fee_per_mil = channel_fees.fee_per_mil
+        fee_rate = channel_fees.fee_rate
+        channel_fees = [chan_point, base_fee_msat, fee_per_mil, fee_rate]
+        channel_fee_list.append(channel_fees)
+    if len(channel_fee_list) > 0 :
+        # Builld dataframe
+        channel_fee_columns = [' Channel Point', 'Base Fee mSat', 'Fee Per Mil', 'Fee Rate']
+        channel_df = pd.DataFrame(channel_fee_list, 
+                    columns=channel_fee_columns).to_string(index=False)
+        # day/week/month fee sums at the end
+        day_fee_sum = fee_report.day_fee_sum
+        week_fee_sum = fee_report.week_fee_sum
+        month_fee_sum = fee_report.month_fee_sum
+        # Print it
+        print("\nFee Report:", '\n' + "-" * 11)
+        print(channel_df)
+        print('\nDaily Fee Sum :', day_fee_sum)
+        print('Weekly Fee Sum :', week_fee_sum)
+        print('Monthly Fee Sum :', month_fee_sum)
+        print('\r')
     else:
-        print('daily_fees:', daily_fees)
-    try:
-        weekly_fees
-    except:
-        print('weekly_fees : 0') 
-    else:
-        print('weekly_fees:', weekly_fees)
-    try:
-        monthly_fees
-    except:
-        print('monthly_fees : 0') 
-    else:
-        print('monthly_fees:', monthly_fees)
-    print('\r')
+        print("No fee data to report")
 
         
 # # # # # # # # # # # # # # # # # # #
@@ -140,10 +132,10 @@ def out_list_peers():
         peer_list.append(peer)
     if len(peer_list) > 0:
         # Build DataFrame
-        peer_df_columns = ['Alias', 'Public Key', 'Address', 'Bytes Sent', 'Bytes Recv', 'Sats Sent', 'Sats Recv', 'Inbound', 'Ping Time']
+        peer_df_columns = [' Alias', ' Public Key', ' Address', 'Bytes Sent', 'Bytes Recv', 'Sats Sent', 'Sats Recv', 'Inbound', 'Ping Time']
         peer_df = pd.DataFrame.from_records(peer_list, columns=peer_df_columns).to_string(index=False)
         # Print it
-        print("\nPeers: " + str(len(peer_list)) + " total \n" + "-" * 15 + "\r")
+        print("\nPeers: " + str(len(peer_list)) + " total \n" + "-" * 15)
         print(peer_df, '\n')
     else:
         print('\nNo peers connected\n')
@@ -158,8 +150,8 @@ def out_node_info(pub_key):
     color = node_details.color
     num_channels = node_info.num_channels
     total_capacity = node_info.total_capacity
-    print('\nNode Details')
-    print('-' * 15)
+    print('\nNode Info')
+    print('-' * 9)
     print('Alias :', alias)
     print('Public Key :', pub_key)
     print('Color :', color)
@@ -223,7 +215,7 @@ def out_list_channels():
         channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
         channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
         # Print it
-        print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
+        print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18)
         print(channels_df, '\n')
     else:
         "\nNo channels open\n"
