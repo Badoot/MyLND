@@ -148,62 +148,24 @@ def out_list_peers():
     else:
         print('\nNo peers connected\n')
 
-
-@error_handler
-def out_list_peers_detail():
-    peers = get_data.get_peers()
-    peers = converters.response_to_dict(peers)
-    if len(peers) > 0:
-        print("\nPeers: " + str(len(peers["peers"])) + " total \n" + "-" * 15 + "\n")
-        df = pd.DataFrame.from_dict(peers["peers"]).fillna(0)
-        # For each peer in the list, print PeerList output and grab NodeInfo details as well
-        for index, row in df.iterrows():
-            # Pull NodeInfo and print right in line with PeerList output for a detailed peer list
-            node_info = get_data.get_node_info(row["pub_key"])
-            node_info = converters.response_to_dict(node_info)
-            node_info = node_info["node"]
-            for key, value in sorted(node_info.items()):
-                if 'last_update' in key:
-                    value = converters.convert_date(value)
-                    print(key + " : ", value)
-                elif key != "pub_key":
-                    print(key + " : ", value)
-            peer_list_info = dict(row)
-            for key, value in peer_list_info.items():
-                print(key + " : ", value)
-            if 'num_channels' in node_info:
-                    print('num_channels : ' + str(node_info['num_channels']))
-                    print('total_capacity : ' + str(node_info['total_capacity']))
-            else:
-                print('num_channels : 0')
-                print('total_capacity : 0')
-            print('\r')
-    else:
-        print('\nNo peers connected\n')
-
-
 @error_handler
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
-    node_info = converters.response_to_dict(node_info)
-    print("\nNode Info:", '\n' + "-" * 10)
-    node_details = node_info["node"]
-    for key, value in sorted(node_details.items()):
-        if 'addresses' in key:
-            addresses = value[0]
-            for k, v in addresses.items():
-                print(k + " : ", v)
-        if 'last_update' in key:
-            value = converters.convert_date(value)
-            print(key + " : ", value)
-        else:
-            print(key + " : ", value)
-    if 'num_channels' in node_info:
-            print('num_channels : ' + str(node_info['num_channels']))
-            print('total_capacity : ' + str(node_info['total_capacity']))
-    else:
-            print('num_channels : 0')
-            print('total_capacity : 0')
+    node_details = node_info.node
+    last_update = converters.convert_date(node_details.last_update)
+    pub_key = node_details.pub_key
+    alias = node_details.alias
+    color = node_details.color
+    num_channels = node_info.num_channels
+    total_capacity = node_info.total_capacity
+    print('\nNode Details')
+    print('-' * 15)
+    print('Alias :', alias)
+    print('Public Key :', pub_key)
+    print('Color :', color)
+    print('Last Update :', last_update)
+    print('Nubmer of Channels :', num_channels)
+    print('Total Capacity :', total_capacity)
     print('\r')
 
 

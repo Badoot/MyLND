@@ -3,13 +3,14 @@
 import argparse
 
 
+
 def arg_parser_func():
 
     # Argparser with help description
     parser = argparse.ArgumentParser(prog='mylnd.py', description="""
     MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""", usage='%(prog)s [--option] [value]')
 
-    
+
     # # # # # # # # # #
     #   My LND node
     # # # # # # # # # #
@@ -43,8 +44,6 @@ def arg_parser_func():
     # # # # # # # # # # #
 
     parser.add_argument("--listpeers", help="List peers connected to this node", action='store_true')
-    parser.add_argument("--listpeers-detail", help="Details about peers connected to this node",
-                               action='store_true', dest='listpeers_detail')
     parser.add_argument("--nodeinfo", nargs="?", help="Node details by pub_key", action='store', dest='node_info',
                                metavar='<public_key>')
     parser.add_argument("--connect", help="Attempt to establish network connection to a remote peer",

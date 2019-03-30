@@ -78,9 +78,6 @@ def run_it():
     if args.listpeers:
         output.out_list_peers()
 
-    if args.listpeers_detail:
-        output.out_list_peers_detail()
-
     if args.node_info:
         pub_key = args.node_info
         output.out_node_info(pub_key)
