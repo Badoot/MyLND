@@ -830,9 +830,7 @@ def out_create():
 # # # # # # # # # # # # # # # # # # # # # 
 
 def out_btcusd():
-    api = "https://api.gemini.com/v1/pubticker/btcusd"
-    raw_data = requests.get(api).json()
-    price = raw_data['last']
+    price = converters.btc_to_usd(100000000)
     print("\nGemini BTC/USD Conversion Rate:\n" + "-" * 31)
     print('1 BTC = ' + '$' + str(price), '\n')
 
