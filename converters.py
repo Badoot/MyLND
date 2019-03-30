@@ -22,8 +22,8 @@ def response_to_dict(response):
 
 # Convert satoshis to USD
 def btc_to_usd(satoshis):
-    api = "https://api.gemini.com/v1/pubticker/btcusd"
+    api = "https://api.coinbase.com/v2/prices/BTC-USD/buy"
     raw_data = requests.get(api).json()
-    price = float(raw_data['last'])
+    price = float(raw_data['data']['amount'])
     btc_amt = int(satoshis) * .00000001
     return(price * btc_amt)
