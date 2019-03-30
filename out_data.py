@@ -149,7 +149,6 @@ def out_list_peers():
         print('\nNo peers connected\n')
 
 
-
 @error_handler
 def out_list_peers_detail():
     peers = get_data.get_peers()
@@ -257,12 +256,15 @@ def out_list_channels():
         # List of fields to include in the output
         channel = [active, private, chan_id, alias, num_updates, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
         channel_list.append(channel)
-    # Build the DataFrame from list of channels
-    channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
-    channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
-    # Print it
-    print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
-    print(channels_df, '\n')
+    if len(channel_list) > 0:
+        # Build the DataFrame from list of channels
+        channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
+        channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
+        # Print it
+        print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
+        print(channels_df, '\n')
+    else:
+        "\nNo channels open\n"
 
 
 @error_handler
