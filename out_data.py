@@ -119,26 +119,35 @@ def out_disconnect_peer(pub_key):
 @error_handler
 def out_list_peers():
     peers = get_data.get_peers()
-    peers = converters.response_to_dict(peers)
-    if len(peers) > 0:
-        print("\nPeers: " + str(len(peers["peers"])) + " total \n" + "-" * 15 + "\n")
-        peers = peers['peers']
-        alias_list = []
-        for peer in peers:
-            for key, value in peer.items():
-                if 'pub_key' in key:
-                    node_info = get_data.get_node_info(value)
-                    node_info = converters.response_to_dict(node_info)
-                    node_info = node_info["node"]
-                    for k, v in node_info.items():
-                        if 'alias' in k:
-                            alias_list.append(v)
-        df = pd.DataFrame.from_dict(peers).fillna(0)
-        df.insert(loc=1, column='alias', value=alias_list)
-        df = pd.DataFrame.to_string(df, index=False)
-        print(df, '\n')
+    peers = peers.peers
+    # Gather list of peers
+    peer_list = []
+    for peer in peers:
+        pub_key = peer.pub_key
+        address = peer.address
+        bytes_sent = peer.bytes_sent
+        bytes_recv = peer.bytes_recv
+        sat_sent = peer.sat_sent
+        sat_recv = peer.sat_recv
+        inbound = peer.inbound
+        ping_time = peer.ping_time
+        # Get alias of the remote node
+        node_info = get_data.get_node_info(pub_key)
+        node_info = converters.response_to_dict(node_info)
+        alias = node_info['node']['alias']
+        # append this peer to peer_list
+        peer = [alias, pub_key, address, bytes_sent, bytes_recv, sat_sent, sat_recv, inbound, ping_time]
+        peer_list.append(peer)
+    if len(peer_list) > 0:
+        # Build DataFrame
+        peer_df_columns = ['Alias', 'Public Key', 'Address', 'Bytes Sent', 'Bytes Recv', 'Sats Sent', 'Sats Recv', 'Inbound', 'Ping Time']
+        peer_df = pd.DataFrame.from_records(peer_list, columns=peer_df_columns).to_string(index=False)
+        # Print it
+        print("\nPeers: " + str(len(peer_list)) + " total \n" + "-" * 15 + "\r")
+        print(peer_df, '\n')
     else:
         print('\nNo peers connected\n')
+
 
 
 @error_handler
@@ -241,21 +250,17 @@ def out_list_channels():
         num_updates = channel.num_updates
         csv_delay = channel.csv_delay
         private = channel.private
-        
-         # Get alias of the remote node
+        # Get alias of the remote node
         node_info = get_data.get_node_info(remote_pubkey)
         node_info = converters.response_to_dict(node_info)
         alias = node_info['node']['alias']
-
         # List of fields to include in the output
         channel = [active, private, chan_id, alias, num_updates, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
         channel_list.append(channel)
-       
     # Build the DataFrame from list of channels
     channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
     channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
-   
-
+    # Print it
     print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18 + "\r")
     print(channels_df, '\n')
 
