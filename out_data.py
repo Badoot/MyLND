@@ -69,6 +69,7 @@ def out_fee_report():
         print('Monthly Fee Sum :', month_fee_sum)
         print('\r')
     else:
+        # If there's no fee dat to report...
         print("No fee data to report")
 
         
@@ -168,16 +169,59 @@ def out_node_info(pub_key):
 
 @error_handler
 def out_channel_info(chan_id):
+    # Query for channel ID
     chan_info = get_data.get_channel_info(chan_id)
-    chan_info = converters.response_to_dict(chan_info)
+    channel_id = chan_info.channel_id
+    chan_point = chan_info.chan_point
+    last_update = chan_info.last_update
+    node1_pub = chan_info.node1_pub
+    node2_pub = chan_info.node2_pub
+    capacity = chan_info.capacity
+    # Node1 Policy
+    node1_policy = chan_info.node1_policy
+    node1_time_lock_delta = node1_policy.time_lock_delta
+    node1_min_htlc = node1_policy.min_htlc
+    node1_fee_base_msat = node1_policy.fee_base_msat
+    node1_fee_rate_milli_msat = node1_policy.fee_rate_milli_msat
+    # Node2 Policy
+    node2_policy = chan_info.node2_policy
+    node2_time_lock_delta = node2_policy.time_lock_delta
+    node2_min_htlc = node2_policy.min_htlc
+    node2_fee_base_msat = node1_policy.fee_base_msat
+    node2_fee_rate_milli_msat = node1_policy.fee_rate_milli_msat
+    # Get aliases for node_1 and node_2
+    node1_info = get_data.get_node_info(node1_pub)
+    node2_info = get_data.get_node_info(node2_pub)
+    node1_info = converters.response_to_dict(node1_info)
+    node2_info = converters.response_to_dict(node2_info)
+    node1_alias = node1_info['node']['alias']
+    node2_alias = node2_info['node']['alias']
+    # Channel details
     print("\nChannel Details:", '\n' + "-" * 16)
-    for key, value in chan_info.items():
-        if key == 'last_update':
-            value = converters.convert_date(value)
-            print(key + " : ", value)
-        else:
-            print(key + " : ", value)
+    print("Channel ID :", channel_id)
+    print("Channel Point :", chan_point)
+    print("Capacity :", capacity)
+    print("Last Update :", converters.convert_date(last_update))
+    # Node1 details
     print('\r')
+    print("Node1 Alias :", node1_alias)
+    print("Node1 Public Key :", node1_pub)
+    print("Node1 Policy :")
+    print(" Time Lock Delta : ", node1_time_lock_delta)
+    print(" Min HTLC :", node1_min_htlc)
+    print(" Fee Base mSat :", node1_fee_base_msat)
+    print(" Fee Rate Milli mSat :", node1_fee_rate_milli_msat)
+    print('\r')
+    # Node2 details
+    print("Node2 Alias :", node2_alias)
+    print("Node2 Public Key :", node2_pub)
+    print("Node2 Policy :")
+    print(" Time Lock Delta : ", node2_time_lock_delta)
+    print(" Min HTLC :", node2_min_htlc)
+    print(" Fee Base mSat :", node2_fee_base_msat)
+    print(" Fee Rate Milli mSat :", node2_fee_rate_milli_msat)
+    print('\r')
+
 
 
 @error_handler
