@@ -21,8 +21,8 @@ pd.set_option('display.max_colwidth', -1)
 @error_handler
 def out_version():
     lnd_ver = get_data.get_info()
-    lnd_ver = converters.response_to_dict(lnd_ver)
-    print('\nLND Version: ' + lnd_ver['version'])
+    lnd_ver = lnd_ver.version
+    print('\nLND Version: ', lnd_ver)
     print('\r')
 
 
@@ -53,7 +53,7 @@ def out_fee_report():
         channel_fees = [chan_point, base_fee_msat, fee_per_mil, fee_rate]
         channel_fee_list.append(channel_fees)
     if len(channel_fee_list) > 0 :
-        # Builld dataframe
+        # Build dataframe
         channel_fee_columns = [' Channel Point', 'Base Fee mSat', 'Fee Per Mil', 'Fee Rate']
         channel_df = pd.DataFrame(channel_fee_list, 
                     columns=channel_fee_columns).to_string(index=False)
@@ -187,8 +187,8 @@ def out_channel_info(chan_id):
     node2_policy = chan_info.node2_policy
     node2_time_lock_delta = node2_policy.time_lock_delta
     node2_min_htlc = node2_policy.min_htlc
-    node2_fee_base_msat = node1_policy.fee_base_msat
-    node2_fee_rate_milli_msat = node1_policy.fee_rate_milli_msat
+    node2_fee_base_msat = node2_policy.fee_base_msat
+    node2_fee_rate_milli_msat = node2_policy.fee_rate_milli_msat
     # Get aliases for node_1 and node_2
     node1_info = get_data.get_node_info(node1_pub)
     node2_info = get_data.get_node_info(node2_pub)
@@ -202,8 +202,8 @@ def out_channel_info(chan_id):
     print("Channel Point :", chan_point)
     print("Capacity :", capacity)
     print("Last Update :", converters.convert_date(last_update))
-    # Node1 details
     print('\r')
+    # Node1 details
     print("Node1 Alias :", node1_alias)
     print("Node1 Public Key :", node1_pub)
     print("Node1 Policy :")
@@ -356,9 +356,9 @@ def out_closed_channels():
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
-    print('pubkey : ' + node_pubkey)
-    print('localamt : ' + str(local_funding_amount))
-    print('pushsat : ' + str(push_sat))
+    print('Public Key : ' + node_pubkey)
+    print('Local Amount :', local_funding_amount)
+    print('Push Amount : ', push_sat)
     print('\r')
     # Convert tx_id to 32-bit hex
     tx_id = codecs.encode(open_channel.funding_txid_bytes, 'hex')
@@ -454,14 +454,13 @@ def out_close_all_channels():
 @error_handler
 def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta):
     response = get_data.get_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta)
-    print(response)
     if response:
         print("\nChannel Policy Updated:", '\n' + "-" * 23)
         channel_point = (str(funding_tx) + ':' + str(output_index))
-        print('channel point : ', channel_point, '\r')
-        print('base fee msat : ', base_fee_msat, '\r')
-        print('fee rate : ', fee_rate, '\r')
-        print('time lock delta : ', time_lock_delta, '\r')
+        print('channel point : ', channel_point)
+        print('base fee msat : ', base_fee_msat)
+        print('fee rate : ', fee_rate)
+        print('time lock delta : ', time_lock_delta)
     print('\r')
 
 
