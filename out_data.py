@@ -831,7 +831,7 @@ def out_create():
 
 def out_btcusd():
     price = converters.btc_to_usd(100000000)
-    print("\nGemini BTC/USD Conversion Rate:\n" + "-" * 31)
+    print("\nConbase BTC/USD Conversion Rate:\n" + "-" * 31)
     print('1 BTC = ' + '$' + str(price), '\n')
 
 
