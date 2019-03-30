@@ -457,10 +457,10 @@ def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate,
     if response:
         print("\nChannel Policy Updated:", '\n' + "-" * 23)
         channel_point = (str(funding_tx) + ':' + str(output_index))
-        print('channel point : ', channel_point)
-        print('base fee msat : ', base_fee_msat)
-        print('fee rate : ', fee_rate)
-        print('time lock delta : ', time_lock_delta)
+        print('Channel Point : ', channel_point)
+        print('Base Fee mSat : ', base_fee_msat)
+        print('Fee Rate : ', fee_rate)
+        print('Time Lock Delta : ', time_lock_delta)
     print('\r')
 
 
@@ -631,8 +631,20 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
 @error_handler
 def out_decode_payreq(payment_request):
     response = get_data.get_decode_payreq(payment_request)
+    destination = response.destination
+    payment_hash = response.payment_hash
+    num_satoshis = response.num_satoshis
+    description = response.description
+    timestamp = converters.convert_date(response.timestamp)
+    expiry = response.expiry
+    cltv_expiry = response.cltv_expiry
     print('\nPayment request details:' + '\n' + '-' * 24)
-    print(response)
+    print("Destination :", destination)
+    print("Payment Hash :", payment_hash)
+    print("Amount in Satoshis :", num_satoshis)
+    print("Timestamp :", timestamp)
+    print("Expiry :", expiry)
+    print("CLTV Expiry :", cltv_expiry, '\n')
 
 
 @error_handler
