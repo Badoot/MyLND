@@ -504,27 +504,7 @@ def out_txns():
     print("Total TX Fees :", final_total_fees)
     print('\r')
 
-   
-    # txns = converters.response_to_dict(txns)
-    # df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
-    # # num_confirmations is too long - shorten to 'confs'
-    # df = df.rename(index=str, columns={'num_confirmations': 'confs'})
-    # dropcols = ['block_hash']
-    # df = df.drop(columns=dropcols)
-    # print("\nTransactions: " + str(len(txns['transactions'])) + " total \n" + "-" * 22)
-    # # Convert Unix timestamps to readable date/time format
-    # timestamp_list = []
-    # for time_stamp in df['time_stamp']:
-    #     time_stamp = converters.convert_date(time_stamp)
-    #     timestamp_list.append(time_stamp)
-    # df['time_stamp'] = timestamp_list
-    # df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
-    # txns_df = df.to_string(index=False)
-    # # Print transactions
-    # print(txns_df + '\n')
-
-  
-
+        
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
