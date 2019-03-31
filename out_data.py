@@ -469,46 +469,61 @@ def out_wallet_balance():
 
 def out_txns():
     txns = get_data.get_transactions()
-    txns = converters.response_to_dict(txns)
-    df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
-    # num_confirmations is too long - shorten to 'confs'
-    df = df.rename(index=str, columns={'num_confirmations': 'confs'})
-    dropcols = ['block_hash']
-    df = df.drop(columns=dropcols)
-    print("\nTransactions: " + str(len(txns['transactions'])) + " total \n" + "-" * 22)
-    # Convert Unix timestamps to readable date/time format
-    timestamp_list = []
-    for time_stamp in df['time_stamp']:
-        time_stamp = converters.convert_date(time_stamp)
-        timestamp_list.append(time_stamp)
-    df['time_stamp'] = timestamp_list
-    df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
-    txns_df = df.to_string(index=False)
-    # Print transactions
-    print(txns_df + '\n')
+    txns = txns.transactions
+    print("\nTransactions: " + str(len(txns)) + " total \n" + "-" * 22)
+    payment_number = 0
+    total_amount = 0
+    final_total_fees = 0
+    for txn in txns:
+        tx_hash = txn.tx_hash
+        num_confs = txn.num_confirmations
+        block_hash = txn.block_hash
+        block_height = txn.block_height
+        time_stamp = converters.convert_date(txn.time_stamp)
+        dest_addresses = txn.dest_addresses
+        amount = txn.amount
+        total_fees = txn.total_fees
+        payment_number += 1
+        print("Payment Number :", payment_number)    
+        print("Time Stamp :", time_stamp)
+        print("Amount :", amount)
+        total_amount += amount
+        print("Fee :", total_fees)
+        final_total_fees += total_fees
+        print("Confirmations :", num_confs)
+        print("Block Height :", block_height)
+        print("Block Hash :", block_hash)
+        print("Destination Addresses :\r")
+        for address in dest_addresses:
+            print(" ", address)
+        print("\r")
     # Print total tx amounts and fees
     print("Transaction Totals\n" + "-" * 18)
-
-    def sum_totals():
-        tx_amt = list(pd.to_numeric(df['amount']))
-        amt_sum = 0
-        for x in tx_amt:
-            amt_sum += x
-        return amt_sum
-
-    def fees_totals():
-        tx_fee = list(pd.to_numeric(df['total_fees']))
-        fee_sum = 0
-        for x in tx_fee:
-            fee_sum += x
-        return fee_sum
-
-    # Print TX totals
-    print("Total TX Count : " + str(len(txns['transactions'])))
-    print("Total TX Amount : " + str(sum_totals()))
-    print("Total TX Fees : " + str(fees_totals()))
+    print("Total TX Count :", payment_number)
+    print("Total TX Amount :", total_amount)
+    print("Total TX Fees :", final_total_fees)
     print('\r')
 
+   
+    # txns = converters.response_to_dict(txns)
+    # df = pd.DataFrame.from_dict(txns['transactions']).fillna(0)
+    # # num_confirmations is too long - shorten to 'confs'
+    # df = df.rename(index=str, columns={'num_confirmations': 'confs'})
+    # dropcols = ['block_hash']
+    # df = df.drop(columns=dropcols)
+    # print("\nTransactions: " + str(len(txns['transactions'])) + " total \n" + "-" * 22)
+    # # Convert Unix timestamps to readable date/time format
+    # timestamp_list = []
+    # for time_stamp in df['time_stamp']:
+    #     time_stamp = converters.convert_date(time_stamp)
+    #     timestamp_list.append(time_stamp)
+    # df['time_stamp'] = timestamp_list
+    # df = df[['time_stamp', 'amount', 'tx_hash', 'confs', 'total_fees', 'dest_addresses']]
+    # txns_df = df.to_string(index=False)
+    # # Print transactions
+    # print(txns_df + '\n')
+
+  
 
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
@@ -523,8 +538,6 @@ def out_sendcoins(addr, amount):
 def out_list_payments():
     payments = get_data.get_list_payments()
     payments = payments.payments
-
-    
     if len(payments) > 0:
         print("\nPayments: " + str(len(payments)), '\n' + "-" * 12)
         payment_list = []
@@ -541,7 +554,6 @@ def out_list_payments():
         payment_columns = ['Creation Date', 'Payment Hash', 'Payment Preimage', 'Value']
         payment_df = pd.DataFrame.from_records(payment_list, columns=payment_columns).to_string(index=False)
         print(payment_df)
-
     else:
         print("\nNo payments to list")
     print("\r")
