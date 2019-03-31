@@ -190,12 +190,12 @@ def run_it():
             output.out_send_payment(payment_request, dest=None, amt=None, payment_hash_str=None, 
                                     final_cltv_delta=None)
         else:
-            payment_request = None
+            payment_request=None
             dest = args.sendpayment[0].encode()
             payment_hash_str = args.sendpayment[1]
             amt = int(args.sendpayment[2])
             final_cltv_delta = int(args.sendpayment[3])
-            output.out_send_payment(payment_request, dest,payment_hash_str, amt, final_cltv_delta)
+            output.out_send_payment(payment_request, dest, payment_hash_str, amt, final_cltv_delta)
 
     if args.decodepayreq:
         payment_request = args.decodepayreq[0]

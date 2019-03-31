@@ -80,16 +80,16 @@ def arg_parser_func():
     # # # # # # # # # # # # # # # # # # # #
 
     parser.add_argument("--sendpayment", nargs="*",
-                               help="Send satoshis with either a) just a payment_request, or b) a public key, "
-                                    "amount, payment hash, and final_cltv_delta from --addinvoice", action='store',
+                            help="Send satoshis with either a payment_request, OR public key, payment hash, "
+                                "amount, and final_cltv_delta\n", action='store',
                                dest='sendpayment')
     parser.add_argument("--listpayments", help="List lightning network payments", action='store_true')
     parser.add_argument("--deletepayments", help="Delete all outgoing payments from DB", action='store_true')
     parser.add_argument("--listinvoices", help="List of all invoices in the db", action='store_true')
-    parser.add_argument("--addinvoice", nargs="*", help="Add a new invoice", default=0, action='store', dest='add_invoice',
+    parser.add_argument("--addinvoice", nargs="*", help="Add a new invoice", action='store', dest='add_invoice',
                         metavar=('<amount>', '<memo>'))
-    parser.add_argument("--lookupinvoice", nargs=1, help="Lookup an invoice by r_hash", action='store',
-                               dest='lookup_invoice', metavar='<r_hash>')
+    parser.add_argument("--lookupinvoice", nargs=1, help="Lookup an invoice by payment hash", action='store',
+                               dest='lookup_invoice', metavar='<payment_hash>')
     parser.add_argument("--decodepayreq", nargs=1, help="Decode an invoice's payment_request", action='store',
                                metavar='<payment_request>')
     parser.add_argument("--queryroutes", nargs=3,

@@ -3,7 +3,6 @@
 import pandas as pd
 import get_data as get_data
 import codecs
-from error_handler import error_handler
 import converters as converters
 import getpass
 import requests
@@ -17,14 +16,11 @@ pd.set_option('display.max_colwidth', -1)
 #           My LND Node
 # # # # # # # # # # # # # # # # # # #
 
-
-
 def out_version():
     lnd_ver = get_data.get_info()
     lnd_ver = lnd_ver.version
     print('\nLND Version: ', lnd_ver)
     print('\r')
-
 
 
 def out_get_info():
@@ -33,12 +29,10 @@ def out_get_info():
     print(get_info)
 
 
-
 def out_debug_level(show, level_spec):
     debug_level = get_data.get_set_debug_level(show, level_spec)
     print("\nDebug Level:\n" + "-" * 12)
     print(debug_level)
-
 
 
 def out_fee_report():
@@ -78,12 +72,10 @@ def out_fee_report():
 # # # # # # # # # # # # # # # # # # #
 
 
-
 def out_network_info():
     net_info = get_data.get_network_info()
     print("\nLightning Network Stats:\n" + "-" * 24)
     print(net_info)
-
 
 
 def out_describe_graph():
@@ -96,18 +88,15 @@ def out_describe_graph():
 # # # # # # # # # # # # # # # # # # #
 
 
-
 def out_connect_peer(peer_data):
     connect_peers = get_data.get_connect_peer(peer_data)
     get_data.get_peers()
     print(connect_peers, '\nPeer connected\n')
 
 
-
 def out_disconnect_peer(pub_key):
     disconnect_peer = get_data.get_disconnect_peer(pub_key)
     print(disconnect_peer, '\nPeer disconnected\n')
-
 
 
 def out_list_peers():
@@ -167,7 +156,6 @@ def out_node_info(pub_key):
 # # # # # # # # # # # # # # # # # # #
 
 
-
 def out_channel_info(chan_id):
     # Query for channel ID
     chan_info = get_data.get_channel_info(chan_id)
@@ -223,8 +211,6 @@ def out_channel_info(chan_id):
     print('\r')
 
 
-
-
 def out_list_channels():
     channels = get_data.get_channels()
     channels = channels.channels
@@ -263,7 +249,6 @@ def out_list_channels():
         print(channels_df, '\n')
     else:
         "\nNo channels open\n"
-
 
 
 def out_pending_channels():
@@ -317,7 +302,6 @@ def out_pending_channels():
                 print('\r')
 
 
-
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     channel_balance_dict = converters.response_to_dict(channel_balance)
@@ -333,7 +317,6 @@ def out_channel_balance():
         print("Pending Channel Balance: " + str(pending))
         print('Pending Channel USD Value: $' + str(balance_pending))
     print("\r")
-
 
 
 def out_closed_channels():
@@ -352,7 +335,6 @@ def out_closed_channels():
         print('\nNo closed channels\n')
 
 
-
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
@@ -365,7 +347,6 @@ def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     # Convert tx_id to a string
     tx_id = codecs.decode(tx_id, 'utf-8')
     print('Funding transaction ID :', tx_id, '\n')
-
 
 
 def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
@@ -390,7 +371,6 @@ def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
     print('\r')
 
 
-
 def out_close_channel(funding_tx, output_index, force):
     request = get_data.get_close_channel(funding_tx, output_index, force)
     print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
@@ -412,7 +392,6 @@ def out_close_channel(funding_tx, output_index, force):
     print('\r')
 
 
-
 def out_close_all_channels():
     channel_list = get_data.get_channels()
     channel_list = converters.response_to_dict(channel_list)
@@ -420,7 +399,6 @@ def out_close_all_channels():
     if len(channel_df) > 0:
         print('\nClosing ALL channels...' + '\r')
         for channel in channel_df['channels']:
-
             # Force close each channel
             def force_close_all_channels():
                 for key, value in channel.items():
@@ -451,7 +429,6 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
-
 def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta):
     response = get_data.get_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta)
     if response:
@@ -469,13 +446,11 @@ def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate,
 # # # # # # # # # # # # # # # # # # #
 
 
-
 def out_new_address():
     new_address = get_data.get_new_address()
     new_address = converters.response_to_dict(new_address)
     print("\nNew Address:", '\n' + "-" * 12)
     print(new_address['address'], '\n')
-
 
 
 def out_wallet_balance():
@@ -490,7 +465,6 @@ def out_wallet_balance():
     conf_usd_value = converters.btc_to_usd(confirmed_balance)
     print('Confirmed USD value: $' + str(conf_usd_value))
     print("\r")
-
 
 
 def out_txns():
@@ -536,7 +510,6 @@ def out_txns():
     print('\r')
 
 
-
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
@@ -545,7 +518,6 @@ def out_sendcoins(addr, amount):
 # # # # # # # # # # # # # # # # # # #
 #         Lightning Payments
 # # # # # # # # # # # # # # # # # # #
-
 
 
 def out_list_payments():
@@ -569,11 +541,9 @@ def out_list_payments():
     print("\r")
 
 
-
 def out_delete_payments():
     delete_payments = get_data.get_delete_payments()
     print(delete_payments, '\nPayments deleted\n')
-
 
 
 def out_list_invoices():
@@ -647,7 +617,6 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
     print('\r')
 
 
-
 def out_decode_payreq(payment_request):
     response = get_data.get_decode_payreq(payment_request)
     destination = response.destination
@@ -666,7 +635,6 @@ def out_decode_payreq(payment_request):
     print("CLTV Expiry :", cltv_expiry, '\n')
 
 
-
 def out_add_invoice(amount, memo):
     response = get_data.get_add_invoice(amount, memo)
     print('\nAdding Invoice:' + '\n' + '-' * 16)
@@ -681,7 +649,6 @@ def out_add_invoice(amount, memo):
     print('r_hash (aka payment_hash) :', r_hash_str)
     print('payment_request (aka invoice) :', payment_request)
     print('\r')
-
 
 
 def out_lookup_invoice(r_hash):
@@ -706,7 +673,6 @@ def out_lookup_invoice(r_hash):
         else:
             print(key, ' : ', value)
     print('\r')
-
 
 
 def out_query_route(pub_key, amount, num_routes):
@@ -738,7 +704,6 @@ def out_unlock(password):
     print('\nWallet unlocked!\n')
 
 
-
 def out_genseed():
     get_data.get_gen_seed()
 
@@ -746,7 +711,6 @@ def out_genseed():
 def out_change_password(current_password, new_password):
     get_data.change_password(current_password, new_password)
     print('\nPassword changed\n')
-
 
 
 def out_create():
