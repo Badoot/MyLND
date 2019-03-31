@@ -162,7 +162,12 @@ def run_it():
         output.out_list_payments()
 
     if args.deletepayments:
-        output.out_delete_payments()
+        print("\nAre you sure you want to delete ALL of your payment history? (y/n)\n")
+        answer = input()
+        if answer == 'y':
+            output.out_delete_payments()
+        else:
+            print("\nOk, peace.\n")
 
     # Add an empty invoice for 0 sats with '--addinvoice 0'
     if args.add_invoice:

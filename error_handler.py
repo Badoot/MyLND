@@ -1,4 +1,4 @@
-# Handle errors in more entertaining ways
+# Error Handler
 
 from functools import wraps
 import grpc

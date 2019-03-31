@@ -10,7 +10,7 @@ import requests
 
 # Pandas dataframe display options
 pd.set_option('colheader_justify', 'center')
-pd.set_option('display.max_colwidth', 1280)
+pd.set_option('display.max_colwidth', -1)
 
 # # # # # # # # # # # # # # # # # # #
 #           My LND Node
@@ -504,7 +504,7 @@ def out_txns():
     print("Total TX Fees :", final_total_fees)
     print('\r')
 
-        
+
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
@@ -545,23 +545,39 @@ def out_delete_payments():
 
 
 def out_list_invoices():
+    pd.set_option("display.max_colwidth", 65)
     invoices = get_data.get_list_invoices()
-    invoices = converters.response_to_dict(invoices)
+    invoices = invoices.invoices
+    invoice_list = []
     if len(invoices) > 0:
-        print("\nInvoices: " + str(len(invoices['invoices'])), '\n' + "-" * 12)
-        invoice_list = invoices["invoices"]
-        columns = ['creation_date', 'value', 'payment_request']
-        invoice_df = pd.DataFrame(invoice_list, columns=columns).fillna(0)
-        # Convert Unix timestamps to readable date/time format
-        timestamp_list = []
-        for time_stamp in invoice_df['creation_date']:
-            time_stamp = converters.convert_date(time_stamp)
-            timestamp_list.append(time_stamp)
-        invoice_df['creation_date'] = timestamp_list
-        print(invoice_df.to_string(index=False))
+        print("\nInvoices: " + str(len(invoices)), '\n' + "-" * 12)
+        for invoice in invoices:
+            payment_preimage = codecs.encode(invoice.r_preimage, 'hex').decode()
+            payment_hash = invoice.r_hash
+            payment_hash = codecs.encode(payment_hash, 'hex').decode()
+            creation_date = converters.convert_date(invoice.creation_date)
+            expiry = invoice.expiry
+            cltv_expiry = invoice.cltv_expiry
+            memo = invoice.memo
+            value = invoice.value
+            settled = invoice.settled
+            settle_date = invoice.settle_date
+            if settle_date == 0:
+                settle_date = 'Not settled'
+            else:
+                settle_date = converters.convert_date(settle_date)
+            private = invoice.private
+            invoice = [creation_date, memo, value, settled, settle_date, private, payment_hash, expiry, cltv_expiry]
+            invoice_list.append(invoice)
+        # build df
+        invoice_df_columns = ['Creation Date', 'Memo', 'Value', 'Settled', 'Settle Date', 
+                            'Private', 'Payment Hash', 'Expiry', 'CLTV']
+        invoice_df = pd.DataFrame.from_records(invoice_list, 
+                    columns=invoice_df_columns).to_string(index=False)
+        print(invoice_df)
+
     else:
-        print('\nNo invoices to list')
-    print("\r")
+        print("\nNo invoices to list\n")
 
 
 def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
