@@ -90,8 +90,6 @@ def arg_parser_func():
                         metavar=('<amount>', '<memo>'))
     parser.add_argument("--lookupinvoice", nargs=1, help="Lookup an invoice by r_hash", action='store',
                                dest='lookup_invoice', metavar='<r_hash>')
-    parser.add_argument("--payinvoice", nargs=1, help="Pay an invoice", action='store',
-                               metavar='<payment_request>')
     parser.add_argument("--decodepayreq", nargs=1, help="Decode an invoice's payment_request", action='store',
                                metavar='<payment_request>')
     parser.add_argument("--queryroutes", nargs=3,

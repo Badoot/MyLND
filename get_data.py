@@ -270,20 +270,14 @@ def get_lookup_invoice(r_hash):
     return response
 
 
-def get_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
+def get_send_payment(payment_request, dest, payment_hash_str, amt, final_cltv_delta):
     request = ln.SendRequest(
         payment_request=payment_request,
         dest_string=dest,
-        amt=amt,
         payment_hash_string=payment_hash_str,
-        final_cltv_delta=final_cltv_delta
+        amt=amt,
+        final_cltv_delta=final_cltv_delta,
     )
-    response = APICall.stub.SendPaymentSync(request)
-    return response
-
-
-def get_payinvoice(payment_request):
-    request = ln.SendRequest(payment_request=payment_request)
     response = APICall.stub.SendPaymentSync(request)
     return response
 

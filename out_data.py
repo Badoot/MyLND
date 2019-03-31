@@ -18,7 +18,7 @@ pd.set_option('display.max_colwidth', -1)
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_version():
     lnd_ver = get_data.get_info()
     lnd_ver = lnd_ver.version
@@ -26,21 +26,21 @@ def out_version():
     print('\r')
 
 
-@error_handler
+
 def out_get_info():
     get_info = get_data.get_info()
     print("\nMy Lightning Node:\n" + "-" * 18)
     print(get_info)
 
 
-@error_handler
+
 def out_debug_level(show, level_spec):
     debug_level = get_data.get_set_debug_level(show, level_spec)
     print("\nDebug Level:\n" + "-" * 12)
     print(debug_level)
 
 
-@error_handler
+
 def out_fee_report():
     fee_report = get_data.get_fee_report()
     # Create a list of channel fee responses
@@ -78,14 +78,14 @@ def out_fee_report():
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_network_info():
     net_info = get_data.get_network_info()
     print("\nLightning Network Stats:\n" + "-" * 24)
     print(net_info)
 
 
-@error_handler
+
 def out_describe_graph():
     describe_graph = get_data.get_describe_graph()
     print(describe_graph)
@@ -96,20 +96,20 @@ def out_describe_graph():
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_connect_peer(peer_data):
     connect_peers = get_data.get_connect_peer(peer_data)
     get_data.get_peers()
     print(connect_peers, '\nPeer connected\n')
 
 
-@error_handler
+
 def out_disconnect_peer(pub_key):
     disconnect_peer = get_data.get_disconnect_peer(pub_key)
     print(disconnect_peer, '\nPeer disconnected\n')
 
 
-@error_handler
+
 def out_list_peers():
     peers = get_data.get_peers()
     peers = peers.peers
@@ -141,7 +141,7 @@ def out_list_peers():
     else:
         print('\nNo peers connected\n')
 
-@error_handler
+
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
     node_details = node_info.node
@@ -167,7 +167,7 @@ def out_node_info(pub_key):
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_channel_info(chan_id):
     # Query for channel ID
     chan_info = get_data.get_channel_info(chan_id)
@@ -224,7 +224,7 @@ def out_channel_info(chan_id):
 
 
 
-@error_handler
+
 def out_list_channels():
     channels = get_data.get_channels()
     channels = channels.channels
@@ -265,7 +265,7 @@ def out_list_channels():
         "\nNo channels open\n"
 
 
-@error_handler
+
 def out_pending_channels():
     pending = get_data.get_pending_channels()
     pending = converters.response_to_dict(pending)
@@ -317,7 +317,7 @@ def out_pending_channels():
                 print('\r')
 
 
-@error_handler
+
 def out_channel_balance():
     channel_balance = get_data.get_channel_balance()
     channel_balance_dict = converters.response_to_dict(channel_balance)
@@ -335,7 +335,7 @@ def out_channel_balance():
     print("\r")
 
 
-@error_handler
+
 def out_closed_channels():
     closed = get_data.get_closed_channels()
     closed = converters.response_to_dict(closed)
@@ -352,7 +352,7 @@ def out_closed_channels():
         print('\nNo closed channels\n')
 
 
-@error_handler
+
 def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
@@ -367,7 +367,7 @@ def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
     print('Funding transaction ID :', tx_id, '\n')
 
 
-@error_handler
+
 def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
     request = get_data.get_open_channel_wait(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
@@ -390,7 +390,7 @@ def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
     print('\r')
 
 
-@error_handler
+
 def out_close_channel(funding_tx, output_index, force):
     request = get_data.get_close_channel(funding_tx, output_index, force)
     print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
@@ -412,7 +412,7 @@ def out_close_channel(funding_tx, output_index, force):
     print('\r')
 
 
-@error_handler
+
 def out_close_all_channels():
     channel_list = get_data.get_channels()
     channel_list = converters.response_to_dict(channel_list)
@@ -451,7 +451,7 @@ def out_close_all_channels():
         print('\nNo channels to close\n')
 
 
-@error_handler
+
 def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta):
     response = get_data.get_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate, time_lock_delta)
     if response:
@@ -469,7 +469,7 @@ def out_update_channel_policy(funding_tx, output_index, base_fee_msat, fee_rate,
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_new_address():
     new_address = get_data.get_new_address()
     new_address = converters.response_to_dict(new_address)
@@ -477,7 +477,7 @@ def out_new_address():
     print(new_address['address'], '\n')
 
 
-@error_handler
+
 def out_wallet_balance():
     wallet_balance = get_data.get_wallet_balance()
     total_balance = wallet_balance.total_balance
@@ -492,7 +492,7 @@ def out_wallet_balance():
     print("\r")
 
 
-@error_handler
+
 def out_txns():
     txns = get_data.get_transactions()
     txns = converters.response_to_dict(txns)
@@ -536,7 +536,7 @@ def out_txns():
     print('\r')
 
 
-@error_handler
+
 def out_sendcoins(addr, amount):
     response = get_data.get_send_coins(addr, amount)
     print('\n', response)
@@ -547,7 +547,7 @@ def out_sendcoins(addr, amount):
 # # # # # # # # # # # # # # # # # # #
 
 
-@error_handler
+
 def out_list_payments():
     payments = get_data.get_list_payments()
     payments = converters.response_to_dict(payments)
@@ -569,13 +569,13 @@ def out_list_payments():
     print("\r")
 
 
-@error_handler
+
 def out_delete_payments():
     delete_payments = get_data.get_delete_payments()
     print(delete_payments, '\nPayments deleted\n')
 
 
-@error_handler
+
 def out_list_invoices():
     invoices = get_data.get_list_invoices()
     invoices = converters.response_to_dict(invoices)
@@ -596,13 +596,17 @@ def out_list_invoices():
     print("\r")
 
 
-@error_handler
 def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta):
+    if payment_request != None:
+        out_decode_payreq(payment_request)
     response = get_data.get_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
-    response_dict = converters.response_to_dict(response)
-    print('\nPayment Receipt:' + '\n' + '-' * 16)
-    for key, value in response_dict.items():
-        if 'payment_preimage' in key:
+    response = converters.response_to_dict(response)
+    print("\nPayment Response :\n" + '-' * 18)
+    for key, value in sorted(response.items()):
+        if key == 'payment_error':
+            print("Payment Error :", value, "\n")
+            exit(1)
+        elif key == 'payment_preimage':    
             preimage_str = value
             # Convert str to bytes
             primage_bytes = codecs.encode(preimage_str, 'utf-8')
@@ -612,23 +616,38 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
             preimage_hex = codecs.encode(preimage_64, 'hex')
             # Decode utf-8
             preimage_print = codecs.decode(preimage_hex, 'utf-8')
-            print('payment_preimage : ', preimage_print)
-        elif 'payment_route' in key:
-            print('payment_route :\r')
-            for k, v in value.items():
-                if 'hops' in k:
-                    print(' hops : \r')
-                    for k2, v2 in v[0].items():
-                        print('  ', k2, ' : ', v2)
-                elif 'hops' not in key:
-                    print(' ', k, ' : ', v)
-            # print(key, ' : ', value)
-        else:
-            print(key, ' : ', value)
+            print("Payment Preimage :", preimage_print)
+        elif key == 'payment_hash':
+            print("Payment Hash :", value)
+        elif key == 'payment_route':
+            print("Payment Route :")
+            hop_list = []
+            for key, value in value.items():
+                if key == 'hops':
+                    hopnum = 1
+                    for hop in value:
+                        hop_list.append(hop)
+                        print(" Hop " + str(hopnum) + " :")
+                        hopnum += 1
+                        for hopkey, hopvalue in sorted(hop.items()):
+                            if hopkey == 'chan_id':
+                                print("  Channel ID :", hopvalue)
+                            if hopkey == 'chan_capacity':
+                                print("  Channel Capcity :", hopvalue)
+                            if hopkey == 'amt_to_forward':
+                                print("  Amount to Forward :", hopvalue)
+                            if hopkey == 'amt_to_forward_msat':
+                                print("  Amount to Forward mSat :", hopvalue)
+                            if hopkey == 'expiry':
+                                print("  Expiry :", hopvalue)
+                            if hopkey == 'fee':
+                                print("  Fee :", hopvalue)
+                            if hopkey == 'fee_msat':
+                                print("  Fee mSat :", hopvalue)
     print('\r')
 
 
-@error_handler
+
 def out_decode_payreq(payment_request):
     response = get_data.get_decode_payreq(payment_request)
     destination = response.destination
@@ -638,7 +657,7 @@ def out_decode_payreq(payment_request):
     timestamp = converters.convert_date(response.timestamp)
     expiry = response.expiry
     cltv_expiry = response.cltv_expiry
-    print('\nPayment request details:' + '\n' + '-' * 24)
+    print('\nPayment Request Details:' + '\n' + '-' * 24)
     print("Destination :", destination)
     print("Payment Hash :", payment_hash)
     print("Amount in Satoshis :", num_satoshis)
@@ -647,7 +666,7 @@ def out_decode_payreq(payment_request):
     print("CLTV Expiry :", cltv_expiry, '\n')
 
 
-@error_handler
+
 def out_add_invoice(amount, memo):
     response = get_data.get_add_invoice(amount, memo)
     print('\nAdding Invoice:' + '\n' + '-' * 16)
@@ -664,7 +683,7 @@ def out_add_invoice(amount, memo):
     print('\r')
 
 
-@error_handler
+
 def out_lookup_invoice(r_hash):
     response = get_data.get_lookup_invoice(r_hash)
     response_dict = converters.response_to_dict(response)
@@ -689,43 +708,7 @@ def out_lookup_invoice(r_hash):
     print('\r')
 
 
-@error_handler
-def out_payinvoice(payment_request):
-    response = get_data.get_decode_payreq(payment_request)
-    print('\nInvoice Payment Request :\n' + '-' * 25)
-    print(response)
-    print('Do you agree to send this payment? (y/n)')
-    answer = input()
-    if answer == 'y':
-        pay_response = get_data.get_payinvoice(payment_request)
-        payment_receipt = converters.response_to_dict(pay_response)
-        print('\nInvoice Payment Receipt :\n' + '-' * 25)
-        for key, value in payment_receipt.items():
-            # Decode base64, encode hex the preimage
-            if 'payment_preimage' in key:
-                preimage_encoded = str(value).encode()
-                preimage_base64_decoded = codecs.decode(preimage_encoded, 'base64')
-                preimage_hex = codecs.encode(preimage_base64_decoded, 'hex')
-                preimage_str = codecs.decode(preimage_hex, 'utf-8')
-                print(key, ' : ', preimage_str)
-            elif 'payment_route' in key:
-                for k, v in value.items():
-                    if 'hops' in k:
-                        print('hops : \r')
-                        for k2, v2 in v[0].items():
-                            print(' ', k2, ' : ', v2)
-                    else:
-                        print(k, ' : ', v)
-            else:
-                print(key, ' : ', value)
-        print('\r')
 
-    else:
-        print('\nOk, cancelling...\n')
-        exit(1)
-
-
-@error_handler
 def out_query_route(pub_key, amount, num_routes):
     route_data = get_data.get_query_route(pub_key, amount, num_routes)
     route_data = converters.response_to_dict(route_data)
@@ -749,23 +732,23 @@ def out_query_route(pub_key, amount, num_routes):
 #        Wallet Stub Stuff
 # # # # # # # # # # # # # # # # # # #
 
-@error_handler
+
 def out_unlock(password):
     get_data.wallet_unlock(password)
     print('\nWallet unlocked!\n')
 
 
-@error_handler
+
 def out_genseed():
     get_data.get_gen_seed()
 
-@error_handler
+
 def out_change_password(current_password, new_password):
     get_data.change_password(current_password, new_password)
     print('\nPassword changed\n')
 
 
-@error_handler
+
 def out_create():
     # Establish a password for the new wallet
     def set_wallet_password():

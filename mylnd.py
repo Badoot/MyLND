@@ -9,7 +9,7 @@ import os
 from error_handler import error_handler 
 
 
-@error_handler
+# @error_handler
 def run_it():
     
     # First, parse those arguments
@@ -187,18 +187,15 @@ def run_it():
     if args.sendpayment:
         if len(args.sendpayment) == 1:
             payment_request = args.sendpayment[0]
-            output.out_send_payment(payment_request, dest=None, amt=None, payment_hash_str=None, final_cltv_delta=None)
+            output.out_send_payment(payment_request, dest=None, amt=None, payment_hash_str=None, 
+                                    final_cltv_delta=None)
         else:
             payment_request = None
             dest = args.sendpayment[0].encode()
-            amt = int(args.sendpayment[1])
-            payment_hash_str = args.sendpayment[2]
+            payment_hash_str = args.sendpayment[1]
+            amt = int(args.sendpayment[2])
             final_cltv_delta = int(args.sendpayment[3])
-            output.out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
-
-    if args.payinvoice:
-        payment_request = args.payinvoice[0]
-        output.out_payinvoice(payment_request)
+            output.out_send_payment(payment_request, dest,payment_hash_str, amt, final_cltv_delta)
 
     if args.decodepayreq:
         payment_request = args.decodepayreq[0]
