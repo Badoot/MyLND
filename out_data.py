@@ -9,8 +9,8 @@ import requests
 
 
 # Pandas dataframe display options
-pd.set_option('colheader_justify', 'left')
-pd.set_option('display.max_colwidth', -1)
+pd.set_option('colheader_justify', 'center')
+pd.set_option('display.max_colwidth', 1280)
 
 # # # # # # # # # # # # # # # # # # #
 #           My LND Node
@@ -522,20 +522,26 @@ def out_sendcoins(addr, amount):
 
 def out_list_payments():
     payments = get_data.get_list_payments()
-    payments = converters.response_to_dict(payments)
+    payments = payments.payments
+
+    
     if len(payments) > 0:
-        print("\nPayments: " + str(len(payments['payments'])), '\n' + "-" * 12)
-        payments_df = pd.DataFrame.from_dict(payments['payments']).fillna(0)
-        payments_df = payments_df.drop(columns='path')
-        # Convert Unix timestamps to readable date/time format
-        timestamp_list = []
-        for time_stamp in payments_df['creation_date']:
-            time_stamp = converters.convert_date(time_stamp)
-            timestamp_list.append(time_stamp)
-        payments_df['creation_date'] = timestamp_list
-        # Convert dataframe to string
-        payments_str = pd.DataFrame.to_string(payments_df, index=False)
-        print(payments_str)
+        print("\nPayments: " + str(len(payments)), '\n' + "-" * 12)
+        payment_list = []
+        for payment in payments:
+            payment_hash = payment.payment_hash
+            create_date = converters.convert_date(payment.creation_date)
+            value = payment.value
+            payment_preimage = payment.payment_preimage
+            path = payment.path
+            # Add this payment to the payment_list
+            payment = [create_date, payment_hash, payment_preimage, value]
+            payment_list.append(payment) 
+        # Build DataFrame 
+        payment_columns = ['Creation Date', 'Payment Hash', 'Payment Preimage', 'Value']
+        payment_df = pd.DataFrame.from_records(payment_list, columns=payment_columns).to_string(index=False)
+        print(payment_df)
+
     else:
         print("\nNo payments to list")
     print("\r")
