@@ -64,7 +64,10 @@
     --channelinfo <channel_id>
                             Channel details by channel ID
     --pendingchannels     Pending channels
-    --closedchannels      Closed channels
+    --closedchannels <close type>
+                        Closed channels (all, cooperative, local_force,
+                        remote_force, breach, funding_canceled, abandoned
+
     --channelbalance      Channel balance
     --updatechannel <channel_point> <base_fee_msat <fee_rate> <time_lock_delta>
                             Update fee schedule and channel policies for a
