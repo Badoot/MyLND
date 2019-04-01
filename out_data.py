@@ -664,16 +664,15 @@ def out_decode_payreq(payment_request):
 def out_add_invoice(amount, memo):
     response = get_data.get_add_invoice(amount, memo)
     print('\nAdding Invoice:' + '\n' + '-' * 16)
-    print('Amount in sats : ' + str(amount))
-    print('Memo : ' + str(memo), '\n')
+    print('Amount :', amount)
+    print('Memo :', memo, '\n')
     r_hash = response.r_hash
     payment_request = response.payment_request
     # Convert r_hash to 32-bit hex
-    r_hash_hex = codecs.encode(r_hash, 'hex')
-    # Convert r_hash to a string
-    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
-    print('r_hash (aka payment_hash) :', r_hash_str)
-    print('payment_request (aka invoice) :', payment_request)
+    r_hash_hex = codecs.encode(r_hash, 'hex').decode()
+    print('Payment Hash :', r_hash_hex)
+    print('Payment Request (aka Invoice) :')
+    print(" ", payment_request)
     print('\r')
 
 
