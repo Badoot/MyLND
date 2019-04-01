@@ -526,6 +526,7 @@ def out_list_payments():
             create_date = converters.convert_date(payment.creation_date)
             value = payment.value
             payment_preimage = payment.payment_preimage
+            # Setting path, but not using it in the output
             path = payment.path
             # Add this payment to the payment_list
             payment = [create_date, payment_hash, payment_preimage, value]
@@ -678,25 +679,33 @@ def out_add_invoice(amount, memo):
 
 def out_lookup_invoice(r_hash):
     response = get_data.get_lookup_invoice(r_hash)
-    response_dict = converters.response_to_dict(response)
+    memo = response.memo
     r_hash = response.r_hash
     r_preimage = response.r_preimage
+    value = response.value
+    creation_date = converters.convert_date(response.creation_date)
+    payment_request = response.payment_request
+    expiry = response.expiry
+    cltv_expiry = response.cltv_expiry
     # Convert r_hash to 32-bit hex
-    r_hash_hex = codecs.encode(r_hash, 'hex')
-    # Convert r_hash to a string
-    r_hash_str = codecs.decode(r_hash_hex, 'utf-8')
+    r_hash_hex = codecs.encode(r_hash, 'hex').decode()
     # Convert r_preimage to 32-bit hex
-    r_preimage_hex = codecs.encode(r_preimage, 'hex')
-    # Convert r_preimage to a string
-    r_preimage_str = codecs.decode(r_preimage_hex, 'utf-8')
+    r_preimage_hex = codecs.encode(r_preimage, 'hex').decode()
+    # # Not sure why response does not include these
+    # settled = response.settled
+    # settle_date = response.settle_date
+    # fallback_addr = response.fallback_addr
+    # amt_paid_sat = response.amt_paid_sat
+    # amt_paid_msat = response.amt_paid_msat
     print('\nInvoice Details:' + '\n' + '-' * 16)
-    for key, value in response_dict.items():
-        if 'r_hash' in key:
-            print('payment_hash :', r_hash_str)
-        elif 'r_preimage' in key:
-            print('payment_preimage : ', r_preimage_str)
-        else:
-            print(key, ' : ', value)
+    print("Creation Date :", creation_date)
+    print("Memo :", memo)
+    print("Value :", value)
+    print("Expiry :", expiry)
+    print("CLTV Expiry :", cltv_expiry)
+    print("Payment Hash :", r_hash_hex)
+    print("Payment Preimage :", r_preimage_hex)
+    print("Payment Request :", payment_request)
     print('\r')
 
 
