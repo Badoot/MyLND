@@ -710,22 +710,45 @@ def out_lookup_invoice(r_hash):
 
 def out_query_route(pub_key, amount, num_routes):
     route_data = get_data.get_query_route(pub_key, amount, num_routes)
-    route_data = converters.response_to_dict(route_data)
-    print('\n' + str(len(route_data['routes'])) + ' possible routes\n' + '-' * 18 + '\n')
-    route_count = 1
-    for route in route_data['routes']:
-        print('Route ' + str(route_count) + '\n' + '-' * 8)
-        route_count += 1
-        for key, value in route.items():
-            if 'hops' in key:
-                print('hops : ')
-                for hop_value in value:
-                    for k, v in hop_value.items():
-                        print(' ', k, ':', v)
-            else:
-                print(key, ':', value)
-        print('\r')
+    print(route_data)
+    print("\n" + str(len(route_data.routes)), "Routes Found :")
+    print("-" * 16, "\n")
+    routenum = 1
+    for route in route_data.routes:
+        print("  Route #" + str(routenum), "\n", "-" * 10)
+        routenum += 1
+        total_time_lock = route.total_time_lock
+        total_fees = route.total_fees
+        total_fees_msat = route.total_fees_msat
+        total_amt = route.total_amt
+        total_amt_msat = route.total_amt_msat
+        route_list = [[total_amt, total_amt_msat, total_fees, total_fees_msat, total_time_lock]]
+        route_cols = ['Total Amount', 'Total Amount mSat', 'Total Fees', 
+                    'Total Fees mSat', 'Total Time Lock']
+        route_df = pd.DataFrame.from_records(route_list, columns=route_cols).to_string(index=False)
+        print(route_df)
+        hops = route.hops
+        hopnum = 1
+        for hop in hops:
+            print(" Hop", hopnum, ":")
+            hopnum += 1
+            chan_id = hop.chan_id
+            chan_capacity = hop.chan_capacity
+            amt_to_forward = hop.amt_to_forward
+            amt_to_forward_msat = hop.amt_to_forward_msat
+            fee = hop.fee
+            fee_msat = hop.fee_msat
+            expiry = hop.expiry
+            hop = [[chan_id, chan_capacity, amt_to_forward, amt_to_forward_msat, fee, fee_msat, expiry]]
+            hop_columns = ['Channel ID', 'Channel Capacity', 'Amt to Fwd','Amt to Fwd mSat', 'Fee',
+                            'Fee mSat', 'Expiry']
+            hop_df = pd.DataFrame.from_records(hop, columns=hop_columns).to_string(index=False)
+            print(hop_df)
 
+        print("\r")
+    print("\r")
+        
+  
 
 # # # # # # # # # # # # # # # # # # #
 #        Wallet Stub Stuff
