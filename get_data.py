@@ -104,6 +104,7 @@ def get_peers():
 
 
 def get_node_info(pub_key):
+    print(pub_key)
     response = APICall.stub.GetNodeInfo(ln.NodeInfoRequest(pub_key=pub_key))
     return response
 
