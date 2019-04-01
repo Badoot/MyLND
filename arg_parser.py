@@ -3,16 +3,12 @@
 import argparse
 
 
-
 def arg_parser_func():
 
     # Argparser with help description
     parser = argparse.ArgumentParser(
         prog='mylnd.py', usage='mylnd.py --command [command_option1] [command_option2]',
         description='MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.')
-
-    # parser = argparse.ArgumentParser(prog='mylnd.py', description="""
-    # MyLND - A gRPC Client for the Lightning Network Daemon (LND) in Python.""", usage='%(prog)s [--option] [value]')
 
     # # # # # # # # # # # # # #
     #  LND Connection Options
@@ -55,7 +51,7 @@ def arg_parser_func():
     # # # # # # # # # # #
     peers = parser.add_argument_group('Peers')
     peers.add_argument("--listpeers", help="List peers connected to this node", action='store_true')
-    peers.add_argument("--nodeinfo", nargs="?", help="Node details by pub_key", action='store', dest='node_info',
+    peers.add_argument("--nodeinfo", nargs=1, help="Node details by pub_key", action='store', dest='node_info',
                                metavar='<public_key>')
     peers.add_argument("--connect", help="Attempt to establish network connection to a remote peer",
                                action='store', dest='connect', metavar='<public_key>@<ip_address>:<port>')
@@ -74,7 +70,7 @@ def arg_parser_func():
                                action='store', dest='openchannel_wait', metavar=('<public_key>', '<local_amount>',
                                                                             '<push_amount>'))
     channels.add_argument("--closechannel", nargs="*", help="Attempt to close a channel with a remote peer",
-                               action='store', metavar=('<channel_point>', '<force>'))
+                               action='store', metavar=('<channel_point>', 'force'))
     channels.add_argument("--closeallchannels", help="Attempt to close all open channels", action='store_true')
     channels.add_argument("--listchannels", help="List channels", action='store_true')
     channels.add_argument("--channelinfo", nargs=1, help="Channel details by channel ID", type=int, action='store',
