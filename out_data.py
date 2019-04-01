@@ -553,8 +553,7 @@ def out_list_invoices():
         print("\nInvoices: " + str(len(invoices)), '\n' + "-" * 12)
         for invoice in invoices:
             payment_preimage = codecs.encode(invoice.r_preimage, 'hex').decode()
-            payment_hash = invoice.r_hash
-            payment_hash = codecs.encode(payment_hash, 'hex').decode()
+            payment_hash = codecs.encode(invoice.r_hash, 'hex').decode()
             creation_date = converters.convert_date(invoice.creation_date)
             expiry = invoice.expiry
             cltv_expiry = invoice.cltv_expiry
@@ -567,7 +566,8 @@ def out_list_invoices():
             else:
                 settle_date = converters.convert_date(settle_date)
             private = invoice.private
-            invoice = [creation_date, memo, value, settled, settle_date, private, payment_hash, expiry, cltv_expiry]
+            invoice = [creation_date, memo, value, settled, settle_date, private, payment_hash, 
+                        expiry, cltv_expiry]
             invoice_list.append(invoice)
         # build df
         invoice_df_columns = ['Creation Date', 'Memo', 'Value', 'Settled', 'Settle Date', 
@@ -585,32 +585,27 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
         out_decode_payreq(payment_request)
     response = get_data.get_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
     response = converters.response_to_dict(response)
-    print("\nPayment Response :\n" + '-' * 18)
+    print("Payment Response :\n" + '-' * 18)
     for key, value in sorted(response.items()):
         if key == 'payment_error':
             print("Payment Error :", value, "\n")
             exit(1)
-        elif key == 'payment_preimage':    
-            preimage_str = value
-            # Convert str to bytes
-            primage_bytes = codecs.encode(preimage_str, 'utf-8')
-            # Decode base64
-            preimage_64 = codecs.decode(primage_bytes, 'base64')
+        elif key == 'payment_preimage':
+            # To bytes  
+            payment_preimage = value.encode()
+            # Decode base64? Not sure if this is right for preimage.
+            preimage_64 = codecs.decode(payment_preimage, 'base64')
             # Encode hex
-            preimage_hex = codecs.encode(preimage_64, 'hex')
-            # Decode utf-8
-            preimage_print = codecs.decode(preimage_hex, 'utf-8')
-            print("Payment Preimage :", preimage_print)
-        elif key == 'payment_hash':
+            preimage_hex = codecs.encode(preimage_64, 'hex').decode()
+            print("Payment Preimage :", preimage_hex)
+        elif 'hash' in key:
             print("Payment Hash :", value)
         elif key == 'payment_route':
             print("Payment Route :")
-            hop_list = []
-            for key, value in value.items():
+            for key, value in sorted(value.items()):
                 if key == 'hops':
                     hopnum = 1
                     for hop in value:
-                        hop_list.append(hop)
                         print(" Hop " + str(hopnum) + " :")
                         hopnum += 1
                         for hopkey, hopvalue in sorted(hop.items()):
@@ -628,6 +623,22 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
                                 print("  Fee :", hopvalue)
                             if hopkey == 'fee_msat':
                                 print("  Fee mSat :", hopvalue)
+                if key == 'total_fees':
+                    total_fees = value
+                    print(" Total Fees :", total_fees)
+                if key == 'total_fees_msat':
+                    total_fees_msat = value
+                    print(" Total Fees mSat :", total_fees_msat)
+                if key == 'total_time_lock':
+                    total_time_lock = value
+                    print(" Total Time Lock :", total_time_lock)
+                if key == 'total_amt':
+                    total_amt = value
+                    print(" Total Amount :", total_amt)
+                if key == 'total_amt_msat':
+                    total_amt_msat = value
+                    print(" Total Amount mSat :", total_amt_msat)
+        
     print('\r')
 
 
