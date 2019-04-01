@@ -710,7 +710,6 @@ def out_lookup_invoice(r_hash):
 
 def out_query_route(pub_key, amount, num_routes):
     route_data = get_data.get_query_route(pub_key, amount, num_routes)
-    print(route_data)
     print("\n" + str(len(route_data.routes)), "Routes Found :")
     print("-" * 16, "\n")
     routenum = 1
