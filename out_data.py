@@ -743,7 +743,6 @@ def out_query_route(pub_key, amount, num_routes):
                             'Fee mSat', 'Expiry']
             hop_df = pd.DataFrame.from_records(hop, columns=hop_columns).to_string(index=False)
             print(hop_df)
-
         print("\r")
     print("\r")
         
@@ -836,9 +835,9 @@ def out_create():
     print(newdf)
     print('\n')
 
-# # # # # # # # # # # # # # # # # # # # # 
-#  Coinmarketcap.com BTC/USD converter
-# # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # 
+#  BTC/USD converters
+# # # # # # # # # # # # # 
 
 def out_btcusd():
     price = converters.btc_to_usd(100000000)
