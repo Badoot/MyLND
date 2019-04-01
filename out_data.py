@@ -213,34 +213,34 @@ def out_channel_info(chan_id):
 
 def out_list_channels():
     channels = get_data.get_channels()
-    channels = channels.channels
-    # Build list of channels from RPC response
-    channel_list = []
-    for channel in channels:
-        active = channel.active
-        remote_pubkey = channel.remote_pubkey
-        channel_point = channel.channel_point
-        chan_id = channel.chan_id
-        capacity = channel.capacity
-        local_balance = channel.local_balance
-        remote_balance = channel.remote_balance
-        commit_fee = channel.commit_fee
-        commit_weight = channel.commit_weight
-        fee_per_kw = channel.fee_per_kw
-        unsettled_balance = channel.unsettled_balance
-        total_satoshis_sent = channel.total_satoshis_sent
-        total_satoshis_received = channel.total_satoshis_received
-        num_updates = channel.num_updates
-        csv_delay = channel.csv_delay
-        private = channel.private
-        # Get alias of the remote node
-        node_info = get_data.get_node_info(remote_pubkey)
-        node_info = converters.response_to_dict(node_info)
-        alias = node_info['node']['alias']
+    if len(channels.channels) > 0:
+        # Build list of channels from RPC response
+        channels = channels.channels
+        channel_list = []
+        for channel in channels:
+            active = channel.active
+            remote_pubkey = channel.remote_pubkey
+            channel_point = channel.channel_point
+            chan_id = channel.chan_id
+            capacity = channel.capacity
+            local_balance = channel.local_balance
+            remote_balance = channel.remote_balance
+            commit_fee = channel.commit_fee
+            commit_weight = channel.commit_weight
+            fee_per_kw = channel.fee_per_kw
+            unsettled_balance = channel.unsettled_balance
+            total_satoshis_sent = channel.total_satoshis_sent
+            total_satoshis_received = channel.total_satoshis_received
+            num_updates = channel.num_updates
+            csv_delay = channel.csv_delay
+            private = channel.private
+            # Get alias of the remote node
+            node_info = get_data.get_node_info(remote_pubkey)
+            node_info = converters.response_to_dict(node_info)
+            alias = node_info['node']['alias']
         # List of fields to include in the output
         channel = [active, private, chan_id, alias, num_updates, capacity, local_balance, remote_balance, unsettled_balance, total_satoshis_received, total_satoshis_sent]
         channel_list.append(channel)
-    if len(channel_list) > 0:
         # Build the DataFrame from list of channels
         channels_df_columns = ['Active', 'Private', 'Channel ID', 'Remote Alias', 'Updates', 'Capacity', 'Local Balance', 'Remote Balance', 'Unsettled', 'Sats Received', 'Sats Sent']
         channels_df = pd.DataFrame.from_records(channel_list, columns=channels_df_columns).to_string(index=False)
@@ -248,7 +248,7 @@ def out_list_channels():
         print("\nChannels: " + str(len(channel_list)) + " total \n" + "-" * 18)
         print(channels_df, '\n')
     else:
-        "\nNo channels open\n"
+        print("\nNo channels open\n")
 
 
 def out_pending_channels():
@@ -322,28 +322,30 @@ def out_channel_balance():
 def out_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned):
     closed = get_data.get_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
     closed = closed.channels
+ 
     closed_num = len(closed)
     if closed_num > 0:
         print("\nTotal Closed:", closed_num, "\n" + "-" * 16)
         for channel in closed:
-            channel_point = channel.channel_point
-            chan_id = channel.chan_id
-            chain_hash = channel.chain_hash
-            closing_tx_hash = channel.closing_tx_hash
-            remote_pubkey = channel.remote_pubkey
-            capacity = channel.capacity
-            close_height = channel.close_height
-            settled_balance = channel.settled_balance
-            close_type = channel.close_type
-            print("Channel ID :", chan_id)
-            print("Remote Pubkey :", remote_pubkey)
-            print("Channel Point :", channel_point)
-            print("Close Type :", close_type)
-            print("Capacity :", capacity)
-            print("Settled Balance :", settled_balance)
-            print("Chain Hash :", chain_hash)
-            print("Close Height :", close_height)
-            print("Closing Tx Hash :", closing_tx_hash)
+            print(channel)
+            # channel_point = channel.channel_point
+            # chan_id = channel.chan_id
+            # chain_hash = channel.chain_hash
+            # closing_tx_hash = channel.closing_tx_hash
+            # remote_pubkey = channel.remote_pubkey
+            # capacity = channel.capacity
+            # close_height = channel.close_height
+            # settled_balance = channel.settled_balance
+            # close_type = channel.close_type
+            # print("Channel ID :", chan_id)
+            # print("Remote Pubkey :", remote_pubkey)
+            # print("Channel Point :", channel_point)
+            # print("Close Type :", close_type)
+            # print("Capacity :", capacity)
+            # print("Settled Balance :", settled_balance)
+            # print("Chain Hash :", chain_hash)
+            # print("Close Height :", close_height)
+            # print("Closing Tx Hash :", closing_tx_hash)
             print("\r")      
     else:
         print('\nNo closed channels\n')
