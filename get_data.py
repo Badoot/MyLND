@@ -143,8 +143,17 @@ def get_channel_balance():
     return response
 
 
-def get_closed_channels():
-    response = APICall.stub.ClosedChannels(ln.ClosedChannelsRequest())
+def get_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned):
+    request = ln.ClosedChannelsRequest(
+        cooperative=cooperative,	
+        local_force=local_force,	
+        remote_force=local_force,	
+        breach=local_force,	
+        funding_canceled=local_force,
+        # # Getting error that 'abandoned' doesn't exist.	
+        # abandoned=abandoned	
+    )
+    response = APICall.stub.ClosedChannels(request)
     return response
 
 
@@ -251,7 +260,7 @@ def get_delete_payments():
 
 
 def get_list_invoices():
-    response = APICall.stub.ListInvoices(ln.ListInvoiceRequest())
+    response = APICall.stub.ListInvoices(ln.ListInvoiceRequest(num_max_invoices=-1))
     return response
 
 

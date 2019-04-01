@@ -98,7 +98,34 @@ def run_it():
         output.out_list_channels()
 
     if args.closedchannels:
-        output.out_closed_channels()
+        close_query = args.closedchannels
+        # I know there's a better way than this, but I'm derpin'......
+        if close_query == 'cooperative':
+            cooperative = True
+        else:
+            cooperative = False
+        if close_query == 'local_force':
+            local_force = True
+        else:
+            local_force = False
+        if close_query == 'remote_force':
+            remote_force = True
+        else:
+            remote_force = False
+        if close_query == 'breach':
+            breach = True
+        else:
+            breach = False
+        if close_query == 'funding_cancelled':
+            funding_canceled = True
+        else:
+            funding_canceled = False
+        if close_query == 'abandoned':
+            abandoned = True
+        else:
+            abandoned = False
+        output.out_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
+  
 
     if args.channelbalance:
         output.out_channel_balance()

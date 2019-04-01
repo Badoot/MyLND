@@ -319,18 +319,32 @@ def out_channel_balance():
     print("\r")
 
 
-def out_closed_channels():
-    closed = get_data.get_closed_channels()
-    closed = converters.response_to_dict(closed)
-    if len(closed) > 0:
-        closed = closed['channels']
-        total_closed = str(len(closed))
-        print("\nClosed Channels: " + "\n" + "-" * 16)
+def out_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned):
+    closed = get_data.get_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
+    closed = closed.channels
+    closed_num = len(closed)
+    if closed_num > 0:
+        print("\nTotal Closed:", closed_num, "\n" + "-" * 16)
         for channel in closed:
-            for key, value in channel.items():
-                print(key, ' : ', value)
-            print('\r')
-        print(total_closed + " total closed channels\n")
+            channel_point = channel.channel_point
+            chan_id = channel.chan_id
+            chain_hash = channel.chain_hash
+            closing_tx_hash = channel.closing_tx_hash
+            remote_pubkey = channel.remote_pubkey
+            capacity = channel.capacity
+            close_height = channel.close_height
+            settled_balance = channel.settled_balance
+            close_type = channel.close_type
+            print("Channel ID :", chan_id)
+            print("Remote Pubkey :", remote_pubkey)
+            print("Channel Point :", channel_point)
+            print("Close Type :", close_type)
+            print("Capacity :", capacity)
+            print("Settled Balance :", settled_balance)
+            print("Chain Hash :", chain_hash)
+            print("Close Height :", close_height)
+            print("Closing Tx Hash :", closing_tx_hash)
+            print("\r")      
     else:
         print('\nNo closed channels\n')
 
