@@ -643,6 +643,10 @@ def out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_de
     print('\r')
 
 
+def out_send_to_route(payment_hash, route):
+    get_data.get_send_to_route(payment_hash, route)
+    
+
 def out_decode_payreq(payment_request):
     response = get_data.get_decode_payreq(payment_request)
     destination = response.destination
@@ -654,8 +658,9 @@ def out_decode_payreq(payment_request):
     cltv_expiry = response.cltv_expiry
     print('\nPayment Request Details:' + '\n' + '-' * 24)
     print("Destination :", destination)
-    print("Payment Hash :", payment_hash)
     print("Amount in Satoshis :", num_satoshis)
+    print("Description :", description)
+    print("Payment Hash :", payment_hash)
     print("Timestamp :", timestamp)
     print("Expiry :", expiry)
     print("CLTV Expiry :", cltv_expiry, '\n')

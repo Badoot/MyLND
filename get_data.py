@@ -281,6 +281,14 @@ def get_send_payment(payment_request, dest, payment_hash_str, amt, final_cltv_de
     response = APICall.stub.SendPaymentSync(request)
     return response
 
+def get_send_to_route(payment_hash, route):
+    request = ln.SendToRouteRequest(
+        payment_hash = payment_hash,
+        route = route
+    )
+    response = APICall.stub.SendToRoute(request)
+    return response
+
 
 def get_decode_payreq(payment_request):
     request = ln.PayReqString(pay_req=payment_request)

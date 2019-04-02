@@ -200,7 +200,12 @@ def run_it():
             payment_hash_str = args.sendpayment[1]
             amt = int(args.sendpayment[2])
             final_cltv_delta = int(args.sendpayment[3])
-            output.out_send_payment(payment_request, dest, payment_hash_str, amt, final_cltv_delta)
+            output.out_send_payment(payment_request, dest, amt, payment_hash_str, final_cltv_delta)
+
+    if args.sendtoroute:
+        payment_hash = args.sendtoroute[0].encode()
+        route = args.sendtoroute[1]
+        output.out_send_to_route(payment_hash, route)
 
     if args.decodepayreq:
         payment_request = args.decodepayreq[0]

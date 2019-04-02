@@ -90,6 +90,7 @@ def arg_parser_func():
                             help="Send satoshis with either a payment_request, OR public key, payment hash, "
                                 "amount, and final_cltv_delta\n", action='store',
                                dest='sendpayment')
+    payments.add_argument("--sendtoroute", nargs='*', default=[], action='store')
     payments.add_argument("--listpayments", help="List lightning network payments", action='store_true')
     payments.add_argument("--deletepayments", help="Delete all outgoing payments from DB", action='store_true')
     payments.add_argument("--listinvoices", help="List of all invoices in the db", action='store_true')
