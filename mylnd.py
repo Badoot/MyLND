@@ -98,35 +98,8 @@ def run_it():
         output.out_list_channels()
 
     if args.closedchannels:
-        close_query = args.closedchannels
-        print(close_query)
-        # I know there's a better way than this, but I'm derpin'......
-        cooperative = False
-        local_force = False
-        remote_force = False
-        breach = False
-        funding_canceled = False
-        abandoned = False
-        if 'cooperative' in close_query :
-            cooperative = True
-        if close_query == 'local_force':
-            local_force = True
-        if close_query == 'remote_force':
-            remote_force = True
-        if close_query == 'breach':
-            breach = True
-        if close_query == 'funding_cancelled':
-            funding_canceled = True
-        if close_query == 'abandoned':
-            abandoned = True
-        else:
-            print("usage:  mylnd.py --closedchannels <cooperative/local_force/remote_force/breach/funding_cancelled/abandoned")
-            print(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
-            exit(1)
- 
-        output.out_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
+        output.out_closed_channels()
   
-
     if args.channelbalance:
         output.out_channel_balance()
 

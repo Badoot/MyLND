@@ -76,10 +76,7 @@ def arg_parser_func():
     channels.add_argument("--channelinfo", nargs=1, help="Channel details by channel ID", type=int, action='store',
                                dest='channel_info', metavar='<channel_id>')
     channels.add_argument("--pendingchannels", help="Pending channels", action='store_true')
-    channels.add_argument("--closedchannels", 
-                help="Closed channels (all, cooperative, local_force, remote_force, breach, funding_canceled, abandoned", 
-                action='store', 
-                metavar='<close type>')
+    channels.add_argument("--closedchannels", help="Closed channels", action='store_true')
     channels.add_argument("--channelbalance", help="Channel balance", action='store_true')
     channels.add_argument("--updatechannel", nargs=4, help="Update fee schedule and channel policies "
                         "for a particular channel", action='store', dest="update_channel_policy", 

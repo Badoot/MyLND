@@ -133,6 +133,7 @@ def out_list_peers():
 
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
+    print(node_info)
     node_details = node_info.node
     last_update = converters.convert_date(node_details.last_update)
     pub_key = node_details.pub_key
@@ -140,10 +141,14 @@ def out_node_info(pub_key):
     color = node_details.color
     num_channels = node_info.num_channels
     total_capacity = node_info.total_capacity
+    if 'address' in node_info.keys():
+        addresses = node_info.addresses
     print('\nNode Info')
     print('-' * 9)
     print('Alias :', alias)
     print('Public Key :', pub_key)
+    print('Addresses :')
+    print(' ', addresses)
     print('Color :', color)
     print('Last Update :', last_update)
     print('Nubmer of Channels :', num_channels)
@@ -319,34 +324,13 @@ def out_channel_balance():
     print("\r")
 
 
-def out_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned):
-    closed = get_data.get_closed_channels(cooperative, local_force, remote_force, breach, funding_canceled, abandoned)
+def out_closed_channels():
+    closed = get_data.get_closed_channels()
     closed = closed.channels
- 
-    closed_num = len(closed)
-    if closed_num > 0:
-        print("\nTotal Closed:", closed_num, "\n" + "-" * 16)
+    if len(closed) > 0:
+        print("\nTotal Closed:", len(closed), "\n" + "-" * 16)
         for channel in closed:
             print(channel)
-            # channel_point = channel.channel_point
-            # chan_id = channel.chan_id
-            # chain_hash = channel.chain_hash
-            # closing_tx_hash = channel.closing_tx_hash
-            # remote_pubkey = channel.remote_pubkey
-            # capacity = channel.capacity
-            # close_height = channel.close_height
-            # settled_balance = channel.settled_balance
-            # close_type = channel.close_type
-            # print("Channel ID :", chan_id)
-            # print("Remote Pubkey :", remote_pubkey)
-            # print("Channel Point :", channel_point)
-            # print("Close Type :", close_type)
-            # print("Capacity :", capacity)
-            # print("Settled Balance :", settled_balance)
-            # print("Chain Hash :", chain_hash)
-            # print("Close Height :", close_height)
-            # print("Closing Tx Hash :", closing_tx_hash)
-            print("\r")      
     else:
         print('\nNo closed channels\n')
 
