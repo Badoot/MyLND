@@ -180,9 +180,9 @@ def get_close_channel(funding_tx, output_index, force):
 
 
 def get_open_channel(node_pubkey, local_funding_amount=None, push_sat=None):
-    pubkey_bytes = codecs.decode(node_pubkey, 'hex')
+    # pubkey_bytes = codecs.decode(node_pubkey, 'hex')
     request = ln.OpenChannelRequest(
-        node_pubkey=pubkey_bytes,
+        # node_pubkey=pubkey_bytes,
         node_pubkey_string=node_pubkey,
         local_funding_amount=int(local_funding_amount),
         push_sat=int(push_sat)
@@ -354,4 +354,4 @@ def get_loop(amount):
         amt=amount     
     )
     response = stub.LoopOut(request)
-    print(response)
+    return response

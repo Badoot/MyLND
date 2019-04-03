@@ -116,6 +116,7 @@ def run_it():
         push_sat = args.openchannel[2]
         output.out_open_channel(node_pubkey, local_funding_amount, push_sat)
 
+
     if args.openchannel_wait:
         node_pubkey = args.openchannel_wait[0]
         local_funding_amount = int(args.openchannel_wait[1])

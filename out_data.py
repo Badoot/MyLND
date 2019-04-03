@@ -138,8 +138,6 @@ def out_list_peers():
             node_info = converters.response_to_dict(node_info)
             alias = node_info['node']['alias']
         except:
-            pass
-        else:
             alias = 'Unknown'
         # append this peer to peer_list
         peer = [alias, pub_key, address, bytes_sent, bytes_recv, sat_sent, sat_recv, inbound, ping_time]
@@ -360,10 +358,16 @@ def out_closed_channels():
         print('\nNo closed channels\n')
 
 
-def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0):
+def out_open_channel(node_pubkey=None, local_funding_amount=0, push_sat=0, ip_port='localhost'):
+    if '@' in node_pubkey:
+        print("\nConnecting to peer...")
+        # node_pubkey = get_data.get_open_channel(node_pubkey)
+        node_pubkey = node_pubkey.split('@')
+        node_pubkey = node_pubkey[0]
+ 
     open_channel = get_data.get_open_channel(node_pubkey, local_funding_amount, push_sat)
     print('\nNew Channel Details:' + '\n' + '-' * 20)
-    print('Public Key : ' + node_pubkey)
+    print('Public Key : ', node_pubkey)
     print('Local Amount :', local_funding_amount)
     print('Push Amount : ', push_sat)
     print('\r')
@@ -887,4 +891,4 @@ def out_satstousd(satoshis):
 
 def out_loop(amount):
     response = get_data.get_loop(amount)
-    return response
+    print(response)
