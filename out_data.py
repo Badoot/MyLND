@@ -157,7 +157,6 @@ def out_list_peers():
 
 def out_node_info(pub_key):
     node_info = get_data.get_node_info(pub_key)
-    print(node_info)
     node_details = node_info.node
     last_update = converters.convert_date(node_details.last_update)
     pub_key = node_details.pub_key
@@ -165,8 +164,10 @@ def out_node_info(pub_key):
     color = node_details.color
     num_channels = node_info.num_channels
     total_capacity = node_info.total_capacity
-    if 'address' in node_info.keys():
+    try:
         addresses = node_info.addresses
+    except:
+        addresses = 'Unknown'
     print('\nNode Info')
     print('-' * 9)
     print('Alias :', alias)
