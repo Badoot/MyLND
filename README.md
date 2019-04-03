@@ -52,7 +52,7 @@
                             Attempt to disconnect from a remote peer
 
     Channels:
-    --openchannel <public_key> <local_amount> <push_amount>
+    --openchannel <public_key> (OR "<public_key>@<ip>:<port>") <local_amount> <push_amount>
                             Attempt to open a channel with a remote peer
     --openchannel-wait <public_key> <local_amount> <push_amount>
                             Attempt to open a channel with a remote peer and wait

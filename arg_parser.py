@@ -63,7 +63,7 @@ def arg_parser_func():
     # # # # # # # # # # # #
     channels = parser.add_argument_group('Channels')
     channels.add_argument("--openchannel", nargs=3, help="Attempt to open a channel with a remote peer",
-                               action='store', dest='openchannel', metavar=('<public_key> OR <pubkey>@<ip>:port', '<local_amount>',
+                               action='store', dest='openchannel', metavar=('<public_key> OR <pubkey>@<ip>:<port>', '<local_amount>',
                                                                             '<push_amount>'))
     channels.add_argument("--openchannel-wait", nargs=3,
                                help="Attempt to open a channel with a remote peer and wait for confirmation",
