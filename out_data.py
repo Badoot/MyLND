@@ -25,8 +25,26 @@ def out_version():
 
 def out_get_info():
     get_info = get_data.get_info()
+    pubkey = get_info.identity_pubkey
+    alias = get_info.alias
+    num_active_channels = get_info.num_active_channels
+    num_peers = get_info.num_peers
+    block_height = get_info.block_height
+    block_hash = get_info.block_hash
+    synced_to_chain = get_info.synced_to_chain
+    best_header_timestamp = converters.convert_date(get_info.best_header_timestamp)
+    version = get_info.version
     print("\nMy Lightning Node:\n" + "-" * 18)
-    print(get_info)
+    print("Public Key :", pubkey)
+    print("Alias :", alias)
+    print("Number of Active Channel :", num_active_channels)
+    print("Number of Connected Peers :", num_peers)
+    print("Block Height :", block_height)
+    print("Block Hash :", block_hash)
+    print("Synced to Chain :", synced_to_chain)
+    print("Best Header Timestamp :", best_header_timestamp)
+    print("LND Version :", version)
+    print("\r")
 
 
 def out_debug_level(show, level_spec):
@@ -119,7 +137,7 @@ def out_list_peers():
             node_info = converters.response_to_dict(node_info)
             alias = node_info['node']['alias']
         except:
-            print("Unable to identify one of the node aliases.")
+            pass
         else:
             alias = 'Unknown'
         # append this peer to peer_list
