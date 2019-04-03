@@ -32,7 +32,8 @@ def out_get_info():
     block_height = get_info.block_height
     block_hash = get_info.block_hash
     synced_to_chain = get_info.synced_to_chain
-    best_header_timestamp = converters.convert_date(get_info.best_header_timestamp)
+    best_header_timestamp = get_info.best_header_timestamp
+    best_header_timestamp_converted = converters.convert_date(get_info.best_header_timestamp)
     version = get_info.version
     print("\nMy Lightning Node:\n" + "-" * 18)
     print("Public Key :", pubkey)
@@ -42,7 +43,7 @@ def out_get_info():
     print("Block Height :", block_height)
     print("Block Hash :", block_hash)
     print("Synced to Chain :", synced_to_chain)
-    print("Best Header Timestamp :", best_header_timestamp)
+    print("Best Header Timestamp :", best_header_timestamp, "(" + str(best_header_timestamp_converted) +")")
     print("LND Version :", version)
     print("\r")
 
