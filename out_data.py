@@ -114,9 +114,14 @@ def out_list_peers():
         inbound = peer.inbound
         ping_time = peer.ping_time
         # Get alias of the remote node
-        node_info = get_data.get_node_info(pub_key)
-        node_info = converters.response_to_dict(node_info)
-        alias = node_info['node']['alias']
+        try:
+            node_info = get_data.get_node_info(pub_key)
+            node_info = converters.response_to_dict(node_info)
+            alias = node_info['node']['alias']
+        except:
+            print("Unable to identify one of the node aliases.")
+        else:
+            alias = 'Unknown'
         # append this peer to peer_list
         peer = [alias, pub_key, address, bytes_sent, bytes_recv, sat_sent, sat_recv, inbound, ping_time]
         peer_list.append(peer)
@@ -374,6 +379,7 @@ def out_open_channel_wait(node_pubkey=None, local_funding_amount=0, push_sat=0):
 def out_close_channel(funding_tx, output_index, force):
     request = get_data.get_close_channel(funding_tx, output_index, force)
     print('\nClosing channel : ' + funding_tx + ':' + str(output_index) + '\r')
+    print('\nWaiting for the on-chain transaction confirmation...')
     for response in request:
         if response.close_pending:
             txid_response = response.close_pending
